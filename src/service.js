@@ -3,9 +3,13 @@ const {faker} = require("@faker-js/faker")
 const services = {}
 
 services.getRandomValues = (min, max) => {
+    if(min > max){
+        return;
+    }
+
     return  faker.datatype.number({
-        'min': min,
-        'max': max
+        'min': min ?? 1,
+        'max': max ?? 100
     });
 }
 
