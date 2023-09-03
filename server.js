@@ -1,17 +1,48 @@
-// import express from "express.js";
-// import router from "./src/routes.js"
 const express = require("express")
-const router = require("./src/routes")
+const {AppdataSource} = require("./src/database/config")
+const applyMiddleware = require("./src/middleware/init")
 
-const app = express();
+AppdataSource.initialize()
+    .then(async () => {
+        const app = express();
 
-app.use(express.json());
-app.use("/api", router);
+        applyMiddleware(app);
 
-app.get("/", (req, res)=> {
-    res.send("Simple Site Is Live")
-})
+        // ROUTES
+        // app.use("/api/v1/books", bookRoute);
 
+        // HEALTH CHECKER
+        app.get("/", (req, res)=> {
+            res.send("Simple Site Is Live")
+        })
 
+        // UNHANDLED ROUTE
+        // app.all("*", (req: Request, res: Response, next: NextFunction) => {
+        //   next(new AppError(404, `Route ${req.originalUrl} not found`));
+        // });
 
-app.listen(5000, ()=> console.log("server starting at 5000"))
+        // GLOBAL ERROR HANDLER
+        // app.use(
+        //   (error: AppError, req: Request, res: Response, next: NextFunction) => {
+        //     error.status = error.status || "error";
+        //     error.statusCode = error.statusCode || 500;
+        //
+        //     res.status(error.statusCode).json({
+        //       status: error.status,
+        //       message: error.message,
+        //     });
+        //   },
+        // );
+
+        app.use((err, req, res) => {
+            // format error
+            res.status(Number(err.status) || 500).json({
+                message: err.message,
+                errors: err.errors,
+            });
+        });
+
+        app.listen(5000, ()=> console.log("server starting at 5000"))
+    })
+    .catch((error) => console.log("server error: ", error));
+
