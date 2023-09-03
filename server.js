@@ -1,6 +1,8 @@
 const express = require("express")
 const {AppdataSource} = require("./src/database/config")
 const applyMiddleware = require("./src/middleware/init")
+const UserRoute = require("./src/route/index")
+
 
 AppdataSource.initialize()
     .then(async () => {
@@ -9,10 +11,10 @@ AppdataSource.initialize()
         applyMiddleware(app);
 
         // ROUTES
-        // app.use("/api/v1/books", bookRoute);
+        app.use("/api/v1/users", UserRoute);
 
         // HEALTH CHECKER
-        app.get("/", (req, res)=> {
+        app.get("/api/v1", (req, res)=> {
             res.send("Simple Site Is Live")
         })
 
