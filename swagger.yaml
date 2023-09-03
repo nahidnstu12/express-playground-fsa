@@ -13,8 +13,8 @@ servers:
 tags:
   - name: Auth
     description: Authentication Endpoints (public)
-  - name: Article
-    description: Article Endpoints (public + private)
+  - name: Menu
+    description: Menu Endpoints (public + private)
   - name: Comment
     description: Comment Endpoints (Private)
   - name: User
@@ -44,7 +44,7 @@ paths:
               required: [name, email, password]
       responses:
         "201":
-          description: Signup successul
+          description: Signup successful
           content:
             "application/json":
               schema:
@@ -63,15 +63,7 @@ paths:
                       access_token:
                         type: string
                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-                  links:
-                    type: object
-                    properties:
-                      self:
-                        type: string
-                        example: "/auth/signup"
-                      signin:
-                        type: string
-                        example: "/auth/signin"
+                  
         "400":
           $ref: "#/components/responses/400"
         "500":
@@ -97,7 +89,7 @@ paths:
               required: [email, password]
       responses:
         "200":
-          description: Signin successul
+          description: Signin successful
           content:
             "application/json":
               schema:
@@ -116,20 +108,15 @@ paths:
                       access_token:
                         type: string
                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-                  links:
-                    type: object
-                    properties:
-                      self:
-                        type: string
-                        example: "/auth/signin"
+                 
         "400":
           $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
-  "/articles":
+  "/menus":
     get:
-      tags: [Article]
-      description: Retrive all published articles
+      tags: [Menu]
+      description: Retrieve all published menus
       parameters:
         - $ref: "#/components/parameters/pageParam"
         - $ref: "#/components/parameters/limitParam"
@@ -138,7 +125,7 @@ paths:
         - $ref: "#/components/parameters/searchParam"
       responses:
         "200":
-          description: Return a list of articles
+          description: Return a list of menus
           content:
             "application/json":
               schema:
@@ -154,19 +141,27 @@ paths:
                               type: integer
                               format: int32
                               example: 1
-                            title:
+                            name:
                               type: string
-                              example: first article
+                              example: test pizza
+                            description:
+                              type: string
+                              example: test pizza description
+                            price:
+                              type: number
+                              example: 200
+                            status:
+                              type: string
+                              enum: [active, inactive]
+
+                              example: active
                             cover:
                               type: string
                               format: url
                               example: https://s3.aws.com/myfirstblog/124.jpg
                             author:
                               $ref: "#/components/schemas/AuthorDTO"
-                            link:
-                              type: string
-                              format: url
-                              example: "/articles/1"
+
                           required: [id, title, author]
                         - $ref: "#/components/schemas/Timestamp"
                   pagination:
@@ -177,15 +172,15 @@ paths:
                       self:
                         type: string
                         format: url
-                        example: "/articles?page=2&limit=10"
+                        example: "/menus?page=2&limit=10"
                       next:
                         type: string
                         format: url
-                        example: "/articles?page=3&limit=10"
+                        example: "/menus?page=3&limit=10"
                       prev:
                         type: string
                         format: url
-                        example: "/articles?page=1&limit=10"
+                        example: "/menus?page=1&limit=10"
         "400":
           $ref: "#/components/responses/400"
         "500":
@@ -194,7 +189,7 @@ paths:
       operationId: createPost
       security:
         - bearerAuth: []
-      tags: [Article]
+      tags: [Menu]
       description: Create a new article
       requestBody:
         description: To create a new article user must need to provide valid data
@@ -232,9 +227,9 @@ paths:
           $ref: "#/components/responses/401"
         "500":
           $ref: "#/components/responses/500"
-  "/articles/{id}":
+  "/menus/{id}":
     get:
-      tags: [Article]
+      tags: [Menu]
       description: Fetch a single article
       parameters:
         - $ref: "#/components/parameters/idPathParam"
@@ -246,7 +241,7 @@ paths:
             example: "author,comment"
       responses:
         "200":
-          description: "Single Article view"
+          description: "Single Menu view"
           content:
             "application/json":
               schema:
@@ -254,7 +249,7 @@ paths:
                 properties:
                   data:
                     allOf:
-                      - $ref: "#/components/schemas/Article"
+                      - $ref: "#/components/schemas/Menu"
                       - type: object
                         properties:
                           author:
@@ -270,13 +265,13 @@ paths:
                     properties:
                       self:
                         type: string
-                        example: "/articles/1"
+                        example: "/menus/1"
                       author:
                         type: string
-                        example: "/articles/1/author"
+                        example: "/menus/1/author"
                       comments:
                         type: string
-                        example: "/articles/1/comments"
+                        example: "/menus/1/comments"
         "400":
           $ref: "#/components/responses/400"
         "404":
@@ -286,7 +281,7 @@ paths:
     put:
       security:
         - bearerAuth: []
-      tags: [Article]
+      tags: [Menu]
       description: Create or update entire article
       parameters:
         - $ref: "#/components/parameters/idPathParam"
@@ -338,7 +333,7 @@ paths:
     patch:
       security:
         - bearerAuth: []
-      tags: [Article]
+      tags: [Menu]
       description: Partially update an article
       parameters:
         - $ref: "#/components/parameters/idPathParam"
@@ -381,13 +376,13 @@ paths:
     delete:
       security:
         - bearerAuth: []
-      tags: [Article]
+      tags: [Menu]
       description: Delete an article by id
       parameters:
         - $ref: "#/components/parameters/idPathParam"
       responses:
         "204":
-          description: "Article deleted successfully"
+          description: "Menu deleted successfully"
         "401":
           $ref: "#/components/responses/401"
         "404":
@@ -401,7 +396,7 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    Article:
+    Menu:
       allOf:
         - type: object
           properties:
@@ -415,7 +410,7 @@ components:
               example: 1
             title:
               type: string
-              example: First Article
+              example: First Menu
             body:
               type: string
               format: text
@@ -439,24 +434,24 @@ components:
           example: 201
         message:
           type: string
-          example: "Article created successfully"
+          example: "Menu created successfully"
         data:
-          $ref: "#/components/schemas/Article"
+          $ref: "#/components/schemas/Menu"
         links:
           type: object
           properties:
             self:
               type: string
               format: url
-              example: "/articles/1"
+              example: "/menus/1"
             author:
               type: string
               format: url
-              example: "/articles/1/author"
+              example: "/menus/1/author"
             comments:
               type: string
               format: url
-              example: "/articles/1/comments"
+              example: "/menus/1/comments"
     ArticleUpdateDTO:
       type: object
       properties:
@@ -466,15 +461,15 @@ components:
           example: 200
         message:
           type: string
-          example: Article updated successfully
+          example: Menu updated successfully
         data:
-          $ref: "#/components/schemas/Article"
+          $ref: "#/components/schemas/Menu"
         links:
           type: object
           properties:
             self:
               type: string
-              example: "/articles/1"
+              example: "/menus/1"
     Comment:
       allOf:
         - type: object
@@ -680,7 +675,7 @@ components:
       in: path
       name: id
       required: true
-      description: Article ID
+      description: Menu ID
       schema:
         type: string
         example: "64d268cdeef8c84bb18912db"
