@@ -1,7 +1,10 @@
 const express = require("express")
 const {AppdataSource} = require("./src/database/config")
 const applyMiddleware = require("./src/middleware/init")
-const UserRoute = require("./src/route/index")
+const UserRoute = require("./src/route/user")
+const MenuRoute = require("./src/route/menu")
+const CartRoute = require("./src/route/cart")
+const OrderRoute = require("./src/route/order")
 
 
 AppdataSource.initialize()
@@ -12,6 +15,9 @@ AppdataSource.initialize()
 
         // ROUTES
         app.use("/api/v1/users", UserRoute);
+        app.use("/api/v1/menus", MenuRoute);
+        app.use("/api/v1/carts", CartRoute);
+        app.use("/api/v1/orders", OrderRoute);
 
         // HEALTH CHECKER
         app.get("/api/v1", (req, res)=> {

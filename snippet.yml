@@ -1,0 +1,29 @@
+security:
+  - bearerAuth: []
+
+  id:
+    type: integer
+    format: int32
+    example: 1
+  name:
+    type: string
+    example: nahid dev
+  phone:
+    type: string
+    example: 01621987123
+  email:
+    type: string
+    example: nahid@mail.com
+  role:
+    type: string
+    enum: [customer, chef, delivery_boy, app_admin]
+    example: customer
+  status:
+    type: string
+    enum: [pending, approved, block, reject]
+    example: pending
+  photo:
+    type: string
+    format: url
+    example: https://s3.aws.com/myfirstblog/124.jpg
+

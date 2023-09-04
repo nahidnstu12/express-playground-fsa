@@ -1,5 +1,8 @@
 var typeorm = require("typeorm")
-// const User = require("../model/user")
+const User = require("../model/user")
+const Menu = require("../model/menu")
+const Cart = require("../model/cart")
+const Order = require("../model/order")
 
 exports.AppdataSource = new typeorm.DataSource({
     type: "mysql",
@@ -9,7 +12,7 @@ exports.AppdataSource = new typeorm.DataSource({
     password: "",
     database: "street-pizza",
     synchronize: true,
-    entities: [require("../model/user")],
+    entities: [User, Menu, Cart, Order],
 })
 
 // module.exports = {AppdataSource};
