@@ -2,7 +2,7 @@ const {createUser} = require("../service/user");
 
 const controller = {}
 
-controller.createUserHandler = async (
+controller.createMenuHandler = async (
     req,
     res,
     next,

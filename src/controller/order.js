@@ -2,7 +2,7 @@ const {createUser} = require("../service/user");
 
 const controller = {}
 
-controller.createUserHandler = async (
+controller.createOrderHandler = async (
     req,
     res,
     next,
