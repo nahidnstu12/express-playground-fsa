@@ -13,12 +13,15 @@ servers:
 tags:
   - name: Auth
     description: Authentication Endpoints (public)
-  - name: Menu
-    description: Menu Endpoints (public + private)
-  - name: Comment
-    description: Comment Endpoints (Private)
   - name: User
     description: User Endpoints (admin only)
+  - name: Menu
+    description: Menu Endpoints (public + private)
+  - name: Cart
+    description: Cart Endpoints (public + private)
+  - name: Order
+    description: Order Endpoints (public + private)
+
 paths:
   "/auth/register":
     post:
@@ -63,7 +66,7 @@ paths:
                       access_token:
                         type: string
                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-                  
+
         "400":
           $ref: "#/components/responses/400"
         "500":
@@ -108,11 +111,208 @@ paths:
                       access_token:
                         type: string
                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-                 
+
         "400":
           $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
+
+  "/users":
+    get:
+      security:
+        - bearerAuth: []
+      tags: [User]
+      description: Retrieve all users
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/searchParam"
+      responses:
+        "200":
+          description: Return a list of users
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: integer
+                              format: int32
+                              example: 1
+                            name:
+                              type: string
+                              example: nahid dev
+                            phone:
+                              type: string
+                              example: 01621987123
+                            email:
+                              type: string
+                              example: nahid@mail.com
+                            role:
+                              type: string
+                              enum: [customer, chef, delivery_boy, app_admin]
+                              example: customer
+                            status:
+                              type: string
+                              enum: [pending, approved, block, reject]
+                              example: pending
+                            photo:
+                              type: string
+                              format: url
+                              example: https://s3.aws.com/myfirstblog/124.jpg
+
+                        - $ref: "#/components/schemas/Timestamp"
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+    post:
+
+      security:
+        - bearerAuth: []
+      tags: [User]
+      description: Create a new user (delivery or chef user)
+      requestBody:
+        description: To create a new user by admin for delivery or chef user 
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: nahid dev
+                phone:
+                  type: string
+                  example: 01621987123
+                email:
+                  type: string
+                  example: nahid@mail.com
+                role:
+                  type: string
+                  enum: [ customer, chef, delivery_boy, app_admin ]
+                  example: delivery_boy
+                status:
+                  type: string
+                  enum: [ pending, approved, block, reject ]
+                  example: pending
+
+              required: [name, phone, email, role, status]
+      responses:
+        "201":
+          description: Successfully created a new user
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/UserCreatedDTO"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
+  "/users/{id}":
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags: [ User ]
+      description: Fetch a single user
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+
+      responses:
+        "200":
+          description: "Single User view"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  data:
+                    allOf:
+                      - $ref: "#/components/schemas/User"
+
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags: [ User ]
+      description: Update an user
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+
+                name:
+                  type: string
+                  example: nahid dev
+                email:
+                  type: string
+                  example: nahid@mail.com
+                role:
+                  type: string
+                  enum: [ customer, chef, delivery_boy, app_admin ]
+                  example: customer
+                status:
+                  type: string
+                  enum: [ pending, approved, block, reject ]
+                  example: pending
+                photo:
+                  type: string
+                  format: url
+                  example: https://s3.aws.com/myfirstblog/124.jpg
+
+      responses:
+        "200":
+          description: "Successfully Updated"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/UserUpdatedDTO"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags: [ User ]
+      description: Delete an user by id
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      responses:
+        "204":
+          description: "User deleted successfully"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+
   "/menus":
     get:
       tags: [Menu]
@@ -120,8 +320,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/pageParam"
         - $ref: "#/components/parameters/limitParam"
-        - $ref: "#/components/parameters/sortTypeParam"
-        - $ref: "#/components/parameters/sortByParam"
         - $ref: "#/components/parameters/searchParam"
       responses:
         "200":
@@ -153,34 +351,29 @@ paths:
                             status:
                               type: string
                               enum: [active, inactive]
-
                               example: active
+                            variant:
+                              type: string
+                              enum:
+                                [
+                                  pizza,
+                                  Smoky BBQ Delight,
+                                  Pepperoni Supreme,
+                                  Veggie Feast,
+                                  Mushroom Elegance,
+                                ]
+                              example: pizza
                             cover:
                               type: string
                               format: url
                               example: https://s3.aws.com/myfirstblog/124.jpg
-                            author:
-                              $ref: "#/components/schemas/AuthorDTO"
+                            userId:
+                              $ref: "#/components/schemas/UserDTO"
 
-                          required: [id, title, author]
                         - $ref: "#/components/schemas/Timestamp"
                   pagination:
                     $ref: "#/components/schemas/Pagination"
-                  links:
-                    type: object
-                    properties:
-                      self:
-                        type: string
-                        format: url
-                        example: "/menus?page=2&limit=10"
-                      next:
-                        type: string
-                        format: url
-                        example: "/menus?page=3&limit=10"
-                      prev:
-                        type: string
-                        format: url
-                        example: "/menus?page=1&limit=10"
+
         "400":
           $ref: "#/components/responses/400"
         "500":
@@ -190,55 +383,66 @@ paths:
       security:
         - bearerAuth: []
       tags: [Menu]
-      description: Create a new article
+      description: Create a new menu
       requestBody:
-        description: To create a new article user must need to provide valid data
+        description: To create a new menu user must need to provide valid data
         content:
           "application/json":
             schema:
               type: object
               properties:
-                title:
+                name:
                   type: string
-                  example: First article
-                body:
+                  example: test pizza
+                description:
                   type: string
-                  format: text
-                  example: Body of the first article
+                  example: test pizza description
+                price:
+                  type: number
+                  example: 200
+                status:
+                  type: string
+                  enum: [active, inactive]
+                  example: active
+                variant:
+                  type: string
+                  enum:
+                    [
+                      pizza,
+                      Smoky BBQ Delight,
+                      Pepperoni Supreme,
+                      Veggie Feast,
+                      Mushroom Elegance,
+                    ]
+                  example: pizza
                 cover:
                   type: string
                   format: url
-                  example: https://s3.aws.example.com/23nds
-                status:
-                  type: string
-                  enum: [draft, published]
-                  example: draft
-              required: [title, body]
+                  example: https://s3.aws.com/myfirstblog/124.jpg
+                userId:
+                  $ref: "#/components/schemas/UserDTO"
+              required: [name, description, price, variant, status]
       responses:
         "201":
-          description: Successfully created a new article
+          description: Successfully created a new menu
           content:
             "application/json":
               schema:
-                $ref: "#/components/schemas/ArticleCreateDTO"
+                $ref: "#/components/schemas/MenuCreatedDTO"
         "400":
           $ref: "#/components/responses/400"
         "401":
           $ref: "#/components/responses/401"
         "500":
           $ref: "#/components/responses/500"
+
   "/menus/{id}":
     get:
       tags: [Menu]
-      description: Fetch a single article
+      description: Fetch a single menu
       parameters:
         - $ref: "#/components/parameters/idPathParam"
-        - in: query
-          name: expand
-          description: expand author and comment object
-          schema:
-            type: string
-            example: "author,comment"
+
       responses:
         "200":
           description: "Single Menu view"
@@ -250,39 +454,19 @@ paths:
                   data:
                     allOf:
                       - $ref: "#/components/schemas/Menu"
-                      - type: object
-                        properties:
-                          author:
-                            $ref: "#/components/schemas/AuthorDTO"
-                      - type: object
-                        properties:
-                          comments:
-                            type: array
-                            items:
-                              $ref: "#/components/schemas/Comment"
-                  links:
-                    type: object
-                    properties:
-                      self:
-                        type: string
-                        example: "/menus/1"
-                      author:
-                        type: string
-                        example: "/menus/1/author"
-                      comments:
-                        type: string
-                        example: "/menus/1/comments"
+
         "400":
           $ref: "#/components/responses/400"
         "404":
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
+
     put:
       security:
         - bearerAuth: []
       tags: [Menu]
-      description: Create or update entire article
+      description: Update an menu
       parameters:
         - $ref: "#/components/parameters/idPathParam"
       requestBody:
@@ -291,80 +475,41 @@ paths:
             schema:
               type: object
               properties:
-                id:
-                  type: integer
-                  format: int32
-                  example: 1
-                title:
+                name:
                   type: string
-                  example: article title
-                body:
+                  example: test pizza
+                description:
                   type: string
-                  format: text
-                  example: article body
+                  example: test pizza description
+                price:
+                  type: number
+                  example: 200
+                status:
+                  type: string
+                  enum: [active, inactive]
+                  example: active
+                variant:
+                  type: string
+                  enum:
+                    [
+                      pizza,
+                      Smoky BBQ Delight,
+                      Pepperoni Supreme,
+                      Veggie Feast,
+                      Mushroom Elegance,
+                    ]
+                  example: pizza
                 cover:
                   type: string
                   format: url
-                  example: "https://s3.aws.myblog.com/221ddw34"
-                status:
-                  type: string
-                  enum: [draft, published]
-                  example: draft
-              required: [title, body]
-      responses:
-        "200":
-          description: "Successfully Updated"
-          content: &article_update_content
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/ArticleUpdateDTO"
-        "201":
-          description: "Successfully Created"
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/ArticleCreateDTO"
-        "400":
-          $ref: "#/components/responses/400"
-        "401":
-          $ref: "#/components/responses/401"
-        "500":
-          $ref: "#/components/responses/500"
-    patch:
-      security:
-        - bearerAuth: []
-      tags: [Menu]
-      description: Partially update an article
-      parameters:
-        - $ref: "#/components/parameters/idPathParam"
-      requestBody:
-        content:
-          "application/json":
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                  example: article title
-                body:
-                  type: string
-                  format: text
-                  example: article body
-                cover:
-                  type: string
-                  format: url
-                  example: "https://s3.aws.myblog.com/221ddw34"
-                status:
-                  type: string
-                  enum: [draft, published]
-                  example: draft
+                  example: https://s3.aws.com/myfirstblog/124.jpg
       responses:
         "200":
           description: "Successfully Updated"
           content:
             "application/json":
               schema:
-                $ref: "#/components/schemas/ArticleUpdateDTO"
+                $ref: "#/components/schemas/MenuUpdatedDTO"
         "400":
           $ref: "#/components/responses/400"
         "401":
@@ -377,7 +522,7 @@ paths:
       security:
         - bearerAuth: []
       tags: [Menu]
-      description: Delete an article by id
+      description: Delete an menu by id
       parameters:
         - $ref: "#/components/parameters/idPathParam"
       responses:
@@ -389,6 +534,107 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
+
+  "/carts":
+    get:
+      tags: [ Cart ]
+      description: Retrieve all carts
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/searchParam"
+      responses:
+        "200":
+          description: Return a list of carts
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: integer
+                              format: int32
+                              example: 1
+                            quantity:
+                              type: number
+                              example: 5
+                            userId:
+                              $ref: "#/components/schemas/UserDTO"
+                            menu_id:
+                              $ref: "#/components/schemas/UserDTO"
+
+                        - $ref: "#/components/schemas/Timestamp"
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+    post:
+      operationId: createPost
+      security:
+        - bearerAuth: [ ]
+      tags: [ Menu ]
+      description: Create a new menu
+      requestBody:
+        description: To create a new menu user must need to provide valid data
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: test pizza
+                description:
+                  type: string
+                  example: test pizza description
+                price:
+                  type: number
+                  example: 200
+                status:
+                  type: string
+                  enum: [ active, inactive ]
+                  example: active
+                variant:
+                  type: string
+                  enum:
+                    [
+                      pizza,
+                      Smoky BBQ Delight,
+                      Pepperoni Supreme,
+                      Veggie Feast,
+                      Mushroom Elegance,
+                    ]
+                  example: pizza
+                cover:
+                  type: string
+                  format: url
+                  example: https://s3.aws.com/myfirstblog/124.jpg
+                userId:
+                  $ref: "#/components/schemas/UserDTO"
+              required: [ name, description, price, variant, status ]
+      responses:
+        "201":
+          description: Successfully created a new menu
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/MenuCreatedDTO"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
+
 components:
   securitySchemes:
     bearerAuth:
@@ -404,28 +650,94 @@ components:
               type: integer
               format: int32
               example: 1
-            authorId:
-              type: integer
-              format: int32
-              example: 1
-            title:
+            name:
               type: string
-              example: First Menu
-            body:
+              example: test pizza
+            description:
               type: string
-              format: text
-              example: The body of the first article
+              example: test pizza description
+            price:
+              type: number
+              example: 200
+            status:
+              type: string
+              enum: [active, inactive]
+              example: active
+            variant:
+              type: string
+              enum:
+                [
+                  pizza,
+                  Smoky BBQ Delight,
+                  Pepperoni Supreme,
+                  Veggie Feast,
+                  Mushroom Elegance,
+                ]
+              example: pizza
             cover:
               type: string
               format: url
-              example: https://s3.aws.example.com/23nds
-            status:
-              type: string
-              enum: [draft, published]
-              example: draft
-          required: [id, authorId, title, body, status]
+              example: https://s3.aws.com/myfirstblog/124.jpg
+            userId:
+              $ref: "#/components/schemas/UserDTO"
+
         - $ref: "#/components/schemas/Timestamp"
-    ArticleCreateDTO:
+    User:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int32
+              example: 1
+            name:
+                type: string
+                example: nahid dev
+            phone:
+                type: string
+                example: 01621987123
+            email:
+                type: string
+                example: nahid@mail.com
+            role:
+                type: string
+                enum: [ customer, chef, delivery_boy, app_admin ]
+                example: customer
+            status:
+                type: string
+                enum: [ pending, approved, block, reject ]
+                example: pending
+            photo:
+                type: string
+                format: url
+                example: https://s3.aws.com/myfirstblog/124.jpg
+
+        - $ref: "#/components/schemas/Timestamp"
+    UserCreatedDTO:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 201
+        message:
+          type: string
+          example: "User created successfully"
+        data:
+          $ref: "#/components/schemas/User"
+    UserUpdatedDTO:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 200
+        message:
+          type: string
+          example: User updated successfully
+        data:
+          $ref: "#/components/schemas/User"
+    MenuCreatedDTO:
       type: object
       properties:
         code:
@@ -437,22 +749,8 @@ components:
           example: "Menu created successfully"
         data:
           $ref: "#/components/schemas/Menu"
-        links:
-          type: object
-          properties:
-            self:
-              type: string
-              format: url
-              example: "/menus/1"
-            author:
-              type: string
-              format: url
-              example: "/menus/1/author"
-            comments:
-              type: string
-              format: url
-              example: "/menus/1/comments"
-    ArticleUpdateDTO:
+
+    MenuUpdatedDTO:
       type: object
       properties:
         code:
@@ -464,78 +762,48 @@ components:
           example: Menu updated successfully
         data:
           $ref: "#/components/schemas/Menu"
-        links:
-          type: object
-          properties:
-            self:
-              type: string
-              example: "/menus/1"
-    Comment:
-      allOf:
-        - type: object
-          properties:
-            id:
-              type: integer
-              format: int32
-              example: 1
-            authorId:
-              type: integer
-              format: int32
-              example: 1
-            articleId:
-              type: integer
-              format: int32
-              example: 1
-            body:
-              type: string
-              format: text
-              example: The body of the comment
-            status:
-              type: string
-              enum: [public, private]
-              example: public
-          required: [id, authorId, articleId, body, status]
-        - $ref: "#/components/schemas/Timestamp"
+
+
     Timestamp:
       type: object
       properties:
-        createdAt:
+        created_at:
           type: string
           format: date-time
-        updatedAt:
+        updated_at:
           type: string
           format: date-time
       required: [createdAt, updatedAt]
-    AuthorDTO:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          example: 1
-        name:
-          type: string
-          example: "A.B Raihan"
-      required: [id, name]
+    UserDTO:
+      type: integer
+      format: int32
+      example: 1
+    MenuDTO:
+      type: integer
+      format: int32
+      example: 1
+    #    UserDTO:
+    #      type: object
+    #      properties:
+    #        id:
+    #          type: integer
+    #          format: int32
+    #          example: 1
+    #        name:
+    #          type: string
+    #          example: "A.B Raihan"
+    #      required: [id, name]
     Pagination:
       type: object
       properties:
         page:
           type: integer
           format: int32
-          example: 2
+          example: 1
         limit:
           type: integer
           format: int32
           example: 10
-        next:
-          type: integer
-          format: int32
-          example: 3
-        prev:
-          type: integer
-          format: int32
-          example: 1
         totalPage:
           type: integer
           format: int32
@@ -544,11 +812,11 @@ components:
           type: integer
           format: int32
           example: 50
-      required:
-        - page
-        - limit
-        - totalPage
-        - totalItems
+  #      required:
+  #        - page
+  #        - limit
+  #        - totalPage
+  #        - totalItems
   responses:
     "500":
       description: "Internal Server Error"
@@ -675,7 +943,7 @@ components:
       in: path
       name: id
       required: true
-      description: Menu ID
+      description: Item ID
       schema:
         type: string
-        example: "64d268cdeef8c84bb18912db"
+        example: "1"
