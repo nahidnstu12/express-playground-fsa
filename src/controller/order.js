@@ -2,7 +2,7 @@ const {createUser} = require("../service/user");
 
 const controller = {}
 
-controller.createOrderHandler = async (
+controller.create = async (
     req,
     res,
     next,
@@ -23,5 +23,116 @@ controller.createOrderHandler = async (
         next(err);
     }
 };
+
+controller.readAll = async (
+    req,
+    res,
+    next,
+)=> {
+    try {
+
+        res.status(201).json({
+            status: "Success",
+            data: [],
+        });
+    } catch (err) {
+        if (err.code === "23505") {
+            return res.status(409).json({
+                status: "fail",
+                message: "",
+            });
+        }
+        next(err);
+    }
+};
+
+controller.read = async (
+    req,
+    res,
+    next,
+)=> {
+    try {
+
+        res.status(201).json({
+            status: "Success",
+            data: [],
+        });
+    } catch (err) {
+        if (err.code === "23505") {
+            return res.status(409).json({
+                status: "fail",
+                message: "",
+            });
+        }
+        next(err);
+    }
+};
+
+controller.update = async (
+    req,
+    res,
+    next,
+)=> {
+    try {
+
+        res.status(201).json({
+            status: "Success",
+            data: [],
+        });
+    } catch (err) {
+        if (err.code === "23505") {
+            return res.status(409).json({
+                status: "fail",
+                message: "",
+            });
+        }
+        next(err);
+    }
+};
+
+controller.delete = async (
+    req,
+    res,
+    next,
+)=> {
+    try {
+
+        res.status(201).json({
+            status: "Success",
+            data: [],
+        });
+    } catch (err) {
+        if (err.code === "23505") {
+            return res.status(409).json({
+                status: "fail",
+                message: "",
+            });
+        }
+        next(err);
+    }
+};
+
+controller.orderCancel = async (
+    req,
+    res,
+    next,
+)=> {
+    try {
+
+        res.status(201).json({
+            status: "Success",
+            data: [],
+        });
+    } catch (err) {
+        if (err.code === "23505") {
+            return res.status(409).json({
+                status: "fail",
+                message: "",
+            });
+        }
+        next(err);
+    }
+};
+
 
 module.exports = controller;

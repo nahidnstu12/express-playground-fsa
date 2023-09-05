@@ -1,11 +1,26 @@
 const {AppdataSource} = require('../database/config');
-const User = require('../model/user');
+const Cart = require('../model/cart');
 
-const userRepository = AppdataSource.getRepository(User);
+const cartRepository = AppdataSource.getRepository(Cart);
 const service = {}
 
-service.createUser = async (input) => {
-    return await userRepository.save(userRepository.create({ ...input }));
+service.createCartHandler = async (input) => {
+    return await cartRepository.save(cartRepository.create({ ...input }));
+};
+service.readAllCartHandler = async (input) => {
+    return await cartRepository.save(cartRepository.create({ ...input }));
+};
+service.readCartHandler = async (input) => {
+    return await cartRepository.save(cartRepository.create({ ...input }));
+};
+service.updateCartHandler = async (input) => {
+    return await cartRepository.save(cartRepository.create({ ...input }));
+};
+service.deleteCartHandler = async (input) => {
+    return await cartRepository.save(cartRepository.create({ ...input }));
+};
+service.cancelCartHandler = async (input) => {
+    return await cartRepository.save(cartRepository.create({ ...input }));
 };
 
 module.exports = service;

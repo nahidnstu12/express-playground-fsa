@@ -1,11 +1,21 @@
-const express = require("express")
-const {createUserHandler} = require("../controller/user");
+const express = require("express");
+const {
+  create,
+  read,
+  readAll,
+  update,
+  delete: remove,
+  menuPublish,
+  menuUnpublish,
+} = require("../controller/menu");
 
 const router = express.Router();
 
-router
-    .route("/")
-    // .get(getBooksHandler)
-    .post( createUserHandler);
+router.route("/menus").get(readAll).post(create);
 
-module.exports =  router;
+router.route("/menus/:id/publish").get(menuPublish);
+router.route("/menus/:id/unpublish").get(menuUnpublish);
+
+router.route("/menus/:id").get(read).delete(remove).put(update);
+
+module.exports = router;

@@ -5,6 +5,7 @@ const UserRoute = require("./src/route/user")
 const MenuRoute = require("./src/route/menu")
 const CartRoute = require("./src/route/cart")
 const OrderRoute = require("./src/route/order")
+const AuthRoute = require("./src/route/auth")
 
 
 AppdataSource.initialize()
@@ -14,6 +15,7 @@ AppdataSource.initialize()
         applyMiddleware(app);
 
         // ROUTES
+        app.use("/api/v1/auth", AuthRoute);
         app.use("/api/v1/users", UserRoute);
         app.use("/api/v1/menus", MenuRoute);
         app.use("/api/v1/carts", CartRoute);

@@ -1,11 +1,29 @@
 const {AppdataSource} = require('../database/config');
-const User = require('../model/user');
+const Menu = require('../model/menu');
 
-const userRepository = AppdataSource.getRepository(User);
+const menuRepository = AppdataSource.getRepository(Menu);
 const service = {}
 
-service.createUser = async (input) => {
-    return await userRepository.save(userRepository.create({ ...input }));
+service.createMenuHandler = async (input) => {
+    return await menuRepository.save(menuRepository.create({ ...input }));
+};
+service.readAllMenuHandler = async (input) => {
+    return await menuRepository.save(menuRepository.create({ ...input }));
+};
+service.readMenuHandler = async (input) => {
+    return await menuRepository.save(menuRepository.create({ ...input }));
+};
+service.updateMenuHandler = async (input) => {
+    return await menuRepository.save(menuRepository.create({ ...input }));
+};
+service.deleteMenuHandler = async (input) => {
+    return await menuRepository.save(menuRepository.create({ ...input }));
+};
+service.publishMenuHandler = async (input) => {
+    return await menuRepository.save(menuRepository.create({ ...input }));
+};
+service.unpublishMenuHandler = async (input) => {
+    return await menuRepository.save(menuRepository.create({ ...input }));
 };
 
 module.exports = service;

@@ -1,11 +1,18 @@
-const express = require("express")
-const {createUserHandler} = require("../controller/user");
+const express = require("express");
+const {
+  create,
+  read,
+  readAll,
+  update,
+  delete: remove,
+  cancelCart,
+} = require("../controller/cart");
 
 const router = express.Router();
 
-router
-    .route("/")
-    // .get(getBooksHandler)
-    .post( createUserHandler);
+router.route("/carts").get(readAll).post(create);
 
-module.exports =  router;
+router.route("/carts/:id").get(read).delete(remove).put(update);
+router.route("/carts/:id/cancel").get(cancelCart);
+
+module.exports = router;
