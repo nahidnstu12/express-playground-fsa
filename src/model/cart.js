@@ -1,37 +1,23 @@
 var EntitySchema = require("typeorm").EntitySchema
 
 module.exports = new EntitySchema({
-    name: "User",
-    tableName: "users",
+    name: "Cart",
+    tableName: "carts",
     columns: {
         id: {
             primary: true,
             type: "int",
             generated: true,
         },
-        name: {
-            type: "varchar",
-            length: 30
+        quantity: {
+            type: "int",
         },
-        phone: {
-            type: "varchar",
+        price: {
+            type: "double",
         },
-        email: {
-            type: "varchar",
-        },
-        password: {
-            type: "varchar",
-        },
-        role:{
-            type: "enum",
-            enum: ['customer', 'chef', 'delivary_boy', 'app_admin'],
-            default: 'customer'
-        },
-        status:{
-            type: "enum",
-            enum: ['pending', 'approved', 'block', 'reject'],
-            default: 'pending'
-        },
+
+
+
         created_at: {
             type: "datetime",
             createDate: true
@@ -40,5 +26,19 @@ module.exports = new EntitySchema({
             type: "datetime",
             updateDate: true
         }
+    },
+    relations: {
+        user_id: {
+            target: "User",
+            type: "many-to-one",
+            joinTable: true,
+            cascade: true,
+        },
+        menu_id: {
+            target: "Menu",
+            type: "many-to-one",
+            joinTable: true,
+            cascade: true,
+        },
     },
 })

@@ -1,8 +1,8 @@
-var EntitySchema = require("typeorm").EntitySchema
+const { EntitySchema } = require("typeorm");
 
 module.exports = new EntitySchema({
-    name: "User",
-    tableName: "users",
+    name: "Menu",
+    tableName: "menus",
     columns: {
         id: {
             primary: true,
@@ -11,34 +11,48 @@ module.exports = new EntitySchema({
         },
         name: {
             type: "varchar",
-            length: 30
+            length: 30,
         },
-        phone: {
+        description: {
+            type: "varchar",
+            length: 255,
+        },
+        cover: {
             type: "varchar",
         },
-        email: {
-            type: "varchar",
+        price: {
+            type: "double",
         },
-        password: {
-            type: "varchar",
-        },
-        role:{
+        variant: {
             type: "enum",
-            enum: ['customer', 'chef', 'delivary_boy', 'app_admin'],
-            default: 'customer'
+            enum: [
+                "pizza",
+                "Smoky BBQ Delight",
+                "Pepperoni Supreme",
+                "Veggie Feast",
+                "Mushroom Elegance",
+            ],
+            default: "pizza",
         },
-        status:{
-            type: "enum",
-            enum: ['pending', 'approved', 'block', 'reject'],
-            default: 'pending'
+        user_id: {
+            type: "int",
         },
         created_at: {
             type: "datetime",
-            createDate: true
+            createDate: true,
         },
         updated_at: {
             type: "datetime",
-            updateDate: true
-        }
+            updateDate: true,
+        },
     },
-})
+    relations: {
+        user: {
+            type: "many-to-one",
+            target: "User",
+            joinTable: true,
+            cascade: true,
+            onDelete: "CASCADE", // You can specify the desired behavior on delete
+        },
+    },
+});

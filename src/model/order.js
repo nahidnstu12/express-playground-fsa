@@ -1,37 +1,40 @@
 var EntitySchema = require("typeorm").EntitySchema
 
 module.exports = new EntitySchema({
-    name: "User",
-    tableName: "users",
+    name: "Order",
+    tableName: "orders",
     columns: {
         id: {
             primary: true,
             type: "int",
             generated: true,
         },
-        name: {
-            type: "varchar",
-            length: 30
+        order_date: {
+            type: "datetime",
+            createDate: true
         },
-        phone: {
-            type: "varchar",
+        quantity: {
+            type: "int",
         },
-        email: {
-            type: "varchar",
+        price: {
+            type: "double",
         },
-        password: {
-            type: "varchar",
-        },
-        role:{
+        order_type:{
             type: "enum",
-            enum: ['customer', 'chef', 'delivary_boy', 'app_admin'],
-            default: 'customer'
+            enum: ['instant_order', 'home_delivary'],
+            default: 'instant_order'
         },
-        status:{
+        order_status:{
             type: "enum",
-            enum: ['pending', 'approved', 'block', 'reject'],
+            enum: ['pending','order_taken','order_processing','order_shipped', 'order_shipped', 'order_delivered', 'order_rejected'],
             default: 'pending'
         },
+        payment_status:{
+            type: "enum",
+            enum: ['pending', 'paid', 'reject'],
+            default: 'pending'
+        },
+
         created_at: {
             type: "datetime",
             createDate: true
@@ -40,5 +43,19 @@ module.exports = new EntitySchema({
             type: "datetime",
             updateDate: true
         }
+    },
+    relations: {
+        user_id: {
+            target: "User",
+            type: "many-to-one",
+            joinTable: true,
+            cascade: true,
+        },
+        menu_id: {
+            target: "Menu",
+            type: "many-to-one",
+            joinTable: true,
+            cascade: true,
+        },
     },
 })
