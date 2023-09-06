@@ -14,7 +14,7 @@ const router = express.Router();
 router.route("").get(readAll).post(create);
 router.route("/:id").get(read).delete(remove).put(update);
 
-router.route("/:id/approve").get(userApprove);
+router.route("/:id/approved").get(userApprove);
 
 router.route("/:id/blocked").get(userBlocked);
 
