@@ -1,61 +1,68 @@
-var EntitySchema = require("typeorm").EntitySchema
+var EntitySchema = require("typeorm").EntitySchema;
 
 module.exports = new EntitySchema({
-    name: "Order",
-    tableName: "orders",
-    columns: {
-        id: {
-            primary: true,
-            type: "int",
-            generated: true,
-        },
-        order_date: {
-            type: "datetime",
-            createDate: true
-        },
-        quantity: {
-            type: "int",
-        },
-        price: {
-            type: "double",
-        },
-        order_type:{
-            type: "enum",
-            enum: ['instant_order', 'home_delivary'],
-            default: 'instant_order'
-        },
-        order_status:{
-            type: "enum",
-            enum: ['pending','order_taken','order_processing','order_shipped', 'order_shipped', 'order_delivered', 'order_rejected'],
-            default: 'pending'
-        },
-        payment_status:{
-            type: "enum",
-            enum: ['pending', 'paid', 'reject'],
-            default: 'pending'
-        },
+  name: "Order",
+  tableName: "orders",
+  columns: {
+    id: {
+      primary: true,
+      type: "int",
+      generated: true,
+    },
+    order_date: {
+      type: "datetime",
+      createDate: true,
+    },
+    quantity: {
+      type: "int",
+    },
+    price: {
+      type: "double",
+    },
+    order_type: {
+      type: "enum",
+      enum: ["instant_order", "home_delivary"],
+      default: "instant_order",
+    },
+    order_status: {
+      type: "enum",
+      enum: [
+        "pending",
+        "order_taken",
+        "order_processing",
+        "order_shipped",
+        "order_delivered",
+        "order_rejected",
+      ],
+      default: "pending",
+    },
+    payment_status: {
+      type: "enum",
+      enum: ["pending", "paid", "reject"],
+      default: "pending",
+    },
 
-        created_at: {
-            type: "datetime",
-            createDate: true
-        },
-        updated_at: {
-            type: "datetime",
-            updateDate: true
-        }
+    created_at: {
+      type: "datetime",
+      createDate: true,
     },
-    relations: {
-        user_id: {
-            target: "User",
-            type: "many-to-one",
-            joinTable: true,
-            cascade: true,
-        },
-        menu_id: {
-            target: "Menu",
-            type: "many-to-one",
-            joinTable: true,
-            cascade: true,
-        },
+    updated_at: {
+      type: "datetime",
+      updateDate: true,
     },
-})
+  },
+  relations: {
+    user_id: {
+      target: "User",
+      type: "many-to-one",
+      joinTable: true,
+      cascade: true,
+    },
+    menu_id: {
+      target: "Menu",
+      type: "many-to-one",
+      joinTable: true,
+      cascade: true,
+    },
+  },
+});

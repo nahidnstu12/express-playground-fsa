@@ -10,10 +10,10 @@ const {
 
 const router = express.Router();
 
-router.route("/orders").get(readAll).post(create);
+router.route("").get(readAll).post(create);
 
-router.route("/orders/:id").get(read).delete(remove).put(update);
+router.route("/:id").get(read).delete(remove).put(update);
 
-router.route("/orders/:id/cancel").get(orderCancel);
+router.route("/:id/cancel").get(orderCancel);
 
 module.exports = router;

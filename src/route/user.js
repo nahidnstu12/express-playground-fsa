@@ -11,11 +11,11 @@ const {
 
 const router = express.Router();
 
-router.route("/users").get(readAll).post(create);
-router.route("/users/:id").get(read).delete(remove).put(update);
+router.route("").get(readAll).post(create);
+router.route("/:id").get(read).delete(remove).put(update);
 
-router.route("/users/:id/approve").get(userApprove);
+router.route("/:id/approve").get(userApprove);
 
-router.route("/users/:id/blocked").get(userBlocked);
+router.route("/:id/blocked").get(userBlocked);
 
 module.exports = router;

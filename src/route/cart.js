@@ -10,9 +10,9 @@ const {
 
 const router = express.Router();
 
-router.route("/carts").get(readAll).post(create);
+router.route("").get(readAll).post(create);
 
-router.route("/carts/:id").get(read).delete(remove).put(update);
-router.route("/carts/:id/cancel").get(cancelCart);
+router.route("/:id").get(read).delete(remove).put(update);
+router.route("/:id/cancel").get(cancelCart);
 
 module.exports = router;

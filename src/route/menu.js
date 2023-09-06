@@ -11,11 +11,11 @@ const {
 
 const router = express.Router();
 
-router.route("/menus").get(readAll).post(create);
+router.route("").get(readAll).post(create);
 
-router.route("/menus/:id/publish").get(menuPublish);
-router.route("/menus/:id/unpublish").get(menuUnpublish);
+router.route("/:id/publish").get(menuPublish);
+router.route("/:id/unpublish").get(menuUnpublish);
 
-router.route("/menus/:id").get(read).delete(remove).put(update);
+router.route("/:id").get(read).delete(remove).put(update);
 
 module.exports = router;
