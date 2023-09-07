@@ -44,7 +44,7 @@ service.updateMenuHandler = async (id, data) => {
   }
 
   Object.assign(menu, data);
-
+  console.log("updateMenuHandler", menu);
   return await menuRepository.save(menu);
 };
 service.deleteMenuHandler = async (id) => {
