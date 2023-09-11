@@ -7,7 +7,7 @@ const service = {};
 service.createMenuHandler = async (input) => {
   return await menuRepository.save(menuRepository.create({ ...input }));
 };
-service.readAllMenuHandler = async () => {
+service.readAllMenuHandler2 = async () => {
   return await menuRepository.find({
     select: {
       id: true,
@@ -17,12 +17,37 @@ service.readAllMenuHandler = async () => {
       status: true,
       variant: true,
       cover: true,
-      user_id: true,
+      userId: true,
     },
+    // not working
+    relations: { user: { select: ["id", "name", "email", "role", "status"] } },
   });
 };
+
+service.readAllMenuHandler = async () => {
+  return await menuRepository
+    .createQueryBuilder("menu")
+    .select([
+      "menu.id",
+      "menu.name",
+      "menu.description",
+      "menu.price",
+      "menu.status",
+      "menu.variant",
+      "menu.cover",
+      "user.id",
+      "user.name",
+      "user.phone",
+      "user.email",
+      "user.role",
+      "user.status",
+    ])
+    .leftJoin("menu.user", "user")
+    .getMany();
+};
+
 service.readMenuHandler = async (id) => {
-  return await menuRepository.find({
+  return await menuRepository.findOneOrFail({
     select: {
       id: true,
       name: true,
@@ -31,9 +56,12 @@ service.readMenuHandler = async (id) => {
       status: true,
       variant: true,
       cover: true,
-      user_id: true,
+      userId: true,
+      email: true,
+      phone: true,
     },
     where: { id },
+    relations: { user: true },
   });
 };
 service.updateMenuHandler = async (id, data) => {
@@ -44,7 +72,6 @@ service.updateMenuHandler = async (id, data) => {
   }
 
   Object.assign(menu, data);
-  console.log("updateMenuHandler", menu);
   return await menuRepository.save(menu);
 };
 service.deleteMenuHandler = async (id) => {

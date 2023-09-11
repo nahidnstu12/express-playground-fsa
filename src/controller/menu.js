@@ -30,11 +30,11 @@ controller.create = async (req, res, next) => {
 
 controller.readAll = async (req, res, next) => {
   try {
-    const users = await readAllMenuHandler();
+    const menus = await readAllMenuHandler();
     res.status(200).json({
       message: "Success",
-      data: users,
-      total: users.length,
+      data: menus,
+      total: menus.length,
     });
   } catch (err) {
     if (err.code === "23505") {

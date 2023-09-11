@@ -1,4 +1,4 @@
-var EntitySchema = require("typeorm").EntitySchema;
+const EntitySchema = require("typeorm").EntitySchema;
 
 module.exports = new EntitySchema({
   name: "Order",
@@ -18,6 +18,12 @@ module.exports = new EntitySchema({
     },
     price: {
       type: "double",
+    },
+    userId: {
+      type: "int",
+    },
+    menuId: {
+      type: "int",
     },
     order_type: {
       type: "enum",
@@ -52,13 +58,13 @@ module.exports = new EntitySchema({
     },
   },
   relations: {
-    user_id: {
+    userId: {
       target: "User",
       type: "many-to-one",
       joinTable: true,
       cascade: true,
     },
-    menu_id: {
+    menuId: {
       target: "Menu",
       type: "many-to-one",
       joinTable: true,

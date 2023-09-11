@@ -15,10 +15,14 @@ service.readAllOrderHandler = async () => {
       order_status: true,
       order_type: true,
       payment_status: true,
-      user_id: true,
-      menu_id: true,
+      userId: true,
+      menuId: true,
       price: true,
       quantity: true,
+    },
+    relations: {
+      menu: true,
+      user: true,
     },
   });
 };
@@ -30,8 +34,8 @@ service.readOrderHandler = async (id) => {
       order_status: true,
       order_type: true,
       payment_status: true,
-      user_id: true,
-      menu_id: true,
+      userId: true,
+      menuId: true,
       price: true,
       quantity: true,
     },

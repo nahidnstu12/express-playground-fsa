@@ -13,8 +13,8 @@ service.readAllCartHandler = async () => {
       id: true,
       quantity: true,
       price: true,
-      menu_id: true,
-      user_id: true,
+      menuId: true,
+      userId: true,
     },
   });
 };
@@ -24,8 +24,8 @@ service.readCartHandler = async (id) => {
       id: true,
       quantity: true,
       price: true,
-      menu_id: true,
-      user_id: true,
+      menuId: true,
+      userId: true,
     },
     where: {
       id,

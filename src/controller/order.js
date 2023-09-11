@@ -11,10 +11,10 @@ const controller = {};
 
 controller.create = async (req, res, next) => {
   try {
-    const user = await createOrderHandler(req.body);
+    const order = await createOrderHandler(req.body);
     res.status(201).json({
       status: "Success",
-      data: user,
+      data: order,
     });
   } catch (err) {
     if (err.code === "23505") {
@@ -29,11 +29,11 @@ controller.create = async (req, res, next) => {
 
 controller.readAll = async (req, res, next) => {
   try {
-    const users = await readAllOrderHandler();
+    const orders = await readAllOrderHandler();
     res.status(200).json({
       message: "Success",
-      data: users,
-      total: users.length,
+      data: orders,
+      total: orders.length,
     });
   } catch (err) {
     if (err.code === "23505") {
@@ -49,10 +49,10 @@ controller.readAll = async (req, res, next) => {
 controller.read = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const user = await readOrderHandler(id);
+    const order = await readOrderHandler(id);
     res.status(200).json({
       message: "Success",
-      data: user,
+      data: order,
     });
   } catch (err) {
     if (err.code === "23505") {
@@ -67,12 +67,12 @@ controller.read = async (req, res, next) => {
 
 controller.update = async (req, res, next) => {
   try {
-    const user = await updateOrderHandler(req.params.id, req.body);
+    const order = await updateOrderHandler(req.params.id, req.body);
 
-    if (user) {
+    if (order) {
       return res.status(200).json({
         message: "Successfully updated",
-        data: user,
+        data: order,
       });
     } else {
       return res.status(404).json({

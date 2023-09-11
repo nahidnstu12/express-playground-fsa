@@ -42,7 +42,6 @@ service.updateUserHandler = async (id, data) => {
   }
 
   Object.assign(user, data);
-
   return await userRepository.save(user);
 };
 service.deleteUserHandler = async (id) => {

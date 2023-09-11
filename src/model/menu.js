@@ -19,6 +19,7 @@ module.exports = new EntitySchema({
     },
     cover: {
       type: "varchar",
+      nullable: true,
     },
     price: {
       type: "double",
@@ -39,7 +40,7 @@ module.exports = new EntitySchema({
       ],
       default: "pizza",
     },
-    user_id: {
+    userId: {
       type: "int",
     },
     created_at: {
@@ -55,7 +56,7 @@ module.exports = new EntitySchema({
     user: {
       type: "many-to-one",
       target: "User",
-      joinTable: true,
+      // joinTable: { inverseJoinColumn: "userId" },
       cascade: true,
       onDelete: "CASCADE", // You can specify the desired behavior on delete
     },
