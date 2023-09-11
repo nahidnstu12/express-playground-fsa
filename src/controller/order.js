@@ -17,12 +17,6 @@ controller.create = async (req, res, next) => {
       data: order,
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "User Already exists.",
-      });
-    }
     next(err);
   }
 };
@@ -36,12 +30,6 @@ controller.readAll = async (req, res, next) => {
       total: orders.length,
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -55,12 +43,6 @@ controller.read = async (req, res, next) => {
       data: order,
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -80,12 +62,6 @@ controller.update = async (req, res, next) => {
       });
     }
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -97,12 +73,6 @@ controller.delete = async (req, res, next) => {
       message: "Successfully deleted",
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -114,12 +84,6 @@ controller.orderCancel = async (req, res, next) => {
       message: "Successfully deleted",
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };

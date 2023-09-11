@@ -17,12 +17,6 @@ controller.create = async (req, res, next) => {
       data: cart,
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -35,12 +29,6 @@ controller.readAll = async (req, res, next) => {
       data: carts,
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -54,12 +42,6 @@ controller.read = async (req, res, next) => {
       data: cart,
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -79,12 +61,6 @@ controller.update = async (req, res, next) => {
       });
     }
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -96,12 +72,6 @@ controller.delete = async (req, res, next) => {
       message: "Successfully deleted",
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -114,12 +84,6 @@ controller.cancelCart = async (req, res, next) => {
       data: [],
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };

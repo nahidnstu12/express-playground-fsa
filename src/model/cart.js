@@ -15,6 +15,12 @@ module.exports = new EntitySchema({
     price: {
       type: "double",
     },
+    userId: {
+      type: "int",
+    },
+    menuId: {
+      type: "int",
+    },
     created_at: {
       type: "datetime",
       createDate: true,
@@ -25,13 +31,13 @@ module.exports = new EntitySchema({
     },
   },
   relations: {
-    userId: {
+    user: {
       target: "User",
       type: "many-to-one",
       joinTable: true,
       cascade: true,
     },
-    menuId: {
+    menu: {
       target: "Menu",
       type: "many-to-one",
       joinTable: true,

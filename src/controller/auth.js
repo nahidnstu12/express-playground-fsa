@@ -10,12 +10,6 @@ controller.register = async (req, res, next) => {
       data: user,
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "User Already exists.",
-      });
-    }
     next(err);
   }
 };
@@ -27,12 +21,6 @@ controller.login = async (req, res, next) => {
       data: [],
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -44,12 +32,6 @@ controller.profile = async (req, res, next) => {
       data: [],
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };

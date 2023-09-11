@@ -1,0 +1,26 @@
+users
+{
+    "name": "rafsan",
+    "email": "raf@mail.com",
+    "phone": "01621876123",
+    "password": "121212aA",
+    "role": "app_admin"
+}
+
+menu
+{
+    "name": "pasta",
+    "description": "pastea description",
+    "price": 250,
+    "userId": 3
+}
+
+cart
+{
+    "quantity": 3,
+    "price": 250,
+    "userId": 2,
+    "menuId": 3
+}
+
+order

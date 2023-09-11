@@ -18,12 +18,6 @@ controller.create = async (req, res, next) => {
       data: menu,
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "User Already exists.",
-      });
-    }
     next(err);
   }
 };
@@ -37,12 +31,6 @@ controller.readAll = async (req, res, next) => {
       total: menus.length,
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -56,12 +44,6 @@ controller.read = async (req, res, next) => {
       data: menu,
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -77,16 +59,10 @@ controller.update = async (req, res, next) => {
       });
     } else {
       return res.status(404).json({
-        status: "User not found",
+        status: "Menu not found",
       });
     }
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -98,12 +74,6 @@ controller.delete = async (req, res, next) => {
       message: "Successfully deleted",
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -115,12 +85,6 @@ controller.menuPublish = async (req, res, next) => {
       message: "Successfully published",
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };
@@ -131,12 +95,6 @@ controller.menuUnpublish = async (req, res, next) => {
       message: "Successfully unpublished",
     });
   } catch (err) {
-    if (err.code === "23505") {
-      return res.status(409).json({
-        status: "fail",
-        message: "",
-      });
-    }
     next(err);
   }
 };

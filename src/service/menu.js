@@ -7,6 +7,7 @@ const service = {};
 service.createMenuHandler = async (input) => {
   return await menuRepository.save(menuRepository.create({ ...input }));
 };
+//deprecated
 service.readAllMenuHandler2 = async () => {
   return await menuRepository.find({
     select: {
@@ -47,22 +48,26 @@ service.readAllMenuHandler = async () => {
 };
 
 service.readMenuHandler = async (id) => {
-  return await menuRepository.findOneOrFail({
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      price: true,
-      status: true,
-      variant: true,
-      cover: true,
-      userId: true,
-      email: true,
-      phone: true,
-    },
-    where: { id },
-    relations: { user: true },
-  });
+  return await menuRepository
+    .createQueryBuilder("menu")
+    .select([
+      "menu.id",
+      "menu.name",
+      "menu.description",
+      "menu.price",
+      "menu.status",
+      "menu.variant",
+      "menu.cover",
+      "user.id",
+      "user.name",
+      "user.phone",
+      "user.email",
+      "user.role",
+      "user.status",
+    ])
+    .leftJoin("menu.user", "user")
+    .where("menu.id = :id", { id })
+    .getOne();
 };
 service.updateMenuHandler = async (id, data) => {
   const menu = await service.readMenuHandler(id);
@@ -92,7 +97,7 @@ service.publishMenuHandler = async (id) => {
 
   return await menuRepository.save(menu);
 };
-service.unpublishMenuHandler = async (input) => {
+service.unpublishMenuHandler = async (id) => {
   const menu = await service.readMenuHandler(id);
 
   if (!menu) {
