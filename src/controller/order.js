@@ -58,7 +58,7 @@ controller.update = async (req, res, next) => {
       });
     } else {
       return res.status(404).json({
-        status: "User not found",
+        status: "Order not found",
       });
     }
   } catch (err) {

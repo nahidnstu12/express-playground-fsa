@@ -13,7 +13,12 @@ const controller = {};
 controller.create = async (req, res, next) => {
   try {
     const user = await createUserHandler(req.body);
-    res.status(201).json({
+    if (!user) {
+      return res.status(400).json({
+        message: "User already exists",
+      });
+    }
+    return res.status(201).json({
       message: "Success",
       data: user,
     });

@@ -24,3 +24,11 @@ cart
 }
 
 order
+{
+    "quantity": 3,
+    "price": 250,
+    "order_date": "2015-12-20 10:01:00.999999",
+    "payment_status": "paid",
+    "menuId": 3,
+    "userId": 2
+}

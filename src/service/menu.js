@@ -5,6 +5,14 @@ const menuRepository = AppdataSource.getRepository(Menu);
 const service = {};
 
 service.createMenuHandler = async (input) => {
+  const { name } = input;
+  const isMenuExist = await menuRepository.findOneBy({
+    name,
+  });
+
+  if (isMenuExist) {
+    return false;
+  }
   return await menuRepository.save(menuRepository.create({ ...input }));
 };
 //deprecated

@@ -8,11 +8,17 @@ const {
   userApprove,
   userBlocked,
 } = require("../controller/user");
+const schema = require("../model/validation/user");
+const validate = require("../middleware/validate");
 
 const router = express.Router();
 
-router.route("").get(readAll).post(create);
-router.route("/:id").get(read).delete(remove).put(update);
+router.route("").get(readAll).post(validate(schema.userPOST), create);
+router
+  .route("/:id")
+  .get(read)
+  .delete(remove)
+  .put(validate(schema.userPOST), update);
 
 router.route("/:id/approved").get(userApprove);
 

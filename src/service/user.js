@@ -5,6 +5,14 @@ const userRepository = AppdataSource.getRepository(User);
 const service = {};
 
 service.createUserHandler = async (input) => {
+  const { email } = input;
+  const isUserExist = await userRepository.findOneBy({
+    email,
+  });
+
+  if (isUserExist) {
+    return false;
+  }
   return await userRepository.save(userRepository.create({ ...input }));
 };
 service.readAllUserHandler = async () => {

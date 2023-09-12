@@ -13,7 +13,12 @@ const controller = {};
 controller.create = async (req, res, next) => {
   try {
     const menu = await createMenuHandler(req.body);
-    res.status(201).json({
+    if (!menu) {
+      return res.status(400).json({
+        message: "Menu already exists",
+      });
+    }
+    return res.status(201).json({
       status: "Success",
       data: menu,
     });
