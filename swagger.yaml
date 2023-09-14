@@ -367,7 +367,7 @@ paths:
                               type: string
                               format: url
                               example: https://s3.aws.com/myfirstblog/124.jpg
-                            user_id:
+                            userId:
                               $ref: "#/components/schemas/UserDTO"
 
                         - $ref: "#/components/schemas/Timestamp"
@@ -419,7 +419,7 @@ paths:
                   type: string
                   format: url
                   example: https://s3.aws.com/myfirstblog/124.jpg
-                user_id:
+                userId:
                   $ref: "#/components/schemas/UserDTO"
               required: [name, description, price, variant, status]
       responses:
@@ -569,9 +569,9 @@ paths:
                             price:
                               type: number
                               example: 500
-                            user_id:
+                            userId:
                               $ref: "#/components/schemas/UserDTO"
-                            menu_id:
+                            menuId:
                               $ref: "#/components/schemas/MenuDTO"
 
                         - $ref: "#/components/schemas/Timestamp"
@@ -600,11 +600,11 @@ paths:
                 price:
                   type: number
                   example: 500
-                user_id:
+                userId:
                   $ref: "#/components/schemas/UserDTO"
-                menu_id:
+                menuId:
                   $ref: "#/components/schemas/MenuDTO"
-              required: [ quantity, user_id, menu_id, price ]
+              required: [ quantity, userId, menuId, price ]
       responses:
         "201":
           description: Successfully added to cart
@@ -664,9 +664,9 @@ paths:
                 price:
                   type: number
                   example: 500
-                user_id:
+                userId:
                   $ref: "#/components/schemas/UserDTO"
-                menu_id:
+                menuId:
                   $ref: "#/components/schemas/MenuDTO"
       responses:
         "200":
@@ -744,9 +744,9 @@ paths:
                               type: string
                               enum: [ pending, paid, reject ]
                               example: pending
-                            user_id:
+                            userId:
                               $ref: "#/components/schemas/UserDTO"
-                            menu_id:
+                            menuId:
                               $ref: "#/components/schemas/MenuDTO"
 
                         - $ref: "#/components/schemas/Timestamp"
@@ -785,11 +785,11 @@ paths:
                   type: string
                   enum: [ pending, paid, reject ]
                   example: pending
-                user_id:
+                userId:
                   $ref: "#/components/schemas/UserDTO"
-                menu_id:
+                menuId:
                   $ref: "#/components/schemas/MenuDTO"
-              required: [ quantity, user_id, menu_id, price, order_date ]
+              required: [ quantity, userId, menuId, price, order_date ]
       responses:
         "201":
           description: Successfully added to order
@@ -859,9 +859,9 @@ paths:
                   type: string
                   enum: [ pending, paid, reject ]
                   example: pending
-                user_id:
+                userId:
                   $ref: "#/components/schemas/UserDTO"
-                menu_id:
+                menuId:
                   $ref: "#/components/schemas/MenuDTO"
       responses:
         "200":
@@ -938,7 +938,7 @@ components:
               type: string
               format: url
               example: https://s3.aws.com/myfirstblog/124.jpg
-            user_id:
+            userId:
               $ref: "#/components/schemas/UserDTO"
 
         - $ref: "#/components/schemas/Timestamp"
@@ -987,9 +987,9 @@ components:
             price:
               type: number
               example: 500
-            user_id:
+            userId:
               $ref: "#/components/schemas/UserDTO"
-            menu_id:
+            menuId:
               $ref: "#/components/schemas/MenuDTO"
 
         - $ref: "#/components/schemas/Timestamp"
@@ -1018,9 +1018,9 @@ components:
               type: string
               enum: [ pending, paid, reject ]
               example: pending
-            user_id:
+            userId:
               $ref: "#/components/schemas/UserDTO"
-            menu_id:
+            menuId:
               $ref: "#/components/schemas/MenuDTO"
 
         - $ref: "#/components/schemas/Timestamp"
