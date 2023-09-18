@@ -9,6 +9,15 @@ const menuSchemas = {
     variant: Joi.string().optional(),
     userId: Joi.number().required(),
   }),
+  menuUpdate: Joi.object().keys({
+    name: Joi.string().optional(),
+    description: Joi.string().optional(),
+    cover: Joi.string().optional(),
+    price: Joi.number().optional(),
+    status: Joi.string().optional(),
+    variant: Joi.string().optional(),
+    userId: Joi.number().optional(),
+  }),
   menuLIST: {
     page: Joi.number().required(),
     limit: Joi.number().required(),

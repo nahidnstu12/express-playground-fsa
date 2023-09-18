@@ -6,6 +6,12 @@ const cartSchemas = {
     menuId: Joi.number().required(),
     userId: Joi.number().required(),
   }),
+  cartUPDATE: Joi.object().keys({
+    price: Joi.number().optional(),
+    quantity: Joi.number().optional(),
+    menuId: Joi.number().optional(),
+    userId: Joi.number().optional(),
+  }),
   cartLIST: {
     page: Joi.number().required(),
     limit: Joi.number().required(),

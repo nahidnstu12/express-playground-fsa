@@ -42,6 +42,21 @@ service.readUserHandler = async (id) => {
     },
   });
 };
+service.findUserByEmailHandler = async (email) => {
+  return await userRepository.findOneOrFail({
+    select: {
+      id: true,
+      name: true,
+      phone: true,
+      email: true,
+      role: true,
+      status: true,
+    },
+    where: {
+      email,
+    },
+  });
+};
 service.updateUserHandler = async (id, data) => {
   const user = await service.readUserHandler(id);
 
