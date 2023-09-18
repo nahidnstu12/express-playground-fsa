@@ -6,7 +6,6 @@ const {
   update,
   delete: remove,
   userApprove,
-  userBlocked,
 } = require("../controller/user");
 const schema = require("../model/validation/user");
 const validate = require("../middleware/validate");
@@ -36,11 +35,11 @@ router
   );
 
 router
-  .route("/:id/approved")
+  .route("/:id/changeApproval")
   .get(authenticate, authorize(["app_admin"]), userApprove);
 
-router
-  .route("/:id/blocked")
-  .get(authenticate, authorize(["app_admin"]), userBlocked);
+// router
+//   .route("/:id/blocked")
+//   .get(authenticate, authorize(["app_admin"]), userBlocked);
 
 module.exports = router;

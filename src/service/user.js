@@ -28,7 +28,7 @@ service.readAllUserHandler = async () => {
   });
 };
 service.readUserHandler = async (id) => {
-  return await userRepository.findOneOrFail({
+  return await userRepository.findOne({
     select: {
       id: true,
       name: true,
@@ -75,23 +75,17 @@ service.deleteUserHandler = async (id) => {
   }
   return await userRepository.delete({ id });
 };
-service.approveUserHandler = async (id) => {
+service.approveUserHandler = async (id, status) => {
   const user = await service.readUserHandler(id);
 
   if (!user) {
     return false;
   }
-  Object.assign(user, { status: "approved" });
-
-  return await userRepository.save(user);
-};
-service.blockUserHandler = async (id) => {
-  const user = await service.readUserHandler(id);
-
-  if (!user) {
-    return false;
+  if (status === "1") {
+    Object.assign(user, { status: "approved" });
+  } else {
+    Object.assign(user, { status: "block" });
   }
-  Object.assign(user, { status: "block" });
 
   return await userRepository.save(user);
 };

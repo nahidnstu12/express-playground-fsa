@@ -87,28 +87,14 @@ controller.delete = async (req, res, next) => {
 
 controller.userApprove = async (req, res, next) => {
   try {
-    const user = await approveUserHandler(req.params.id);
+    const approvalStatus = req.query.approve;
+    const user = await approveUserHandler(req.params.id, approvalStatus);
 
     if (user) {
       return res.status(200).json({
-        message: "User Approved Successfully",
-      });
-    } else {
-      return res.status(404).json({
-        status: "User not found",
-      });
-    }
-  } catch (err) {
-    next(err);
-  }
-};
-controller.userBlocked = async (req, res, next) => {
-  try {
-    const user = await blockUserHandler(req.params.id);
-
-    if (user) {
-      return res.status(200).json({
-        message: "Blocked User Successfully",
+        message: `User ${
+          approvalStatus === "1" ? "Approved" : "Blocked"
+        } Successfully`,
       });
     } else {
       return res.status(404).json({
