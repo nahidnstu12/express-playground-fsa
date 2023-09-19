@@ -7,6 +7,12 @@ users
     "role": "app_admin"
 }
 
+login
+{
+ "email": "app_admin@mail.com",
+ "password": "121212aA"
+}
+
 menu
 {
     "name": "pasta",

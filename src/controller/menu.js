@@ -4,7 +4,6 @@ const {
   deleteMenuHandler,
   publishMenuHandler,
   readAllMenuHandler,
-  unpublishMenuHandler,
   updateMenuHandler,
 } = require("../service/menu");
 
@@ -12,7 +11,10 @@ const controller = {};
 
 controller.create = async (req, res, next) => {
   try {
-    const menu = await createMenuHandler(req.body);
+    const menu = await createMenuHandler({
+      body: req.body,
+      user: { userId: req.user.id },
+    });
     if (!menu) {
       return res.status(400).json({
         message: "Menu already exists",
@@ -29,6 +31,7 @@ controller.create = async (req, res, next) => {
 
 controller.readAll = async (req, res, next) => {
   try {
+    // todo: require optional authentication middleware
     const menus = await readAllMenuHandler();
     res.status(200).json({
       message: "Success",
@@ -83,25 +86,35 @@ controller.delete = async (req, res, next) => {
   }
 };
 
-controller.menuPublish = async (req, res, next) => {
+controller.menuChangePublishStatus = async (req, res, next) => {
   try {
-    await publishMenuHandler(req.params.id);
-    res.status(200).json({
-      message: "Successfully published",
+    const publishableStatus = req.query.status;
+    if (!publishableStatus) {
+      return res.status(400).json({
+        message: "Provide publishable status",
+      });
+    }
+    const menu = await publishMenuHandler(req.params.id, publishableStatus);
+    return res.status(200).json({
+      message:
+        menu.message ||
+        `Menu ${
+          publishableStatus === "1" ? "Published" : "Unpublished"
+        } Successfully`,
     });
   } catch (err) {
     next(err);
   }
 };
-controller.menuUnpublish = async (req, res, next) => {
-  try {
-    await unpublishMenuHandler(req.params.id);
-    res.status(200).json({
-      message: "Successfully unpublished",
-    });
-  } catch (err) {
-    next(err);
-  }
-};
+// controller.menuUnpublish = async (req, res, next) => {
+//   try {
+//     await unpublishMenuHandler(req.params.id);
+//     res.status(200).json({
+//       message: "Successfully unpublished",
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 module.exports = controller;

@@ -83,8 +83,12 @@ service.approveUserHandler = async (id, status) => {
   }
   if (status === "1") {
     Object.assign(user, { status: "approved" });
-  } else {
+  } else if (status === "2") {
     Object.assign(user, { status: "block" });
+  } else {
+    return {
+      message: "Invalid approval status.",
+    };
   }
 
   return await userRepository.save(user);

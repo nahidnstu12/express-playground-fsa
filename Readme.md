@@ -15,6 +15,7 @@ For limitations of time, i will listing points what i refactor later.
   -  User approved / blocked
   - Menu published / unpublished
 - Model (enum value convert to number)
+- Require optional authentication middleware
 
 
 

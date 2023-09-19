@@ -28,7 +28,7 @@ service.registerHandler = async (input) => {
         { email, phone, role: input.role, name },
         "hello-secret",
         {
-          expiresIn: "1h",
+          expiresIn: "12h",
         },
       );
 
@@ -71,7 +71,7 @@ service.loginHandler = async (input) => {
         phone: userFound.phone,
       },
       "hello-secret",
-      { expiresIn: "1h" },
+      { expiresIn: "12h" },
     );
     return {
       status: 200,

@@ -16,27 +16,27 @@ const router = express.Router();
 
 router
   .route("")
-  .get(authenticate, authorize(["app_admin", "customer"]), readAll)
+  .get(authenticate, authorize(["admin", "customer"]), readAll)
   .post(
     authenticate,
-    authorize(["app_admin", "customer"]),
+    authorize(["customer"]),
     validate(schema.orderPOST),
     create,
   );
 
 router
   .route("/:id")
-  .get(authenticate, authorize(["app_admin", "customer"]), read)
-  .delete(authenticate, authorize(["app_admin", "customer"]), remove)
+  .get(authenticate, authorize(["admin", "customer"]), read)
+  .delete(authenticate, authorize(["admin", "customer"]), remove)
   .put(
     authenticate,
-    authorize(["app_admin", "customer"]),
+    authorize(["admin", "customer"]),
     validate(schema.orderUPDATE),
     update,
   );
 
 router
   .route("/:id/cancel")
-  .get(authenticate, authorize(["app_admin", "customer"]), orderCancel);
+  .get(authenticate, authorize(["admin"]), orderCancel);
 
 module.exports = router;

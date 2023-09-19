@@ -25,11 +25,11 @@ router
   );
 router
   .route("/:id")
-  .get(authenticate, authorize(["app_admin"]), read)
+  .get(authenticate, authorize(["app_admin", "admin"]), read)
   .delete(authenticate, authorize(["app_admin"]), remove)
   .put(
     authenticate,
-    authorize(["app_admin"]),
+    authorize(["app_admin", "admin"]),
     validate(schema.userUpdate),
     update,
   );
@@ -37,9 +37,5 @@ router
 router
   .route("/:id/changeApproval")
   .get(authenticate, authorize(["app_admin"]), userApprove);
-
-// router
-//   .route("/:id/blocked")
-//   .get(authenticate, authorize(["app_admin"]), userBlocked);
 
 module.exports = router;

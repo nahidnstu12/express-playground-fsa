@@ -5,7 +5,7 @@ const menuRepository = AppdataSource.getRepository(Menu);
 const service = {};
 
 service.createMenuHandler = async (input) => {
-  const { name } = input;
+  const { name } = input.body;
   const isMenuExist = await menuRepository.findOneBy({
     name,
   });
@@ -13,7 +13,10 @@ service.createMenuHandler = async (input) => {
   if (isMenuExist) {
     return false;
   }
-  return await menuRepository.save(menuRepository.create({ ...input }));
+
+  return await menuRepository.save(
+    menuRepository.create({ ...input.body, ...input.user }),
+  );
 };
 //deprecated
 service.readAllMenuHandler2 = async () => {
@@ -34,6 +37,8 @@ service.readAllMenuHandler2 = async () => {
 };
 
 service.readAllMenuHandler = async () => {
+  // const userRole = user?.menu;
+  // console.log("userRole", userRole);
   return await menuRepository
     .createQueryBuilder("menu")
     .select([
@@ -46,12 +51,9 @@ service.readAllMenuHandler = async () => {
       "menu.cover",
       "user.id",
       "user.name",
-      "user.phone",
-      "user.email",
-      "user.role",
-      "user.status",
     ])
     .leftJoin("menu.user", "user")
+    // .where("menu.status != :status", { status: "unpublish" })
     .getMany();
 };
 
@@ -68,10 +70,6 @@ service.readMenuHandler = async (id) => {
       "menu.cover",
       "user.id",
       "user.name",
-      "user.phone",
-      "user.email",
-      "user.role",
-      "user.status",
     ])
     .leftJoin("menu.user", "user")
     .where("menu.id = :id", { id })
@@ -95,25 +93,35 @@ service.deleteMenuHandler = async (id) => {
   }
   return await menuRepository.delete({ id });
 };
-service.publishMenuHandler = async (id) => {
+service.publishMenuHandler = async (id, status) => {
   const menu = await service.readMenuHandler(id);
 
   if (!menu) {
     return false;
   }
-  Object.assign(menu, { status: "publish" });
 
-  return await menuRepository.save(menu);
-};
-service.unpublishMenuHandler = async (id) => {
-  const menu = await service.readMenuHandler(id);
-
-  if (!menu) {
-    return false;
+  if (status === "1") {
+    Object.assign(menu, { status: "publish" });
+  } else if (status === "2") {
+    Object.assign(menu, { status: "unpublish" });
+  } else {
+    return {
+      message: "Invalid publishing status.",
+    };
   }
-  Object.assign(menu, { status: "unpublish" });
 
   return await menuRepository.save(menu);
 };
+
+// service.unpublishMenuHandler = async (id) => {
+//   const menu = await service.readMenuHandler(id);
+//
+//   if (!menu) {
+//     return false;
+//   }
+//   Object.assign(menu, { status: "unpublish" });
+//
+//   return await menuRepository.save(menu);
+// };
 
 module.exports = service;

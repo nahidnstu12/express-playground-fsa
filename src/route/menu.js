@@ -5,8 +5,7 @@ const {
   readAll,
   update,
   delete: remove,
-  menuPublish,
-  menuUnpublish,
+  menuChangePublishStatus,
 } = require("../controller/menu");
 const schema = require("../model/validation/menu");
 const validate = require("../middleware/validate");
@@ -18,15 +17,16 @@ const router = express.Router();
 router
   .route("")
   .get(readAll)
-  .post(authenticate, authorize(), validate(schema.menuPOST), create);
+  .post(authenticate, authorize(["admin"]), validate(schema.menuPOST), create);
 
-router.route("/:id/publish").get(authenticate, authorize(), menuPublish);
-router.route("/:id/unpublish").get(authenticate, authorize(), menuUnpublish);
+router
+  .route("/:id/changeStatus")
+  .get(authenticate, authorize(["admin"]), menuChangePublishStatus);
 
 router
   .route("/:id")
   .get(read)
-  .delete(authenticate, authorize(), remove)
-  .put(authenticate, authorize(), validate(schema.menuUpdate), update);
+  .delete(authenticate, authorize(["admin"]), remove)
+  .put(authenticate, authorize(["admin"]), validate(schema.menuUpdate), update);
 
 module.exports = router;

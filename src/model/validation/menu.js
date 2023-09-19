@@ -7,7 +7,7 @@ const menuSchemas = {
     price: Joi.number().required(),
     status: Joi.string().optional(),
     variant: Joi.string().optional(),
-    userId: Joi.number().required(),
+    userId: Joi.number().optional(),
   }),
   menuUpdate: Joi.object().keys({
     name: Joi.string().optional(),
