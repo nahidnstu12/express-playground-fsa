@@ -11,12 +11,13 @@ const schema = require("../model/validation/menu");
 const validate = require("../middleware/validate");
 const authenticate = require("../middleware/authenticate");
 const authorize = require("../middleware/authorize");
+const optionalAuthorize = require("../middleware/optional-authorize");
 
 const router = express.Router();
 
 router
   .route("")
-  .get(readAll)
+  .get(optionalAuthorize, readAll)
   .post(authenticate, authorize(["admin"]), validate(schema.menuPOST), create);
 
 router

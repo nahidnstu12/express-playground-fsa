@@ -36,9 +36,9 @@ service.readAllMenuHandler2 = async () => {
   });
 };
 
-service.readAllMenuHandler = async () => {
-  // const userRole = user?.menu;
-  // console.log("userRole", userRole);
+service.readAllMenuHandler = async (user) => {
+  const userRole = user?.role !== "admin";
+
   return await menuRepository
     .createQueryBuilder("menu")
     .select([
@@ -53,7 +53,7 @@ service.readAllMenuHandler = async () => {
       "user.name",
     ])
     .leftJoin("menu.user", "user")
-    // .where("menu.status != :status", { status: "unpublish" })
+    .where("menu.status != :status", { status: userRole ? "unpublish" : "" })
     .getMany();
 };
 
