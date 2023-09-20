@@ -36,9 +36,9 @@ router
     update,
   );
 
-router
-  .route("/:id/cancel")
-  .get(authenticate, authorize(["admin"]), orderCancel);
+// router
+//   .route("/:id/cancel")
+//   .get(authenticate, authorize(["admin"]), orderCancel);
 router
   .route("/:id/changeOrderStatus")
   .get(authenticate, authorize(["admin"]), changeOrderStatus);
