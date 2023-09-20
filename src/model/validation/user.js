@@ -8,6 +8,14 @@ const userSchemas = {
     role: Joi.string().optional(),
     status: Joi.string().optional(),
   }),
+  userUpdate: Joi.object().keys({
+    name: Joi.string().optional(),
+    phone: Joi.string().optional(),
+    email: Joi.string().email().lowercase().optional(),
+    password: Joi.string().min(5).optional(),
+    role: Joi.string().optional(),
+    status: Joi.string().optional(),
+  }),
   userLIST: {
     page: Joi.number().required(),
     limit: Joi.number().required(),

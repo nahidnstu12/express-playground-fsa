@@ -15,7 +15,7 @@ const orderSchemas = {
     price: Joi.number().required(),
     quantity: Joi.number().required(),
     menuId: Joi.number().required(),
-    userId: Joi.number().required(),
+    userId: Joi.number().optional(),
     order_type: Joi.string().optional(),
     order_status: Joi.string().optional(),
     payment_status: Joi.string().optional(),

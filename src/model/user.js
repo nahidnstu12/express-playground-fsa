@@ -24,7 +24,7 @@ module.exports = new EntitySchema({
     },
     role: {
       type: "enum",
-      enum: ["customer", "chef", "delivary_boy", "app_admin"],
+      enum: ["customer", "chef", "delivary_boy", "app_admin", "admin"],
       default: "customer",
     },
     // todo: change string enum to number enum

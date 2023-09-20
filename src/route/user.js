@@ -6,22 +6,36 @@ const {
   update,
   delete: remove,
   userApprove,
-  userBlocked,
 } = require("../controller/user");
 const schema = require("../model/validation/user");
 const validate = require("../middleware/validate");
+const authenticate = require("../middleware/authenticate");
+const authorize = require("../middleware/authorize");
 
 const router = express.Router();
 
-router.route("").get(readAll).post(validate(schema.userPOST), create);
+router
+  .route("")
+  .get(authenticate, authorize(["app_admin"]), readAll)
+  .post(
+    authenticate,
+    authorize(["app_admin"]),
+    validate(schema.userPOST),
+    create,
+  );
 router
   .route("/:id")
-  .get(read)
-  .delete(remove)
-  .put(validate(schema.userPOST), update);
+  .get(authenticate, authorize(["app_admin", "admin"]), read)
+  .delete(authenticate, authorize(["app_admin"]), remove)
+  .put(
+    authenticate,
+    authorize(["app_admin", "admin"]),
+    validate(schema.userUpdate),
+    update,
+  );
 
-router.route("/:id/approved").get(userApprove);
-
-router.route("/:id/blocked").get(userBlocked);
+router
+  .route("/:id/changeApproval")
+  .get(authenticate, authorize(["app_admin"]), userApprove);
 
 module.exports = router;

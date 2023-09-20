@@ -9,7 +9,6 @@ const controller = {};
 controller.register = async (req, res, next) => {
   try {
     const user = await registerHandler(req.body);
-    console.log("user response", user);
     if (user.status === 400) {
       return res.status(400).json({
         status: "fail",

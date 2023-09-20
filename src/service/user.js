@@ -28,7 +28,7 @@ service.readAllUserHandler = async () => {
   });
 };
 service.readUserHandler = async (id) => {
-  return await userRepository.findOneOrFail({
+  return await userRepository.findOne({
     select: {
       id: true,
       name: true,
@@ -39,6 +39,21 @@ service.readUserHandler = async (id) => {
     },
     where: {
       id,
+    },
+  });
+};
+service.findUserByEmailHandler = async (email) => {
+  return await userRepository.findOneOrFail({
+    select: {
+      id: true,
+      name: true,
+      phone: true,
+      email: true,
+      role: true,
+      status: true,
+    },
+    where: {
+      email,
     },
   });
 };
@@ -60,23 +75,21 @@ service.deleteUserHandler = async (id) => {
   }
   return await userRepository.delete({ id });
 };
-service.approveUserHandler = async (id) => {
+service.approveUserHandler = async (id, status) => {
   const user = await service.readUserHandler(id);
 
   if (!user) {
     return false;
   }
-  Object.assign(user, { status: "approved" });
-
-  return await userRepository.save(user);
-};
-service.blockUserHandler = async (id) => {
-  const user = await service.readUserHandler(id);
-
-  if (!user) {
-    return false;
+  if (status === "1") {
+    Object.assign(user, { status: "approved" });
+  } else if (status === "2") {
+    Object.assign(user, { status: "block" });
+  } else {
+    return {
+      message: "Invalid approval status.",
+    };
   }
-  Object.assign(user, { status: "block" });
 
   return await userRepository.save(user);
 };

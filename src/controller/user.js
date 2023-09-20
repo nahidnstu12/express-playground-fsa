@@ -2,7 +2,6 @@ const {
   createUserHandler,
   readAllUserHandler,
   approveUserHandler,
-  blockUserHandler,
   deleteUserHandler,
   readUserHandler,
   updateUserHandler,
@@ -66,7 +65,7 @@ controller.update = async (req, res, next) => {
       });
     } else {
       return res.status(404).json({
-        status: "User not found",
+        message: "User not found",
       });
     }
   } catch (err) {
@@ -87,32 +86,25 @@ controller.delete = async (req, res, next) => {
 
 controller.userApprove = async (req, res, next) => {
   try {
-    const user = await approveUserHandler(req.params.id);
-
-    if (user) {
-      return res.status(200).json({
-        message: "User Approved Successfully",
-      });
-    } else {
-      return res.status(404).json({
-        status: "User not found",
+    const approvalStatus = req.query.approve;
+    if (!approvalStatus) {
+      return res.status(400).json({
+        message: "Provide approval status",
       });
     }
-  } catch (err) {
-    next(err);
-  }
-};
-controller.userBlocked = async (req, res, next) => {
-  try {
-    const user = await blockUserHandler(req.params.id);
+    const user = await approveUserHandler(req.params.id, approvalStatus);
 
     if (user) {
       return res.status(200).json({
-        message: "Blocked User Successfully",
+        message:
+          user.message ||
+          `User ${
+            approvalStatus === "1" ? "Approved" : "Blocked"
+          } Successfully`,
       });
     } else {
       return res.status(404).json({
-        status: "User not found",
+        message: user.message || "User not found",
       });
     }
   } catch (err) {
