@@ -11,11 +11,13 @@ This is the second assignment of fullstack army bootcamp. Here i will try to bui
 
 ### Refactoring Scopes
 For limitations of time, i will listing points what i refactor later.
-- route (some route optimized or removed)
+- route (some route optimized or removed) (fixed)
   -  User approved / blocked
   - Menu published / unpublished
 - Model (enum value convert to number)
-- Require optional authentication middleware
+- Require optional authentication middleware (fixed)
+- Implement pagination
+- Implement Logging for error tracing
 
 
 
