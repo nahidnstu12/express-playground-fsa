@@ -4,7 +4,7 @@ const cartSchemas = {
     price: Joi.number().required(),
     quantity: Joi.number().required(),
     menuId: Joi.number().required(),
-    userId: Joi.number().required(),
+    userId: Joi.number().optional(),
   }),
   cartUPDATE: Joi.object().keys({
     price: Joi.number().optional(),

@@ -5,7 +5,6 @@ const {
   readAll,
   update,
   delete: remove,
-  cancelCart,
 } = require("../controller/cart");
 const schema = require("../model/validation/cart");
 const validate = require("../middleware/validate");
@@ -28,12 +27,8 @@ router
   .route("/:id")
   .get(authenticate, authorize(["admin", "customer"]), read)
   .delete(authenticate, authorize(["admin", "customer"]), remove)
-  .put(
-    authenticate,
-    authorize(["admin", "customer"]),
-    validate(schema.cartUPDATE),
-    update,
-  );
-router.route("/:id/cancel").get(authenticate, authorize(["admin"]), cancelCart);
+  .put(authenticate, authorize(["admin"]), validate(schema.cartUPDATE), update);
+
+// router.route("/:id/cancel").get(authenticate, authorize(["admin"]), cancelCart);
 
 module.exports = router;

@@ -6,6 +6,7 @@ const {
   update,
   delete: remove,
   orderCancel,
+  changeOrderStatus,
 } = require("../controller/order");
 const schema = require("../model/validation/order");
 const validate = require("../middleware/validate");
@@ -38,5 +39,8 @@ router
 router
   .route("/:id/cancel")
   .get(authenticate, authorize(["admin"]), orderCancel);
+router
+  .route("/:id/changeOrderStatus")
+  .get(authenticate, authorize(["admin"]), changeOrderStatus);
 
 module.exports = router;

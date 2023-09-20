@@ -11,7 +11,10 @@ const controller = {};
 
 controller.create = async (req, res, next) => {
   try {
-    const cart = await createCartHandler(req.body);
+    const cart = await createCartHandler({
+      body: req.body,
+      user: { userId: req.user.id },
+    });
     res.status(201).json({
       status: "Success",
       data: cart,
@@ -23,7 +26,7 @@ controller.create = async (req, res, next) => {
 
 controller.readAll = async (req, res, next) => {
   try {
-    const carts = await readAllCartHandler();
+    const carts = await readAllCartHandler(req.user);
     res.status(200).json({
       status: "Success",
       data: carts,
