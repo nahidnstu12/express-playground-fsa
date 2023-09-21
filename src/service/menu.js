@@ -18,6 +18,18 @@ service.createMenuHandler = async (input) => {
     menuRepository.create({ ...input.body, ...input.user }),
   );
 };
+service.createTestingMenuHandler = async (input) => {
+  const { name } = input.body;
+  const isMenuExist = await menuRepository.findOneBy({
+    name,
+  });
+
+  if (isMenuExist) {
+    return false;
+  }
+
+  return await menuRepository.save(menuRepository.create({ ...input.body }));
+};
 //deprecated
 service.readAllMenuHandler2 = async () => {
   return await menuRepository.find({

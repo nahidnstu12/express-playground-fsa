@@ -3,6 +3,7 @@ const app = require("../../app");
 // const UserService = require("../service/user");
 const { AppdataSource } = require("../database/config");
 const { clearDatabase } = require("./utils");
+const jwt = require("jsonwebtoken");
 
 // const userPayload = {
 //   name: "rafsan",
@@ -17,10 +18,21 @@ const { clearDatabase } = require("./utils");
 // };
 
 const userInput = {
+  id: 100,
   name: "rafsan",
   email: "raf404@mail.com",
   phone: "01621876123",
   password: "121212aA",
+  role: "admin",
+  status: "approved",
+};
+
+const menuInput = {
+  id: 100,
+  name: "pasta 404",
+  description: "pastea description",
+  price: 250,
+  userId: 100,
 };
 describe("test create group", () => {
   beforeAll(async () => {
@@ -28,20 +40,11 @@ describe("test create group", () => {
   });
   test("should return a 201 and create the user", async () => {
     await AppdataSource.initialize();
-    // const createUserServiceMock = jest
-    //   .spyOn(UserService, "createUserHandler")
-    //   .mockReturnValueOnce(userPayload);
-
-    // const mockuser = jest.fn(() => userInput);
-    // const createUserServiceMockV2 = jest
-    //   .spyOn(UserService, "createUserHandler")
-    //   .mockImplementation(mockuser);
 
     const res = await request(app)
       .post("/api/v1/users/testing")
       .send(userInput);
-    // console.log("create user testcase", res.body);
-    // expect(mockuser).toHaveBeenCalledTimes(1);
+
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty("message");
     expect(res.body).toHaveProperty("data");
@@ -52,8 +55,8 @@ describe("test create group", () => {
         email: "raf404@mail.com",
         password: "121212aA",
         id: expect.any(Number),
-        role: "customer",
-        status: "pending",
+        role: "admin",
+        status: "approved",
         created_at: expect.any(String),
         updated_at: expect.any(String),
       },
@@ -61,6 +64,26 @@ describe("test create group", () => {
     });
 
     // expect(createUserServiceMock).toHaveBeenCalledWith(userPayload2);
+  });
+
+  test("should return a 201 and create the menu", async () => {
+    // await AppdataSource.initialize();
+
+    const token = jwt.sign({ ...userInput }, "hello-secret", {
+      expiresIn: "12h",
+    });
+
+    console.log("token", token);
+
+    const res = await request(app)
+      .post("/api/v1/menus/testing")
+      .set("Authorization", `Bearer ${token}`)
+      .send(menuInput);
+    console.log("create user testcase", res.body);
+    // expect(mockuser).toHaveBeenCalledTimes(1);
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("status");
+    expect(res.body).toHaveProperty("data");
   });
 });
 

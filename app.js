@@ -45,7 +45,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   // format error
-  // console.log("last error: ", err);
+  console.log("last error: ", err);
   res.status(Number(err.status) || 500).json({
     // message: err.message,
     errors: err,

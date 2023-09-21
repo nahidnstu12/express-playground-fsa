@@ -6,6 +6,7 @@ const {
   update,
   delete: remove,
   menuChangePublishStatus,
+  testing,
 } = require("../controller/menu");
 const schema = require("../model/validation/menu");
 const validate = require("../middleware/validate");
@@ -29,5 +30,8 @@ router
   .get(read)
   .delete(authenticate, authorize(["admin"]), remove)
   .put(authenticate, authorize(["admin"]), validate(schema.menuUpdate), update);
+
+// only for testing coverage
+router.route("/testing").post(authenticate, authorize(["admin"]), testing);
 
 module.exports = router;
