@@ -9,7 +9,6 @@ service.createUserHandler = async (input) => {
   const isUserExist = await userRepository.findOneBy({
     email,
   });
-
   if (isUserExist) {
     return false;
   }

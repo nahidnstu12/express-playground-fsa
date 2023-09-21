@@ -26,6 +26,23 @@ controller.create = async (req, res, next) => {
   }
 };
 
+controller.testing = async (req, res, next) => {
+  try {
+    const user = await createUserHandler(req.body);
+    if (!user) {
+      return res.status(400).json({
+        message: "User already exists",
+      });
+    }
+    return res.status(201).json({
+      message: "Success",
+      data: user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 controller.readAll = async (req, res, next) => {
   try {
     const users = await readAllUserHandler();
