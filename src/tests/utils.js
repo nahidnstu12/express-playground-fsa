@@ -8,7 +8,10 @@ exports.jwtSign = (body) => {
 };
 
 exports.jwtVerify = (token) => {
-  return jwt.verify(token, process.env.JWT_SECRET);
+  console.log("jwtVerify", token, process.env.JWT_SECRET);
+  const jwtvrify = jwt.verify(token, process.env.JWT_SECRET);
+  console.log("jwtvrify", jwtvrify);
+  return jwtvrify;
 };
 
 exports.clearDatabase = async () => {
