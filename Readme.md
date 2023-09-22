@@ -1,5 +1,8 @@
 ## Second Assignment
 This is the second assignment of fullstack army bootcamp. Here i will try to build rest api, using express.
+Here is the detailed research & documentation notion links
+[doccs](https://nahid-me.notion.site/Assignment-2-5d1077aba9ec40c0b7090956fd033308)
+
 
 ### Tools
 - Express
@@ -18,6 +21,7 @@ For limitations of time, i will listing points what i refactor later.
 - Require optional authentication middleware (fixed)
 - Implement pagination
 - Implement Logging for error tracing
+- Implement Seeding
 
 
 
