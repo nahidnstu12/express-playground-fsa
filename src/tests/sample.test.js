@@ -1,8 +1,7 @@
 const request = require("supertest");
 const app = require("../../app");
 // const UserService = require("../service/user");
-const { AppdataSource } = require("../database/config");
-const { clearDatabase } = require("./utils");
+const { clearDatabase, closeDatabase } = require("./utils");
 const { jwtSign, jwtVerify } = require("./utils");
 
 // const userPayload = {
@@ -38,9 +37,10 @@ describe("test create group", () => {
   beforeAll(async () => {
     return await clearDatabase();
   });
+  afterAll(async () => {
+    return await closeDatabase();
+  });
   test("should return a 201 and create the user", async () => {
-    await AppdataSource.initialize();
-
     const res = await request(app)
       .post("/api/v1/users/testing")
       .send(userInput);

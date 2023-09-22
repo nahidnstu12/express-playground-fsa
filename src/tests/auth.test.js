@@ -1,7 +1,6 @@
 const request = require("supertest");
 const app = require("../../app");
-const { AppdataSource } = require("../database/config");
-const { clearDatabase, jwtSign } = require("./utils");
+const { clearDatabase, closeDatabase, jwtSign } = require("./utils");
 const {
   loginInput,
   userInput,
@@ -13,10 +12,11 @@ describe("User Authentication group", () => {
   beforeAll(async () => {
     return await clearDatabase();
   });
+  afterAll(async () => {
+    return await closeDatabase();
+  });
 
   test("given the username and password are valid", async () => {
-    await AppdataSource.initialize();
-
     const res = await request(app)
       .post("/api/v1/auth/register")
       .send(userInput);

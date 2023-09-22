@@ -21,11 +21,14 @@ exports.clearDatabase = async () => {
       // console.log("entities: ", entity.name, entity.tableName);
       await repository.query(`DELETE FROM ${entity.tableName};`);
     }
-    await AppdataSource.destroy();
   } catch (error) {
     // console.error("Error in database cleanup:", error);
     throw error; // Optionally rethrow the error for further handling
   }
+};
+
+exports.closeDatabase = async () => {
+  await AppdataSource.destroy();
 };
 
 // module.exports = clearDatabase;

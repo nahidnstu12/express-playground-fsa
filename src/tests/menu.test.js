@@ -1,16 +1,17 @@
 const request = require("supertest");
 const app = require("../../app");
-const { AppdataSource } = require("../database/config");
-const { clearDatabase, jwtSign } = require("./utils");
+const { clearDatabase, jwtSign, closeDatabase } = require("./utils");
 const { adminUser, menuInput, userInput } = require("./mockData");
 
 describe("Menu group", () => {
   beforeAll(async () => {
     return await clearDatabase();
   });
+  afterAll(async () => {
+    return await closeDatabase();
+  });
 
   test("menu created successfully when user role will be admin", async () => {
-    await AppdataSource.initialize();
     //create app-admin user
     await request(app).post("/api/v1/users/testing").send(adminUser);
     await request(app).post("/api/v1/users/testing").send(userInput);

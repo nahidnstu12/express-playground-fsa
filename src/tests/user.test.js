@@ -1,7 +1,6 @@
 const request = require("supertest");
 const app = require("../../app");
-const { AppdataSource } = require("../database/config");
-const { clearDatabase, jwtSign } = require("./utils");
+const { clearDatabase, jwtSign, closeDatabase } = require("./utils");
 const {
   appAdminUser,
   userInput,
@@ -13,9 +12,11 @@ describe("User group", () => {
   beforeAll(async () => {
     return await clearDatabase();
   });
+  afterAll(async () => {
+    return await closeDatabase();
+  });
 
   test("user created successfully when user role will be app-admin", async () => {
-    await AppdataSource.initialize();
     //create app-admin user
     await request(app).post("/api/v1/users/testing").send(appAdminUser);
     await request(app).post("/api/v1/users/testing").send(userInput);
