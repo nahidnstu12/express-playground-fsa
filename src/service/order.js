@@ -90,8 +90,8 @@ service.readOrderHandler = async (id, user) => {
 //     .where("order.id = :id", { id })
 //     .getOne();
 // };
-service.updateOrderHandler = async (id, data) => {
-  const order = await service.readOrderHandler(id);
+service.updateOrderHandler = async (id, data, user) => {
+  const order = await service.readOrderHandler(id, user);
 
   if (!order) {
     return false;

@@ -13,8 +13,9 @@ const authenticate = async (req, _res, next) => {
         message: "Authentication Failed",
       });
     }
-
-    const decodedUser = await jwtVerify(token);
+    console.log("token auth", { token });
+    const decodedUser = jwtVerify(token);
+    console.log("decoded user", decodedUser);
     const user = await findUserByEmailHandler(decodedUser.email);
     if (!user) {
       // console.log("user not found");
@@ -33,6 +34,7 @@ const authenticate = async (req, _res, next) => {
     req.user = { ...user };
     next();
   } catch (e) {
+    console.log(e);
     console.log("authentication failed in catch", e.message);
     next({
       status: 401,
