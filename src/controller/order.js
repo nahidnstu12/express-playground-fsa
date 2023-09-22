@@ -83,7 +83,8 @@ controller.changeOrderStatus = async (req, res, next) => {
       orderStatus,
       req.user,
     );
-    return res.status(200).json({
+    const status = order?.status === 400 ? 400 : 200;
+    return res.status(status).json({
       message: order.message || `order is now ${orderStatus} `,
     });
   } catch (err) {

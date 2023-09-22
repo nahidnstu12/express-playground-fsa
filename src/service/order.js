@@ -128,18 +128,19 @@ service.orderStatusHandler = async (id, status, user) => {
     "order_delivered",
     "order_rejected",
   ];
-  console.log("order", order);
+
   if (!order) {
     return {
       status: 404,
       message: "Order not found",
     };
   }
-
+  console.log("order", order, status);
   if (orderStatusArray.some((val) => val === status)) {
     Object.assign(order, { order_status: status });
   } else {
     return {
+      status: 400,
       message: "Invalid order status.",
     };
   }
