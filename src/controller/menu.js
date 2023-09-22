@@ -116,7 +116,9 @@ controller.menuChangePublishStatus = async (req, res, next) => {
       });
     }
     const menu = await publishMenuHandler(req.params.id, publishableStatus);
-    return res.status(200).json({
+    console.log("menu,", menu);
+    const status = menu?.status === 400 ? 400 : 200;
+    return res.status(status).json({
       message:
         menu.message ||
         `Menu ${

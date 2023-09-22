@@ -118,6 +118,7 @@ service.publishMenuHandler = async (id, status) => {
     Object.assign(menu, { status: "unpublish" });
   } else {
     return {
+      status: 400,
       message: "Invalid publishing status.",
     };
   }

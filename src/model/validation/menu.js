@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const menuSchemas = {
   menuPOST: Joi.object().keys({
+    id: Joi.number().optional(),
     name: Joi.string().required(),
     description: Joi.string().required(),
     cover: Joi.string().optional(),
