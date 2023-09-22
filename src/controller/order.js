@@ -16,8 +16,8 @@ controller.create = async (req, res, next) => {
       body: req.body,
       user: { userId: req.user.id },
     });
-    res.status(201).json({
-      status: "Success",
+    const status = order?.status === 400 ? 400 : 201;
+    res.status(status).json({
       data: order,
     });
   } catch (err) {

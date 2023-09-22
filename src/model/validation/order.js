@@ -11,6 +11,7 @@ const orderSchemas = {
     payment_status: Joi.string().optional(),
   }),
   orderPOST: Joi.object().keys({
+    id: Joi.number().optional(),
     order_date: Joi.date().required(),
     price: Joi.number().required(),
     quantity: Joi.number().required(),

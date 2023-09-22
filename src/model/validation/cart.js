@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const cartSchemas = {
   cartPOST: Joi.object().keys({
+    id: Joi.number().optional(),
     price: Joi.number().required(),
     quantity: Joi.number().required(),
     menuId: Joi.number().required(),
