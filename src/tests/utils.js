@@ -1,18 +1,15 @@
-const { DataSource } = require("typeorm");
 const { AppdataSource } = require("../database/config");
+const jwt = require("jsonwebtoken");
 
-// module.exports = async () => {
-//   const appDataSource = new DataSource(AppdataSource);
-//   const entities = appDataSource.entityMetadatas;
-//
-//   for await (const entity of entities) {
-//     const repository = appDataSource.getRepository(entity.name);
-//
-//     await repository.query(
-//       `TRUNCATE ${entity.tableName} RESTART IDENTITY CASCADE;`,
-//     );
-//   }
-// };
+exports.jwtSign = (body) => {
+  return jwt.sign({ ...body }, process.env.JWT_SECRET, {
+    expiresIn: "12h",
+  });
+};
+
+exports.jwtVerify = (token) => {
+  return jwt.verify(token, process.env.JWT_SECRET);
+};
 
 exports.clearDatabase = async () => {
   try {

@@ -1,22 +1,23 @@
 const jwt = require("jsonwebtoken");
 const { findUserByEmailHandler } = require("../service/user");
+const { jwtVerify } = require("../tests/utils");
 
 const authenticate = async (req, _res, next) => {
   try {
     const token = req.headers.authorization?.split(" ")[1] || null;
 
     if (!token) {
-      console.log("token not found");
+      // console.log("token not found");
       next({
         status: 401,
         message: "Authentication Failed",
       });
     }
 
-    const decodedUser = await jwt.verify(token, "hello-secret");
+    const decodedUser = await jwtVerify(token);
     const user = await findUserByEmailHandler(decodedUser.email);
     if (!user) {
-      console.log("user not found");
+      // console.log("user not found");
       next({
         status: 401,
         message: "Authentication Failed",

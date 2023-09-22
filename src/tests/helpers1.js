@@ -88,7 +88,7 @@ const withLogin = async (
     //   where: { name: user.name, email: user.email },
     // });
 
-    const authToken = jwt.sign({ user }, "hello-secret");
+    const authToken = jwt.sign({ user }, process.env.JWT_SECRET);
     return req.set("Authorization", `Bearer ${authToken}`);
   } catch (err) {
     console.log("test withLogin Helper", err);

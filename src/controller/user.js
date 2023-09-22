@@ -18,7 +18,7 @@ controller.create = async (req, res, next) => {
       });
     }
     return res.status(201).json({
-      message: "Success",
+      status: "Success",
       data: user,
     });
   } catch (err) {
@@ -35,7 +35,7 @@ controller.testing = async (req, res, next) => {
       });
     }
     return res.status(201).json({
-      message: "Success",
+      status: "Success",
       data: user,
     });
   } catch (err) {
@@ -47,7 +47,7 @@ controller.readAll = async (req, res, next) => {
   try {
     const users = await readAllUserHandler();
     res.status(200).json({
-      message: "Success",
+      status: "Success",
       data: users,
       total: users.length,
     });
@@ -63,7 +63,7 @@ controller.read = async (req, res, next) => {
     const id = req.params.id;
     const user = await readUserHandler(id);
     res.status(200).json({
-      message: "Success",
+      status: "Success",
       data: user,
     });
   } catch (err) {
@@ -112,7 +112,8 @@ controller.userApprove = async (req, res, next) => {
     const user = await approveUserHandler(req.params.id, approvalStatus);
 
     if (user) {
-      return res.status(200).json({
+      const status = user?.status === 400 ? 400 : 200;
+      return res.status(status).json({
         message:
           user.message ||
           `User ${

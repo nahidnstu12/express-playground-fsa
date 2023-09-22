@@ -1,7 +1,7 @@
 const { AppdataSource } = require("../database/config");
 const User = require("../model/user");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const { jwtSign, jwtVerify } = require("../tests/utils");
 
 const authRepository = AppdataSource.getRepository(User);
 const service = {};
@@ -24,9 +24,9 @@ service.registerHandler = async (input) => {
 
     // token generation
     try {
-      const tokenGenerate = jwt.sign(
+      const tokenGenerate = jwtSign(
         { email, phone, role: input.role, name },
-        "hello-secret",
+        process.env.JWT_SECRET,
         {
           expiresIn: "12h",
         },
@@ -63,16 +63,13 @@ service.loginHandler = async (input) => {
     if (!isMatch) {
       return { status: 400, message: "credentials do not match" };
     }
-    const tokenGen = await jwt.sign(
-      {
-        email: userFound.email,
-        role: userFound.role,
-        name: userFound.name,
-        phone: userFound.phone,
-      },
-      "hello-secret",
-      { expiresIn: "12h" },
-    );
+
+    const tokenGen = await jwtSign({
+      email: userFound.email,
+      role: userFound.role,
+      name: userFound.name,
+      phone: userFound.phone,
+    });
     return {
       status: 200,
       message: "login successful",
@@ -91,7 +88,7 @@ service.profileHandler = async (requestToken) => {
     };
   }
   console.log("token", token);
-  const decodedUser = await jwt.verify(token, "hello-secret");
+  const decodedUser = await jwtVerify(token);
   const userFound = await authRepository.findOneBy({
     email: decodedUser?.email,
     name: decodedUser?.name,

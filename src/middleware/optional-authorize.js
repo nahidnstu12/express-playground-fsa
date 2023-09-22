@@ -9,7 +9,7 @@ const optionalAuthorize = async (req, _res, next) => {
       return next();
     }
 
-    const decodedUser = await jwt.verify(token, "hello-secret");
+    const decodedUser = await jwt.verify(token, process.env.JWT_SECRET);
     const user = await findUserByEmailHandler(decodedUser.email);
     if (!user) {
       console.log("user not found");
