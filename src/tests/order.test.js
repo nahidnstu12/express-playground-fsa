@@ -2,56 +2,15 @@ const request = require("supertest");
 const app = require("../../app");
 const { AppdataSource } = require("../database/config");
 const { clearDatabase, jwtSign } = require("./utils");
+const {
+  adminUser,
+  userInputChef,
+  userInput,
+  menuInput,
+  orderInput,
+} = require("./mockData");
 
-const appAdminUser = {
-  id: 100,
-  name: "appadmin",
-  email: "app@mail.com",
-  phone: "01621876123",
-  password: "121212aA",
-  status: "approved",
-  role: "admin",
-};
-
-const menuInput = {
-  id: 100,
-  name: "pasta",
-  description: "pastea description",
-  price: 250,
-};
-const orderInput = {
-  id: 100,
-  quantity: 3,
-  price: 250,
-  order_date: "2015-12-20 10:01:00.999999",
-  payment_status: "paid",
-  menuId: menuInput.id,
-};
-
-const userInputWithID = {
-  id: 102,
-  name: "james",
-  email: "raf44@mail.com",
-  phone: "01621876123",
-  password: "121212aA",
-  status: "approved",
-};
-const userInputChef = {
-  id: 103,
-  name: "james",
-  email: "checf@mail.com",
-  phone: "01621876123",
-  password: "121212aA",
-  role: "chef",
-  status: "approved",
-};
-
-const userInputDataForUpdata = {
-  phone: "01621876123",
-  status: "approved",
-};
-
-describe("User group", () => {
+describe("Order group", () => {
   beforeAll(async () => {
     return await clearDatabase();
   });
@@ -59,12 +18,12 @@ describe("User group", () => {
   test("order created successfully when user role will be customer", async () => {
     await AppdataSource.initialize();
     //create app-admin user
-    await request(app).post("/api/v1/users/testing").send(appAdminUser);
+    await request(app).post("/api/v1/users/testing").send(adminUser);
     await request(app).post("/api/v1/users/testing").send(userInputChef);
-    await request(app).post("/api/v1/users/testing").send(userInputWithID);
+    await request(app).post("/api/v1/users/testing").send(userInput);
 
-    const tokenCustomer = jwtSign({ ...userInputWithID });
-    const tokenAdmin = jwtSign({ ...appAdminUser });
+    const tokenCustomer = jwtSign({ ...userInput });
+    const tokenAdmin = jwtSign({ ...adminUser });
     await request(app)
       .post("/api/v1/menus")
       .set("Authorization", `Bearer ${tokenAdmin}`)
@@ -80,7 +39,7 @@ describe("User group", () => {
     expect(res.body.data).toHaveProperty("price");
   });
   test("order created success when valid payload provided", async () => {
-    const token = jwtSign({ ...userInputWithID });
+    const token = jwtSign({ ...userInput });
 
     const res = await request(app)
       .post("/api/v1/orders")
@@ -110,7 +69,7 @@ describe("User group", () => {
     });
   });
   test("order status can not changed if valid order_status not provided ", async () => {
-    const token = jwtSign({ ...appAdminUser });
+    const token = jwtSign({ ...adminUser });
     const res = await request(app)
       .get("/api/v1/orders/100/changeOrderStatus?order_status=order_invalid")
       .set("Authorization", `Bearer ${token}`);

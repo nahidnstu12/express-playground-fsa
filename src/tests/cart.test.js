@@ -2,54 +2,15 @@ const request = require("supertest");
 const app = require("../../app");
 const { AppdataSource } = require("../database/config");
 const { clearDatabase, jwtSign } = require("./utils");
+const {
+  adminUser,
+  userInputChef,
+  userInput,
+  cartInput,
+  menuInput,
+} = require("./mockData");
 
-const appAdminUser = {
-  id: 100,
-  name: "appadmin",
-  email: "app@mail.com",
-  phone: "01621876123",
-  password: "121212aA",
-  status: "approved",
-  role: "admin",
-};
-
-const menuInput = {
-  id: 100,
-  name: "pasta",
-  description: "pastea description",
-  price: 250,
-};
-const cartInput = {
-  id: 100,
-  quantity: 3,
-  price: 250,
-  menuId: menuInput.id,
-};
-
-const userInputWithID = {
-  id: 102,
-  name: "james",
-  email: "raf44@mail.com",
-  phone: "01621876123",
-  password: "121212aA",
-  status: "approved",
-};
-const userInputChef = {
-  id: 103,
-  name: "james",
-  email: "checf@mail.com",
-  phone: "01621876123",
-  password: "121212aA",
-  role: "chef",
-  status: "approved",
-};
-
-const userInputDataForUpdata = {
-  phone: "01621876123",
-  status: "approved",
-};
-
-describe("User group", () => {
+describe("Cart group", () => {
   beforeAll(async () => {
     return await clearDatabase();
   });
@@ -57,12 +18,12 @@ describe("User group", () => {
   test("cart created successfully when user role will be customer", async () => {
     await AppdataSource.initialize();
     //create app-admin user
-    await request(app).post("/api/v1/users/testing").send(appAdminUser);
+    await request(app).post("/api/v1/users/testing").send(adminUser);
     await request(app).post("/api/v1/users/testing").send(userInputChef);
-    await request(app).post("/api/v1/users/testing").send(userInputWithID);
+    await request(app).post("/api/v1/users/testing").send(userInput);
 
-    const tokenCustomer = jwtSign({ ...userInputWithID });
-    const tokenAdmin = jwtSign({ ...appAdminUser });
+    const tokenCustomer = jwtSign({ ...userInput });
+    const tokenAdmin = jwtSign({ ...adminUser });
     await request(app)
       .post("/api/v1/menus")
       .set("Authorization", `Bearer ${tokenAdmin}`)
@@ -78,7 +39,7 @@ describe("User group", () => {
     expect(res.body.data).toHaveProperty("price");
   });
   test("cart created success when valid payload provided", async () => {
-    const token = jwtSign({ ...userInputWithID });
+    const token = jwtSign({ ...userInput });
 
     const res = await request(app)
       .post("/api/v1/carts")
@@ -93,7 +54,7 @@ describe("User group", () => {
     expect(res.body.data.price).toBe(cartInput.price);
   });
   test("should not create new cart when missing menu", async () => {
-    const token = jwtSign({ ...userInputWithID });
+    const token = jwtSign({ ...userInput });
     const res = await request(app)
       .post("/api/v1/carts")
       .set("Authorization", `Bearer ${token}`)

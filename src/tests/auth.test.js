@@ -2,28 +2,12 @@ const request = require("supertest");
 const app = require("../../app");
 const { AppdataSource } = require("../database/config");
 const { clearDatabase, jwtSign } = require("./utils");
-
-const userInput = {
-  id: 100,
-  name: "rafsan",
-  email: "raf404@mail.com",
-  phone: "01621876123",
-  password: "121212aA",
-  status: "approved",
-};
-
-const loginInput = {
-  email: "raf404@mail.com",
-  password: "121212aA",
-};
-const wrongLoginInput = {
-  email: "raf404@mail.com",
-  password: "121212",
-};
-const wrongLoginInput2 = {
-  email: "raf@mail.com",
-  password: "121212",
-};
+const {
+  loginInput,
+  userInput,
+  wrongLoginInput,
+  wrongLoginInput2,
+} = require("./mockData");
 
 describe("User Authentication group", () => {
   beforeAll(async () => {
