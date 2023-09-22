@@ -12,7 +12,7 @@ service.createCartHandler = async (input) => {
   if (!isMenuExist) {
     return {
       status: 400,
-      message: "Menu doesn't found.'",
+      message: "Menu doesn't found.",
     };
   }
   let isExistCart = await service.findCartByMenuAndUserId(userId, menuId);

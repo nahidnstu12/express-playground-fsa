@@ -5,6 +5,7 @@ const {
   publishMenuHandler,
   readAllMenuHandler,
   updateMenuHandler,
+  createTestingMenuHandler,
 } = require("../service/menu");
 
 const controller = {};
@@ -14,6 +15,25 @@ controller.create = async (req, res, next) => {
     const menu = await createMenuHandler({
       body: req.body,
       user: { userId: req.user.id },
+    });
+    if (!menu) {
+      return res.status(400).json({
+        message: "Menu already exists",
+      });
+    }
+    return res.status(201).json({
+      status: "Success",
+      data: menu,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+controller.testing = async (req, res, next) => {
+  try {
+    const menu = await createTestingMenuHandler({
+      body: req.body,
     });
     if (!menu) {
       return res.status(400).json({
@@ -96,7 +116,9 @@ controller.menuChangePublishStatus = async (req, res, next) => {
       });
     }
     const menu = await publishMenuHandler(req.params.id, publishableStatus);
-    return res.status(200).json({
+
+    const status = menu?.status === 400 ? 400 : 200;
+    return res.status(status).json({
       message:
         menu.message ||
         `Menu ${

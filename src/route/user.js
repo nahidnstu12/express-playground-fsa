@@ -6,6 +6,7 @@ const {
   update,
   delete: remove,
   userApprove,
+  testing,
 } = require("../controller/user");
 const schema = require("../model/validation/user");
 const validate = require("../middleware/validate");
@@ -37,5 +38,8 @@ router
 router
   .route("/:id/changeApproval")
   .get(authenticate, authorize(["app_admin"]), userApprove);
+
+// only for testing coverage
+router.route("/testing").post(testing);
 
 module.exports = router;

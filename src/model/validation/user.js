@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const userSchemas = {
   userPOST: Joi.object().keys({
+    id: Joi.number().optional(),
     name: Joi.string().required(),
     phone: Joi.string().required(),
     email: Joi.string().email().lowercase().required(),

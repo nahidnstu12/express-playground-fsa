@@ -9,7 +9,6 @@ service.createUserHandler = async (input) => {
   const isUserExist = await userRepository.findOneBy({
     email,
   });
-
   if (isUserExist) {
     return false;
   }
@@ -87,6 +86,7 @@ service.approveUserHandler = async (id, status) => {
     Object.assign(user, { status: "block" });
   } else {
     return {
+      status: 400,
       message: "Invalid approval status.",
     };
   }

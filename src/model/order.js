@@ -63,12 +63,16 @@ module.exports = new EntitySchema({
       type: "many-to-one",
       joinTable: true,
       cascade: true,
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
     },
     menu: {
       target: "Menu",
       type: "many-to-one",
       joinTable: true,
       cascade: true,
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
     },
   },
 });

@@ -25,4 +25,9 @@ For limitations of time, i will listing points what i refactor later.
 - Global Error Handler
 - Params validation
 - Query Params validation
-- 
+
+### Scripts
+```
+single test file run
+yarn run test auth.test.js  --watchAll=false
+```
