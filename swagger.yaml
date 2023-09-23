@@ -884,7 +884,7 @@ paths:
                 order_date:
                   type: string
                   format: date-time
-                  example: 21/05/2023
+                  example: 2015-12-20 10:01:00.999999
                 order_status:
                   type: string
                   enum: [ pending, order_taken,order_processing,order_shipped, order_on_road, order_delivered,order_rejected ]

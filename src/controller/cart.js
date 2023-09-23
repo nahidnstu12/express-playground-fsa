@@ -52,7 +52,7 @@ controller.read = async (req, res, next) => {
 controller.update = async (req, res, next) => {
   try {
     const cart = await updateCartHandler(req.params.id, req.body);
-
+    console.log("controller", cart);
     if (cart) {
       return res.status(200).json({
         message: "Successfully updated",
@@ -60,7 +60,7 @@ controller.update = async (req, res, next) => {
       });
     } else {
       return res.status(404).json({
-        status: "User not found",
+        status: "Cart not found",
       });
     }
   } catch (err) {

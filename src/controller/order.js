@@ -54,7 +54,6 @@ controller.read = async (req, res, next) => {
 controller.update = async (req, res, next) => {
   try {
     const order = await updateOrderHandler(req.params.id, req.body, req.user);
-
     if (order) {
       return res.status(200).json({
         message: "Successfully updated",
