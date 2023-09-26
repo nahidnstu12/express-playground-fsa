@@ -340,6 +340,39 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
+  "/users/{id}/changeApproval":
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags: [ User ]
+      description: User approval status change by app-admin
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+        - $ref: "#/components/parameters/approveParam"
+
+      responses:
+        "200":
+          description: User approval status change by app-admin
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  data:
+                    allOf:
+                      - type: object
+                        properties:
+
+                          message:
+                            type: string
+                            example: User Approved successfully
+
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 
   "/menus":
     get:
@@ -558,6 +591,39 @@ paths:
           description: "Menu deleted successfully"
         "401":
           $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  "/menus/{id}/changeStatus":
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags: [ Menu ]
+      description: Menu publishable status change by admin
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+        - $ref: "#/components/parameters/menuStatusParam"
+
+      responses:
+        "200":
+          description: Menu publishable status change by admin
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  data:
+                    allOf:
+                      - type: object
+                        properties:
+
+                          message:
+                            type: string
+                            example: Menu Published successfully
+
+        "400":
+          $ref: "#/components/responses/400"
         "404":
           $ref: "#/components/responses/404"
         "500":
@@ -884,7 +950,7 @@ paths:
                 order_date:
                   type: string
                   format: date-time
-                  example: 21/05/2023
+                  example: 2015-12-20 10:01:00.999999
                 order_status:
                   type: string
                   enum: [ pending, order_taken,order_processing,order_shipped, order_on_road, order_delivered,order_rejected ]
@@ -928,6 +994,39 @@ paths:
           description: "Cart deleted successfully"
         "401":
           $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  "/orders/{id}/changeOrderStatus":
+    get:
+      security:
+        - bearerAuth: [ ]
+      tags: [ Order ]
+      description: Order status change by admin
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+        - $ref: "#/components/parameters/orderStatusParam"
+
+      responses:
+        "200":
+          description: Order status change by admin
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  data:
+                    allOf:
+                      - type: object
+                        properties:
+
+                          message:
+                            type: string
+                            example: Order order_taken successfully
+
+        "400":
+          $ref: "#/components/responses/400"
         "404":
           $ref: "#/components/responses/404"
         "500":
@@ -1354,6 +1453,27 @@ components:
       schema:
         type: string
         example: title
+    approveParam:
+      in: query
+      name: approve
+      description: user approval status
+      schema:
+        type: string
+        example: 1
+    menuStatusParam:
+      in: query
+      name: status
+      description: Menu publish status
+      schema:
+        type: string
+        example: 1
+    orderStatusParam:
+      in: query
+      name: order_status
+      description: order approval status
+      schema:
+        type: string
+        example: order_taken
     idPathParam:
       in: path
       name: id

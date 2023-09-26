@@ -96,9 +96,9 @@ service.updateOrderHandler = async (id, data, user) => {
   if (!order) {
     return false;
   }
-
+  delete data.userId;
+  delete data.menuId;
   Object.assign(order, data);
-
   return await orderRepository.save(order);
 };
 service.deleteOrderHandler = async (id) => {
@@ -135,7 +135,6 @@ service.orderStatusHandler = async (id, status, user) => {
       message: "Order not found",
     };
   }
-  console.log("order", order, status);
   if (orderStatusArray.some((val) => val === status)) {
     Object.assign(order, { order_status: status });
   } else {

@@ -87,7 +87,7 @@ service.readCartHandler = async (id) => {
 // };
 service.updateCartHandler = async (id, data) => {
   const cart = await service.readCartHandler(id);
-
+  console.log("service", { cart, id, data });
   if (!cart) {
     return false;
   }
