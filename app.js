@@ -17,8 +17,8 @@ app.use("/api/v1/carts", CartRoute);
 app.use("/api/v1/orders", OrderRoute);
 
 // HEALTH CHECKER
-app.get("/api/v1", (req, res) => {
-  res.send({ message: "Simple Site Is Live" });
+app.get("/api/v1/health", (req, res) => {
+  res.status(200).send({ message: "Site Is Live" });
 });
 
 // UNHANDLED ROUTE

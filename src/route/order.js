@@ -8,6 +8,7 @@ const {
   orderCancel,
   changeOrderStatus,
 } = require("../controller/order");
+const {USER_ROLES} = require("../utils/constants");
 const schema = require("../model/validation/order");
 const validate = require("../middleware/validate");
 const authenticate = require("../middleware/authenticate");
@@ -17,30 +18,30 @@ const router = express.Router();
 
 router
   .route("")
-  .get(authenticate, authorize(["admin", "customer"]), readAll)
+  .get(authenticate, authorize([USER_ROLES.ADMIN, USER_ROLES.CUSTOMER]), readAll)
   .post(
     authenticate,
-    authorize(["customer"]),
+    authorize([USER_ROLES.CUSTOMER]),
     validate(schema.orderPOST),
     create,
   );
 
 router
   .route("/:id")
-  .get(authenticate, authorize(["admin", "customer"]), read)
-  .delete(authenticate, authorize(["admin", "customer"]), remove)
+  .get(authenticate, authorize([USER_ROLES.ADMIN, USER_ROLES.CUSTOMER]), read)
+  .delete(authenticate, authorize([USER_ROLES.ADMIN, USER_ROLES.CUSTOMER]), remove)
   .put(
     authenticate,
-    authorize(["admin", "customer"]),
+    authorize([USER_ROLES.ADMIN, USER_ROLES.CUSTOMER]),
     validate(schema.orderUPDATE),
     update,
   );
 
 // router
 //   .route("/:id/cancel")
-//   .get(authenticate, authorize(["admin"]), orderCancel);
+//   .get(authenticate, authorize([USER_ROLES.ADMIN]), orderCancel);
 router
   .route("/:id/changeOrderStatus")
-  .get(authenticate, authorize(["admin"]), changeOrderStatus);
+  .get(authenticate, authorize([USER_ROLES.ADMIN]), changeOrderStatus);
 
 module.exports = router;

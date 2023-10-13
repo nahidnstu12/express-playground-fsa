@@ -63,7 +63,7 @@ describe("Menu group", () => {
 
     expect(res.body.errors).toEqual({
       status: 403,
-      message: "You have not permission to do this",
+      message: "You do not have permission to perform this action.",
     });
   });
 

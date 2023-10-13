@@ -2,7 +2,7 @@
 const {USER_STATUS, USER_ROLES} = require("../utils/constants");
 exports.userInput = {
   id: 102,
-  name: "rafsan",
+  name: "customer",
   email: "customer404@mail.com",
   phone: "01621876123",
   password: "121212aA",
@@ -11,7 +11,7 @@ exports.userInput = {
 exports.userInput2 = {
   id: 104,
   name: "rafsan",
-  email: "customre@mail.com",
+  email: "rafsan@mail.com",
   phone: "01621876123",
   password: "121212aA",
   status: USER_STATUS.APPROVED,
@@ -78,6 +78,7 @@ exports.orderInput = {
   order_date: "2015-12-20 10:01:00.999999",
   payment_status: "paid",
   menuId: 100,
+  userId: 104
 };
 exports.userInputDataForUpdata = {
   phone: "01621876123",

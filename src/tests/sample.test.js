@@ -1,5 +1,5 @@
-// const request = require("supertest");
-// const app = require("../../app");
+const request = require("supertest");
+const app = require("../../app");
 // // const UserService = require("../service/user");
 // const { clearDatabase, closeDatabase } = require("./utils");
 // const { jwtSign, jwtVerify } = require("./utils");
@@ -87,10 +87,13 @@
 //   });
 // });
 //
-// // describe("test Api group", () => {
-// //   test("test Api route", async () => {
-// //     const res = await request(app).get("/api/v1").send();
-// //     expect(res.status).toBe(200);
-// //     expect(res.body).toHaveProperty("message");
-// //   });
-// // });
+describe("test Api group", () => {
+  test("test Api route", async () => {
+    const res = await request(app).get("/api/v1/health");
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({
+      message: "Site Is Live",
+    });
+  });
+});

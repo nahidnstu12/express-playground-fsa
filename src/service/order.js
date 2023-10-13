@@ -1,6 +1,7 @@
 const { AppdataSource } = require("../database/config");
 const Order = require("../model/order");
 const { findCartByMenuAndUserId, deleteCartHandler } = require("./cart");
+const {USER_ROLES} = require("../utils/constants");
 
 const orderRepository = AppdataSource.getRepository(Order);
 const service = {};
@@ -36,7 +37,7 @@ service.readAllOrderHandler = async (user) => {
     .leftJoin("order.user", "user")
     .leftJoin("order.menu", "menu");
 
-  if (user?.role !== "admin") {
+  if (user?.role !== USER_ROLES.ADMIN) {
     queryBuilder = queryBuilder.where("order.userId = :uId", { uId: user?.id });
   }
 
@@ -61,7 +62,7 @@ service.readOrderHandler = async (id, user) => {
     .leftJoin("order.menu", "menu")
     .where("order.id = :id", { id });
 
-  if (user?.role !== "admin") {
+  if (user?.role !== USER_ROLES.ADMIN) {
     queryBuilder.andWhere("order.userId = :uId", {
       uId: user?.id,
     });

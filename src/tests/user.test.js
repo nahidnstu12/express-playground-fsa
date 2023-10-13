@@ -40,7 +40,7 @@ describe("User group", () => {
       .send({ ...userInput2, email: "sakib@mail.com" });
 
     expect(res.status).toBe(201);
-    expect(res.body.data.name).toBe(userInput.name);
+    expect(res.body.data.name).toBe(userInput2.name);
     expect(res.body.data.email).toBe("sakib@mail.com");
   });
   test("user lists fetched failed when user role will not be app-admin", async () => {

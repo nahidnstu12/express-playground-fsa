@@ -34,6 +34,7 @@ describe("Order group", () => {
       .post("/api/v1/orders")
       .set("Authorization", `Bearer ${tokenCustomer}`)
       .send(orderInput);
+    console.log({orderInput: res.body})
 
     expect(res.status).toBe(201);
     expect(res.body.data).toHaveProperty("order_date");
@@ -66,7 +67,7 @@ describe("Order group", () => {
 
     expect(res.body.errors).toEqual({
       status: 403,
-      message: "You have not permission to do this",
+      message: "You do not have permission to perform this action.",
     });
   });
   test("order status can not changed if valid order_status not provided ", async () => {
