@@ -7,6 +7,8 @@ const {
   updateOrderHandler,
   orderStatusHandler,
 } = require("../service/order");
+const { getKeyByValue } = require("../utils/helpers");
+const { ORDER_STATUS } = require("../utils/constants");
 
 const controller = {};
 
@@ -84,7 +86,9 @@ controller.changeOrderStatus = async (req, res, next) => {
     );
     const status = order?.status === 400 ? 400 : 200;
     return res.status(status).json({
-      message: order.message || `order is now ${orderStatus} `,
+      message:
+        order.message ||
+        `order is now ${getKeyByValue(ORDER_STATUS, orderStatus)} `,
     });
   } catch (err) {
     next(err);

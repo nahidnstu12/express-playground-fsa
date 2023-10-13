@@ -1,3 +1,4 @@
+const {ORDER_TYPE, ORDER_STATUS, ORDER_PAYMENT_STATUS} = require("../utils/constants");
 const EntitySchema = require("typeorm").EntitySchema;
 
 module.exports = new EntitySchema({
@@ -27,25 +28,18 @@ module.exports = new EntitySchema({
     },
     order_type: {
       type: "enum",
-      enum: ["instant_order", "home_delivary"],
-      default: "instant_order",
+      enum: Object.values(ORDER_TYPE),
+      default: ORDER_TYPE.INSTANT_ORDER,
     },
     order_status: {
       type: "enum",
-      enum: [
-        "pending",
-        "order_taken",
-        "order_processing",
-        "order_shipped",
-        "order_delivered",
-        "order_rejected",
-      ],
-      default: "pending",
+      enum:  Object.values(ORDER_STATUS),
+      default: ORDER_STATUS.PENDING,
     },
     payment_status: {
       type: "enum",
-      enum: ["pending", "paid", "reject"],
-      default: "pending",
+      enum:  Object.values(ORDER_PAYMENT_STATUS),
+      default: ORDER_PAYMENT_STATUS.PENDING,
     },
 
     created_at: {

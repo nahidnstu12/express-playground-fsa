@@ -129,15 +129,6 @@ controller.menuChangePublishStatus = async (req, res, next) => {
     next(err);
   }
 };
-// controller.menuUnpublish = async (req, res, next) => {
-//   try {
-//     await unpublishMenuHandler(req.params.id);
-//     res.status(200).json({
-//       message: "Successfully unpublished",
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+
 
 module.exports = controller;

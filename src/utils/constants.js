@@ -25,4 +25,40 @@ constants.USER_ROLES = {
   ADMIN: 4,
   APP_ADMIN: 5
 }
+
+constants.ORDER_TYPE = {
+  INSTANT_ORDER: 1,
+  HOME_DELIVERY: 2
+}
+
+constants.ORDER_STATUS = {
+
+  PENDING: 1,
+  ORDER_TAKEN: 2,
+  ORDER_PROCESSING: 3,
+  ORDER_SHIPPED: 4,
+  ORDER_DELIVERED: 5,
+  ORDER_REJECTED: 6
+}
+
+constants.ORDER_PAYMENT_STATUS = {
+  PENDING: 1,
+  PAID: 2,
+  REJECTED: 3,
+}
+
+constants.MENU_VARIANTS = {
+
+  PIZZA: 1,
+  BBQ_DELIGHT: 2,
+  PEPPERONI: 3,
+  VEGGIE: 4,
+  MUSHROOMS: 5
+}
+
+constants.MENU_PUBLISH ={
+
+  PUBLISH: 1,
+  UNPUBLISH:2
+}
 module.exports = constants;
