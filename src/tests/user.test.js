@@ -53,7 +53,7 @@ describe("User group", () => {
 
     expect(res.body.errors).toEqual({
       status: 403,
-      message: "You have not permission to do this",
+      message: "You do not have permission to perform this action.",
     });
   });
   test("single user fetched success when user role will be app-admin or admin", async () => {
@@ -90,6 +90,7 @@ describe("User group", () => {
     expect(res.status).toBe(200);
 
     expect(res.body).toEqual({
+      status: 200,
       message: "User Approved Successfully",
     });
   });
@@ -101,6 +102,7 @@ describe("User group", () => {
 
     expect(res.status).toBe(400);
     expect(res.body).toEqual({
+      status: 400,
       message: "Invalid approval status.",
     });
   });

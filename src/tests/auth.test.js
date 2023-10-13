@@ -42,8 +42,8 @@ describe("User Authentication group", () => {
 
     expect(res.status).toBe(400);
 
-    expect(res.body).toEqual({
-      status: "fail",
+    expect(res.body.errors).toEqual({
+      status: 400,
       message: "Already Registered",
     });
   });

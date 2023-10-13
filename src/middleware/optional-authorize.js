@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { findUserByEmailHandler } = require("../service/user");
+const {USER_STATUS} = require("../utils/constants");
 const optionalAuthorize = async (req, _res, next) => {
   try {
     const token = req.headers.authorization?.split(" ")[1] || null;
@@ -19,7 +20,7 @@ const optionalAuthorize = async (req, _res, next) => {
       });
     }
 
-    if (user.status !== "approved") {
+    if (user.status !== USER_STATUS.APPROVED) {
       return next({
         status: 401,
         message: `Your account is ${user.status}`,

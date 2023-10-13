@@ -106,6 +106,7 @@ controller.userApprove = async (req, res, next) => {
     const approvalStatus = req.query.approve;
     if (!approvalStatus) {
       return res.status(400).json({
+        status: 400,
         message: "Provide approval status",
       });
     }
@@ -114,6 +115,7 @@ controller.userApprove = async (req, res, next) => {
     if (user) {
       const status = user?.status === 400 ? 400 : 200;
       return res.status(status).json({
+        status: status,
         message:
           user.message ||
           `User ${
@@ -122,6 +124,7 @@ controller.userApprove = async (req, res, next) => {
       });
     } else {
       return res.status(404).json({
+        status: 404,
         message: user.message || "User not found",
       });
     }

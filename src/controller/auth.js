@@ -10,10 +10,7 @@ controller.register = async (req, res, next) => {
   try {
     const user = await registerHandler(req.body);
     if (user.status === 400) {
-      return res.status(400).json({
-        status: "fail",
-        message: user.message,
-      });
+      next(user)
     } else if (user.status === 201) {
       return res.status(201).json({
         status: "Success",
