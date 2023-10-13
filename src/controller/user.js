@@ -6,6 +6,8 @@ const {
   readUserHandler,
   updateUserHandler,
 } = require("../service/user");
+const { badRequest, notFound } = require("../utils/error");
+const { successResponse } = require("../utils/success");
 
 const controller = {};
 
@@ -13,14 +15,14 @@ controller.create = async (req, res, next) => {
   try {
     const user = await createUserHandler(req.body);
     if (!user) {
-      return res.status(400).json({
-        message: "User already exists",
-      });
+      next(badRequest("User already exists"));
     }
-    return res.status(201).json({
-      status: "Success",
-      data: user,
-    });
+
+    return res.status(201).json(
+      successResponse({
+        data: user,
+      }),
+    );
   } catch (err) {
     next(err);
   }
@@ -30,14 +32,13 @@ controller.testing = async (req, res, next) => {
   try {
     const user = await createUserHandler(req.body);
     if (!user) {
-      return res.status(400).json({
-        message: "User already exists",
-      });
+      next(badRequest("Menu already exists"));
     }
-    return res.status(201).json({
-      status: "Success",
-      data: user,
-    });
+    return res.status(201).json(
+      successResponse({
+        data: user,
+      }),
+    );
   } catch (err) {
     next(err);
   }
@@ -46,11 +47,11 @@ controller.testing = async (req, res, next) => {
 controller.readAll = async (req, res, next) => {
   try {
     const users = await readAllUserHandler();
-    res.status(200).json({
-      status: "Success",
-      data: users,
-      total: users.length,
-    });
+    res.status(200).json(
+      successResponse({
+        data: users,
+      }),
+    );
   } catch (err) {
     console.log("error ", err);
 
@@ -62,10 +63,11 @@ controller.read = async (req, res, next) => {
   try {
     const id = req.params.id;
     const user = await readUserHandler(id);
-    res.status(200).json({
-      status: "Success",
-      data: user,
-    });
+    res.status(200).json(
+      successResponse({
+        data: user,
+      }),
+    );
   } catch (err) {
     next(err);
   }
@@ -76,14 +78,14 @@ controller.update = async (req, res, next) => {
     const user = await updateUserHandler(req.params.id, req.body);
 
     if (user) {
-      return res.status(200).json({
-        message: "Successfully updated",
-        data: user,
-      });
+      return res.status(200).json(
+        successResponse({
+          message: "Successfully updated",
+          data: user,
+        }),
+      );
     } else {
-      return res.status(404).json({
-        message: "User not found",
-      });
+      next(notFound("User not found"));
     }
   } catch (err) {
     next(err);
@@ -93,9 +95,11 @@ controller.update = async (req, res, next) => {
 controller.delete = async (req, res, next) => {
   try {
     await deleteUserHandler(req.params.id);
-    res.status(200).json({
-      message: "Successfully deleted",
-    });
+    res.status(200).json(
+      successResponse({
+        message: "Successfully deleted",
+      }),
+    );
   } catch (err) {
     next(err);
   }
@@ -105,28 +109,24 @@ controller.userApprove = async (req, res, next) => {
   try {
     const approvalStatus = req.query.approve;
     if (!approvalStatus) {
-      return res.status(400).json({
-        status: 400,
-        message: "Provide approval status",
-      });
+      next(badRequest("Provide approval status"));
     }
     const user = await approveUserHandler(req.params.id, approvalStatus);
 
     if (user) {
       const status = user?.status === 400 ? 400 : 200;
-      return res.status(status).json({
-        status: status,
-        message:
-          user.message ||
-          `User ${
-            approvalStatus === "1" ? "Approved" : "Blocked"
-          } Successfully`,
-      });
+      return res.status(status).json(
+        successResponse({
+          status: status,
+          message:
+            user.message ||
+            `User ${
+              approvalStatus === "1" ? "Approved" : "Blocked"
+            } Successfully`,
+        }),
+      );
     } else {
-      return res.status(404).json({
-        status: 404,
-        message: user.message || "User not found",
-      });
+      next(notFound(user.message || "User not found"));
     }
   } catch (err) {
     next(err);
