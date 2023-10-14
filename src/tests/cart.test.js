@@ -80,7 +80,6 @@ describe("Cart group", () => {
     expect(res.status).toBe(403);
 
     expect(res.body.errors).toEqual({
-      status: 403,
       message: "You do not have permission to perform this action.",
     });
   });

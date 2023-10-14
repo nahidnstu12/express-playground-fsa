@@ -28,7 +28,6 @@ describe("User group", () => {
       .send(userInput2);
 
     expect(res.status).toBe(201);
-    expect(res.body).toHaveProperty("status");
     expect(res.body).toHaveProperty("data");
   });
   test("user created success when valid payload provided", async () => {
@@ -52,7 +51,6 @@ describe("User group", () => {
     expect(res.status).toBe(403);
 
     expect(res.body.errors).toEqual({
-      status: 403,
       message: "You do not have permission to perform this action.",
     });
   });
@@ -77,7 +75,7 @@ describe("User group", () => {
 
     expect(res.status).toBe(404);
 
-    expect(res.body).toEqual({
+    expect(res.body.errors).toEqual({
       message: "User not found",
     });
   });
@@ -90,7 +88,6 @@ describe("User group", () => {
     expect(res.status).toBe(200);
 
     expect(res.body).toEqual({
-      status: 200,
       message: "User Approved Successfully",
     });
   });
@@ -102,7 +99,6 @@ describe("User group", () => {
 
     expect(res.status).toBe(400);
     expect(res.body).toEqual({
-      status: 400,
       message: "Invalid approval status.",
     });
   });

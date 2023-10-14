@@ -49,7 +49,7 @@ describe("Menu group", () => {
 
     expect(res.status).toBe(400);
 
-    expect(res.body).toEqual({
+    expect(res.body.errors).toEqual({
       message: "Menu already exists",
     });
   });
@@ -62,7 +62,6 @@ describe("Menu group", () => {
     expect(res.status).toBe(403);
 
     expect(res.body.errors).toEqual({
-      status: 403,
       message: "You do not have permission to perform this action.",
     });
   });

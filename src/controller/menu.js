@@ -19,11 +19,10 @@ controller.create = async (req, res, next) => {
       user: { userId: req.user.id },
     });
     if (!menu) {
-      next(badRequest("Menu already exists"));
+     return  next(badRequest("Menu already exists"));
     }
     return res.status(201).json(
       successResponse({
-        status: "Success",
         data: menu,
       }),
     );
@@ -38,11 +37,10 @@ controller.testing = async (req, res, next) => {
       body: req.body,
     });
     if (!menu) {
-      next(badRequest("Menu already exists"));
+     return  next(badRequest("Menu already exists"));
     }
     return res.status(201).json(
       successResponse({
-        status: "Success",
         data: menu,
       }),
     );
