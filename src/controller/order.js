@@ -9,8 +9,8 @@ const {
 } = require("../service/order");
 const { getKeyByValue } = require("../utils/helpers");
 const { ORDER_STATUS } = require("../utils/constants");
-const {successResponse} = require("../utils/success");
-const {notFound, badRequest} = require("../utils/error");
+const { successResponse } = require("../utils/success");
+const { notFound, badRequest } = require("../utils/error");
 
 const controller = {};
 
@@ -22,9 +22,11 @@ controller.create = async (req, res, next) => {
     });
     const status = order?.status === 400 ? 400 : 201;
 
-    res.status(status).json(successResponse({
-      data: order,
-    }));
+    res.status(status).json(
+      successResponse({
+        data: order,
+      }),
+    );
   } catch (err) {
     next(err);
   }
@@ -33,9 +35,11 @@ controller.create = async (req, res, next) => {
 controller.readAll = async (req, res, next) => {
   try {
     const orders = await readAllOrderHandler(req.user);
-    res.status(200).json(successResponse({
-      data: orders,
-    }));
+    res.status(200).json(
+      successResponse({
+        data: orders,
+      }),
+    );
   } catch (err) {
     next(err);
   }
@@ -45,9 +49,14 @@ controller.read = async (req, res, next) => {
   try {
     const id = req.params.id;
     const order = await readOrderHandler(id, req.user);
-    res.status(200).json(successResponse({
-      data: order,
-    }));
+    if (!order) {
+      next(notFound("Order not found"));
+    }
+    return res.status(200).json(
+      successResponse({
+        data: order,
+      }),
+    );
   } catch (err) {
     next(err);
   }
@@ -57,10 +66,12 @@ controller.update = async (req, res, next) => {
   try {
     const order = await updateOrderHandler(req.params.id, req.body, req.user);
     if (order) {
-      return res.status(200).json(successResponse({
-        message: "Successfully updated",
-        data: order,
-      }));
+      return res.status(200).json(
+        successResponse({
+          message: "Successfully updated",
+          data: order,
+        }),
+      );
     } else {
       next(notFound("Order not found"));
       // return res.status(404).json({
@@ -87,11 +98,13 @@ controller.changeOrderStatus = async (req, res, next) => {
       req.user,
     );
     const status = order?.status === 400 ? 400 : 200;
-    return res.status(status).json(successResponse({
-      message:
-        order.message ||
-        `order is now ${getKeyByValue(ORDER_STATUS, orderStatus)} `,
-    }));
+    return res.status(status).json(
+      successResponse({
+        message:
+          order.message ||
+          `order is now ${getKeyByValue(ORDER_STATUS, orderStatus)} `,
+      }),
+    );
   } catch (err) {
     next(err);
   }
@@ -100,9 +113,11 @@ controller.changeOrderStatus = async (req, res, next) => {
 controller.delete = async (req, res, next) => {
   try {
     await deleteOrderHandler(req.params.id);
-    res.status(200).json(successResponse({
-      message: "Successfully deleted",
-    }));
+    res.status(200).json(
+      successResponse({
+        message: "Successfully deleted",
+      }),
+    );
   } catch (err) {
     next(err);
   }
@@ -111,9 +126,11 @@ controller.delete = async (req, res, next) => {
 controller.orderCancel = async (req, res, next) => {
   try {
     await cancelOrderHandler(req.params.id);
-    res.status(200).json(successResponse({
-      message: "Successfully deleted",
-    }));
+    res.status(200).json(
+      successResponse({
+        message: "Successfully deleted",
+      }),
+    );
   } catch (err) {
     next(err);
   }

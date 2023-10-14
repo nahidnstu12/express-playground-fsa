@@ -7,7 +7,7 @@ const {
   updateCartHandler,
 } = require("../service/cart");
 const { successResponse } = require("../utils/success");
-const { notFound } = require("../utils/error");
+const { notFound, badRequest} = require("../utils/error");
 
 const controller = {};
 
@@ -37,7 +37,11 @@ controller.read = async (req, res, next) => {
   try {
     const id = req.params.id;
     const cart = await readCartHandler(id);
-    res.status(200).json(successResponse({ data: cart }));
+    if(!cart){
+      next(notFound("Cart item not found"));
+    }
+    return res.status(200).json(successResponse({ data: cart }));
+
   } catch (err) {
     next(err);
   }

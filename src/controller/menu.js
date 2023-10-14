@@ -67,7 +67,10 @@ controller.read = async (req, res, next) => {
   try {
     const id = req.params.id;
     const menu = await readMenuHandler(id);
-    res.status(200).json(
+    if(!menu){
+      next(notFound("Menu not found"));
+    }
+    return res.status(200).json(
       successResponse({
         data: menu,
       }),

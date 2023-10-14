@@ -32,7 +32,7 @@ controller.testing = async (req, res, next) => {
   try {
     const user = await createUserHandler(req.body);
     if (!user) {
-      next(badRequest("Menu already exists"));
+      next(badRequest("User already exists"));
     }
     return res.status(201).json(
       successResponse({
