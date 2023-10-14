@@ -63,7 +63,10 @@ controller.read = async (req, res, next) => {
   try {
     const id = req.params.id;
     const user = await readUserHandler(id);
-    res.status(200).json(
+    if(!user){
+      next(notFound("User not found"));
+    }
+    return res.status(200).json(
       successResponse({
         data: user,
       }),

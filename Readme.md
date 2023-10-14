@@ -35,12 +35,49 @@ yarn run test auth.test.js  --watchAll=false
 
 ```
 
+### Common Snippets
+```
+notFound messsage
+{
+  "errors": {
+    "message": "User not found"
+  },
+  
+}
+
+badRequest message
+{
+  "errors": {
+     "message": "User already exists"
+  },
+}
+
+authenticaionError message
+{
+  "errors": {
+     "message": "Authntication Failed"
+  },
+}
+
+authorizationError message
+{
+  "errors": {
+     "message": "You do not have permission to perform this action."
+  },
+}
+serverError message
+{
+  "errors": {
+     "message": "Internal Server Error."
+  },
+}
+```
 ### Refactoring Scopes
 For limitations of time, i will listing points what i refactor later.
 - route (some route optimized or removed) (fixed)
   -  User approved / blocked
   - Menu published / unpublished
-- Model (enum value convert to number)
+- Model (enum value convert to number) (fixed)
 - Require optional authentication middleware (fixed)
 - Implement pagination
 - Implement Logging for error tracing
