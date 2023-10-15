@@ -4,6 +4,7 @@ const { runSeeders } = require("typeorm-extension");
 
 AppdataSource.initialize()
   .then(async () => {
+    await AppdataSource.synchronize(true);
     await runSeeders(AppdataSource);
     process.exit();
     // app.listen(5000, () => console.log("server starting at 5000"));

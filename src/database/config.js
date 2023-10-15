@@ -6,6 +6,7 @@ const Order = require("../model/order");
 const {UsersFactory} = require("../seeder/factory/user");
 const MainSeeder = require("../seeder");
 console.log("testing=>", process.env.database);
+
 exports.AppdataSource = new typeorm.DataSource({
   type: "mysql",
   host: "localhost",
