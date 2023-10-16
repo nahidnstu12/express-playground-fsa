@@ -1,16 +1,9 @@
 const { setSeederFactory } = require("typeorm-extension");
 const User = require("../../model/user");
 const { USER_ROLES, USER_STATUS } = require("../../utils/constants");
-const { AppdataSource } = require("../../database/config");
-
-
 
 exports.UsersFactory = setSeederFactory(User, async (faker) => {
-  console.log("UsersFactory 1");
-  // const userRepository = AppdataSource.getRepository(User);
-  const user = new User();
-  // const user =  userRepository.create();
-  console.log("UsersFactory 2");
+  const user = {};
   user.name = faker.internet.userName();
   user.phone = faker.phone.number();
   user.email = faker.internet.email();

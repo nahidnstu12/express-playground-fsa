@@ -1,7 +1,7 @@
 const { AppdataSource } = require("../database/config");
 const Order = require("../model/order");
 const { findCartByMenuAndUserId, deleteCartHandler } = require("./cart");
-const {USER_ROLES, ORDER_STATUS} = require("../utils/constants");
+const { USER_ROLES, ORDER_STATUS } = require("../utils/constants");
 
 const orderRepository = AppdataSource.getRepository(Order);
 const service = {};
@@ -108,7 +108,7 @@ service.orderStatusHandler = async (id, status, user) => {
       message: "Order not found",
     };
   }
-    console.log({valus: Object.values(ORDER_STATUS), status})
+  // console.log({valus: Object.values(ORDER_STATUS), status})
   if (Object.values(ORDER_STATUS).some((val) => val == status)) {
     Object.assign(order, { order_status: status });
   } else {
