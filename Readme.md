@@ -55,7 +55,7 @@ badRequest message
 authenticaionError message
 {
   "errors": {
-     "message": "Authntication Failed"
+     "message": "Authentication Failed"
   },
 }
 

@@ -26,8 +26,6 @@ app.get("/api/v1/health", (req, res) => {
 //   next(new AppError(404, `Route ${req.originalUrl} not found`));
 // });
 
-
-
 app.use((req, res, next) => {
   res.status(404).json({ message: "Not Found", dev_note: "global 404" });
 });
@@ -35,11 +33,10 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   // format error
   console.log("last error: ", err);
-  res.status(Number(err.status) || 500).json({
+  res.status(Number(err.code) || 500).json({
     errors: {
       // status: err.status,
-      message: err.message
-
+      message: err.message,
     },
     dev_note: "global error",
   });

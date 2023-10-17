@@ -13,11 +13,11 @@ const validate = (schema, property = "body") => {
         const { details } = error;
         // console.log("step 3", details);
         const message = details.map((i) => i.message);
-        // console.log("error", message, property);
+        // console.log("error 4", message, property);
         res.status(422).json({ error: message });
       }
     } catch (err) {
-      console.log("validation error", err);
+      console.log("validation error 5", err);
       next(err);
     }
   };
