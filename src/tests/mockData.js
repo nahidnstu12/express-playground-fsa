@@ -1,19 +1,20 @@
 //customer
+const {USER_STATUS, USER_ROLES} = require("../utils/constants");
 exports.userInput = {
   id: 102,
-  name: "rafsan",
+  name: "customer",
   email: "customer404@mail.com",
   phone: "01621876123",
   password: "121212aA",
-  status: "approved",
+  status: USER_STATUS.APPROVED,
 };
 exports.userInput2 = {
   id: 104,
   name: "rafsan",
-  email: "customre@mail.com",
+  email: "rafsan@mail.com",
   phone: "01621876123",
   password: "121212aA",
-  status: "approved",
+  status: USER_STATUS.APPROVED,
 };
 //app-admin
 exports.appAdminUser = {
@@ -22,8 +23,8 @@ exports.appAdminUser = {
   email: "app@mail.com",
   phone: "01621876123",
   password: "121212aA",
-  status: "approved",
-  role: "app_admin",
+  status: USER_STATUS.APPROVED,
+  role: USER_ROLES.APP_ADMIN,
 };
 //admin
 exports.adminUser = {
@@ -32,8 +33,8 @@ exports.adminUser = {
   email: "admin@mail.com",
   phone: "01621876123",
   password: "121212aA",
-  status: "approved",
-  role: "admin",
+  status: USER_STATUS.APPROVED,
+  role: USER_ROLES.ADMIN,
 };
 // chef
 exports.userInputChef = {
@@ -42,8 +43,8 @@ exports.userInputChef = {
   email: "checf@mail.com",
   phone: "01621876123",
   password: "121212aA",
-  role: "chef",
-  status: "approved",
+  role: USER_ROLES.CHEF,
+  status: USER_STATUS.APPROVED,
 };
 
 exports.loginInput = {
@@ -77,8 +78,9 @@ exports.orderInput = {
   order_date: "2015-12-20 10:01:00.999999",
   payment_status: "paid",
   menuId: 100,
+  userId: 104
 };
 exports.userInputDataForUpdata = {
   phone: "01621876123",
-  status: "approved",
+  status: USER_STATUS.APPROVED,
 };

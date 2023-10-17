@@ -8,6 +8,7 @@ const {
   menuChangePublishStatus,
   testing,
 } = require("../controller/menu");
+const {USER_ROLES} = require("../utils/constants");
 const schema = require("../model/validation/menu");
 const validate = require("../middleware/validate");
 const authenticate = require("../middleware/authenticate");
@@ -19,19 +20,19 @@ const router = express.Router();
 router
   .route("")
   .get(optionalAuthorize, readAll)
-  .post(authenticate, authorize(["admin"]), validate(schema.menuPOST), create);
+  .post(authenticate, authorize([USER_ROLES.ADMIN]), validate(schema.menuPOST), create);
 
 router
   .route("/:id/changeStatus")
-  .get(authenticate, authorize(["admin"]), menuChangePublishStatus);
+  .get(authenticate, authorize([USER_ROLES.ADMIN]), menuChangePublishStatus);
 
 router
   .route("/:id")
   .get(read)
-  .delete(authenticate, authorize(["admin"]), remove)
-  .put(authenticate, authorize(["admin"]), validate(schema.menuUpdate), update);
+  .delete(authenticate, authorize([USER_ROLES.ADMIN]), remove)
+  .put(authenticate, authorize([USER_ROLES.ADMIN]), validate(schema.menuUpdate), update);
 
 // only for testing coverage
-router.route("/testing").post(authenticate, authorize(["admin"]), testing);
+router.route("/testing").post(authenticate, authorize([USER_ROLES.ADMIN]), testing);
 
 module.exports = router;

@@ -1,3 +1,4 @@
+const {USER_STATUS, USER_ROLES} = require("../utils/constants");
 const EntitySchema = require("typeorm").EntitySchema;
 
 module.exports = new EntitySchema({
@@ -24,14 +25,14 @@ module.exports = new EntitySchema({
     },
     role: {
       type: "enum",
-      enum: ["customer", "chef", "delivary_boy", "app_admin", "admin"],
-      default: "customer",
+      enum: Object.values(USER_ROLES),
+      default: USER_ROLES.CUSTOMER,
     },
-    // todo: change string enum to number enum
+
     status: {
       type: "enum",
-      enum: ["pending", "approved", "block", "reject"],
-      default: "pending",
+      enum: Object.values(USER_STATUS),
+      default: USER_STATUS.PENDING,
     },
     created_at: {
       type: "datetime",

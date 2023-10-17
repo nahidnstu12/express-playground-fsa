@@ -22,17 +22,15 @@ describe("User Authentication group", () => {
       .send(userInput);
 
     expect(res.status).toBe(201);
-    expect(res.body).toHaveProperty("status");
     expect(res.body).toHaveProperty("data");
     expect(res.body).toHaveProperty("data.token");
 
-    expect(res.body).toEqual({
-      status: "Success",
-      data: {
+    expect(res.body.data).toEqual({
+
         status: 201,
         message: "Successfully registered user",
         token: expect.any(String),
-      },
+
     });
   });
   test("user registration failed when already user exists", async () => {
@@ -42,8 +40,7 @@ describe("User Authentication group", () => {
 
     expect(res.status).toBe(400);
 
-    expect(res.body).toEqual({
-      status: "fail",
+    expect(res.body.errors).toEqual({
       message: "Already Registered",
     });
   });
@@ -53,7 +50,7 @@ describe("User Authentication group", () => {
     expect(res.status).toBe(200);
 
     expect(res.body).toEqual({
-      status: "Success",
+
       data: {
         status: 200,
         message: "login successful",
@@ -68,8 +65,7 @@ describe("User Authentication group", () => {
 
     expect(res.status).toBe(400);
 
-    expect(res.body).toEqual({
-      status: "fail",
+    expect(res.body.errors).toEqual({
       message: "credentials do not match",
     });
   });
@@ -80,8 +76,7 @@ describe("User Authentication group", () => {
 
     expect(res.status).toBe(400);
 
-    expect(res.body).toEqual({
-      status: "fail",
+    expect(res.body.errors).toEqual({
       message: "User not found",
     });
   });
@@ -90,12 +85,8 @@ describe("User Authentication group", () => {
 
     expect(res.status).toBe(401);
 
-    expect(res.body).toEqual({
-      errors: {
-        status: 401,
-        message: "Authentication Failed",
-      },
-      dev_note: "global error",
+    expect(res.body.errors).toEqual({
+      message: "Authentication Failed",
     });
   });
   test("user profile failed when user provide valid token", async () => {

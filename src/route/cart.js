@@ -6,6 +6,7 @@ const {
   update,
   delete: remove,
 } = require("../controller/cart");
+const {USER_ROLES} = require("../utils/constants");
 const schema = require("../model/validation/cart");
 const validate = require("../middleware/validate");
 const authenticate = require("../middleware/authenticate");
@@ -15,20 +16,20 @@ const router = express.Router();
 
 router
   .route("")
-  .get(authenticate, authorize(["admin", "customer"]), readAll)
+  .get(authenticate, authorize([USER_ROLES.ADMIN, USER_ROLES.CUSTOMER]), readAll)
   .post(
     authenticate,
-    authorize(["customer"]),
+    authorize([USER_ROLES.CUSTOMER]),
     validate(schema.cartPOST),
     create,
   );
 
 router
   .route("/:id")
-  .get(authenticate, authorize(["admin", "customer"]), read)
-  .delete(authenticate, authorize(["admin", "customer"]), remove)
-  .put(authenticate, authorize(["admin"]), validate(schema.cartUPDATE), update);
+  .get(authenticate, authorize([USER_ROLES.ADMIN, USER_ROLES.CUSTOMER]), read)
+  .delete(authenticate, authorize([USER_ROLES.ADMIN, USER_ROLES.CUSTOMER]), remove)
+  .put(authenticate, authorize([USER_ROLES.ADMIN]), validate(schema.cartUPDATE), update);
 
-// router.route("/:id/cancel").get(authenticate, authorize(["admin"]), cancelCart);
+// router.route("/:id/cancel").get(authenticate, authorize([USER_ROLES.ADMIN]), cancelCart);
 
 module.exports = router;

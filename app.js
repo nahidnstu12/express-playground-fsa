@@ -17,8 +17,8 @@ app.use("/api/v1/carts", CartRoute);
 app.use("/api/v1/orders", OrderRoute);
 
 // HEALTH CHECKER
-app.get("/api/v1", (req, res) => {
-  res.send({ message: "Simple Site Is Live" });
+app.get("/api/v1/health", (req, res) => {
+  res.status(200).send({ message: "Site Is Live" });
 });
 
 // UNHANDLED ROUTE
@@ -26,18 +26,7 @@ app.get("/api/v1", (req, res) => {
 //   next(new AppError(404, `Route ${req.originalUrl} not found`));
 // });
 
-// GLOBAL ERROR HANDLER
-// app.use(
-//   (error: AppError, req: Request, res: Response, next: NextFunction) => {
-//     error.status = error.status || "error";
-//     error.statusCode = error.statusCode || 500;
-//
-//     res.status(error.statusCode).json({
-//       status: error.status,
-//       message: error.message,
-//     });
-//   },
-// );
+
 
 app.use((req, res, next) => {
   res.status(404).json({ message: "Not Found", dev_note: "global 404" });
@@ -47,8 +36,11 @@ app.use((err, req, res, next) => {
   // format error
   console.log("last error: ", err);
   res.status(Number(err.status) || 500).json({
-    // message: err.message,
-    errors: err,
+    errors: {
+      // status: err.status,
+      message: err.message
+
+    },
     dev_note: "global error",
   });
 });

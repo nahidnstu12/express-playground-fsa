@@ -1,5 +1,6 @@
 const { AppdataSource } = require("../database/config");
 const User = require("../model/user");
+const {USER_STATUS} = require("../utils/constants");
 
 const userRepository = AppdataSource.getRepository(User);
 const service = {};
@@ -81,9 +82,9 @@ service.approveUserHandler = async (id, status) => {
     return false;
   }
   if (status === "1") {
-    Object.assign(user, { status: "approved" });
+    Object.assign(user, { status: USER_STATUS.APPROVED });
   } else if (status === "2") {
-    Object.assign(user, { status: "block" });
+    Object.assign(user, { status: USER_STATUS.BLOCKED });
   } else {
     return {
       status: 400,

@@ -40,9 +40,13 @@ service.registerHandler = async (input) => {
       };
     } catch (err) {
       console.log("token err", err);
-      // res.status(500).send({ message: err });
+      return {
+        status: 400,
+        message: err.message,
+        dev_note: "token error"
+      }
     }
-    //
+
   } catch (err) {
     console.log("password err", err);
     // next(err);
@@ -50,6 +54,7 @@ service.registerHandler = async (input) => {
 };
 service.loginHandler = async (input) => {
   try {
+
     const { email, password } = input;
     const userFound = await authRepository.findOneBy({ email });
 

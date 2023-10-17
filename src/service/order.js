@@ -1,6 +1,7 @@
 const { AppdataSource } = require("../database/config");
 const Order = require("../model/order");
 const { findCartByMenuAndUserId, deleteCartHandler } = require("./cart");
+const { USER_ROLES, ORDER_STATUS } = require("../utils/constants");
 
 const orderRepository = AppdataSource.getRepository(Order);
 const service = {};
@@ -36,7 +37,7 @@ service.readAllOrderHandler = async (user) => {
     .leftJoin("order.user", "user")
     .leftJoin("order.menu", "menu");
 
-  if (user?.role !== "admin") {
+  if (user?.role !== USER_ROLES.ADMIN) {
     queryBuilder = queryBuilder.where("order.userId = :uId", { uId: user?.id });
   }
 
@@ -61,7 +62,7 @@ service.readOrderHandler = async (id, user) => {
     .leftJoin("order.menu", "menu")
     .where("order.id = :id", { id });
 
-  if (user?.role !== "admin") {
+  if (user?.role !== USER_ROLES.ADMIN) {
     queryBuilder.andWhere("order.userId = :uId", {
       uId: user?.id,
     });
@@ -69,27 +70,7 @@ service.readOrderHandler = async (id, user) => {
 
   return await queryBuilder.getOne();
 };
-// service.readOrderHandler = async (id) => {
-//   return await orderRepository
-//     .createQueryBuilder("order")
-//     .select([
-//       "order.id",
-//       "order.quantity",
-//       "order.order_date",
-//       "order.order_status",
-//       "order.payment_status",
-//       "order.price",
-//       "user.id",
-//       "user.name",
-//       "user.role",
-//       "menu.id",
-//       "menu.name",
-//     ])
-//     .leftJoin("order.user", "user")
-//     .leftJoin("order.menu", "menu")
-//     .where("order.id = :id", { id })
-//     .getOne();
-// };
+
 service.updateOrderHandler = async (id, data, user) => {
   const order = await service.readOrderHandler(id, user);
 
@@ -120,14 +101,6 @@ service.cancelOrderHandler = async (id) => {
 
 service.orderStatusHandler = async (id, status, user) => {
   const order = await service.readOrderHandler(id, user);
-  const orderStatusArray = [
-    "pending",
-    "order_taken",
-    "order_processing",
-    "order_shipped",
-    "order_delivered",
-    "order_rejected",
-  ];
 
   if (!order) {
     return {
@@ -135,7 +108,8 @@ service.orderStatusHandler = async (id, status, user) => {
       message: "Order not found",
     };
   }
-  if (orderStatusArray.some((val) => val === status)) {
+  // console.log({valus: Object.values(ORDER_STATUS), status})
+  if (Object.values(ORDER_STATUS).some((val) => val == status)) {
     Object.assign(order, { order_status: status });
   } else {
     return {

@@ -28,7 +28,6 @@ describe("User group", () => {
       .send(userInput2);
 
     expect(res.status).toBe(201);
-    expect(res.body).toHaveProperty("status");
     expect(res.body).toHaveProperty("data");
   });
   test("user created success when valid payload provided", async () => {
@@ -40,7 +39,7 @@ describe("User group", () => {
       .send({ ...userInput2, email: "sakib@mail.com" });
 
     expect(res.status).toBe(201);
-    expect(res.body.data.name).toBe(userInput.name);
+    expect(res.body.data.name).toBe(userInput2.name);
     expect(res.body.data.email).toBe("sakib@mail.com");
   });
   test("user lists fetched failed when user role will not be app-admin", async () => {
@@ -52,8 +51,7 @@ describe("User group", () => {
     expect(res.status).toBe(403);
 
     expect(res.body.errors).toEqual({
-      status: 403,
-      message: "You have not permission to do this",
+      message: "You do not have permission to perform this action.",
     });
   });
   test("single user fetched success when user role will be app-admin or admin", async () => {
@@ -77,7 +75,7 @@ describe("User group", () => {
 
     expect(res.status).toBe(404);
 
-    expect(res.body).toEqual({
+    expect(res.body.errors).toEqual({
       message: "User not found",
     });
   });

@@ -1,4 +1,5 @@
 const { EntitySchema } = require("typeorm");
+const {MENU_VARIANTS, MENU_PUBLISH} = require("../utils/constants");
 
 module.exports = new EntitySchema({
   name: "Menu",
@@ -26,19 +27,13 @@ module.exports = new EntitySchema({
     },
     status: {
       type: "enum",
-      enum: ["publish", "unpublish"],
-      default: "publish",
+      enum: Object.values(MENU_PUBLISH),
+      default: MENU_PUBLISH.PUBLISH,
     },
     variant: {
       type: "enum",
-      enum: [
-        "pizza",
-        "Smoky BBQ Delight",
-        "Pepperoni Supreme",
-        "Veggie Feast",
-        "Mushroom Elegance",
-      ],
-      default: "pizza",
+      enum: Object.values(MENU_VARIANTS),
+      default: MENU_VARIANTS.PIZZA,
     },
     userId: {
       type: "int",
