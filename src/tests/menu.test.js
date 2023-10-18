@@ -75,6 +75,7 @@ describe("Menu group", () => {
     expect(res.status).toBe(200);
 
     expect(res.body).toEqual({
+      code: 200,
       message: "Menu Published Successfully",
     });
   });
@@ -86,6 +87,7 @@ describe("Menu group", () => {
 
     expect(res.status).toBe(400);
     expect(res.body).toEqual({
+      code: 400,
       message: "Invalid publishing status.",
     });
   });

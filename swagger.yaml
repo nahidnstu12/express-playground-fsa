@@ -70,7 +70,6 @@ paths:
                         type: string
                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
 
-
         "400":
           $ref: "#/components/responses/400"
         "500":
@@ -184,16 +183,16 @@ paths:
 
                             role:
                               type: string
-                              enum: [ 1, 2, 3, 4, 5 ]
+                              enum: [1, 2, 3, 4, 5]
                               example: 1
                             status:
                               type: string
-                              enum: [ 1, 2, 3, 4 ]
+                              enum: [1, 2, 3, 4]
                               example: 1
-#                            photo:
-#                              type: string
-#                              format: url
-#                              example: https://s3.aws.com/myfirstblog/124.jpg
+                        #                            photo:
+                        #                              type: string
+                        #                              format: url
+                        #                              example: https://s3.aws.com/myfirstblog/124.jpg
 
                         - $ref: "#/components/schemas/Timestamp"
                   meta:
@@ -229,11 +228,11 @@ paths:
                   example: 121212aA
                 role:
                   type: string
-                  enum: [ 1, 2, 3, 4, 5 ]
+                  enum: [1, 2, 3, 4, 5]
                   example: 1
                 status:
                   type: string
-                  enum: [ 1, 2, 3, 4 ]
+                  enum: [1, 2, 3, 4]
                   example: 1
 
               required: [name, phone, email]
@@ -297,11 +296,11 @@ paths:
 
                 role:
                   type: string
-                  enum: [ 1, 2, 3, 4, 5 ]
+                  enum: [1, 2, 3, 4, 5]
                   example: 1
                 status:
                   type: string
-                  enum: [ 1, 2, 3, 4 ]
+                  enum: [1, 2, 3, 4]
                   example: 1
       #                photo:
       #                  type: string
@@ -331,7 +330,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/idPathParam"
       responses:
-        "204":
+        "200":
           description: "User deleted successfully"
         "401":
           $ref: "#/components/responses/401"
@@ -409,25 +408,18 @@ paths:
                               example: 200
                             status:
                               type: string
-                              enum: [active, inactive]
-                              example: active
+                              enum: [1, 2]
+                              example: 1
                             variant:
                               type: string
-                              enum:
-                                [
-                                  pizza,
-                                  Smoky BBQ Delight,
-                                  Pepperoni Supreme,
-                                  Veggie Feast,
-                                  Mushroom Elegance,
-                                ]
-                              example: pizza
+                              enum: [1, 2, 3, 4, 5]
+                              example: 1
                             cover:
                               type: string
                               format: url
                               example: https://s3.aws.com/myfirstblog/124.jpg
-                            userId:
-                              $ref: "#/components/schemas/UserDTO"
+                            user:
+                              $ref: "#/components/schemas/UserObjDTO"
 
                         - $ref: "#/components/schemas/Timestamp"
                   meta:
@@ -461,29 +453,22 @@ paths:
                   example: 200
                 status:
                   type: string
-                  enum: [publish, unpublish]
-                  example: publish
+                  enum: [1, 2]
+                  example: 1
                 variant:
                   type: string
-                  enum:
-                    [
-                      pizza,
-                      Smoky BBQ Delight,
-                      Pepperoni Supreme,
-                      Veggie Feast,
-                      Mushroom Elegance,
-                    ]
-                  example: pizza
+                  enum: [1, 2, 3, 4, 5]
+                  example: 1
                 cover:
                   type: string
                   format: url
                   example: https://s3.aws.com/myfirstblog/124.jpg
                 userId:
                   $ref: "#/components/schemas/UserDTO"
-              required: [name, description, price, variant, status]
+              required: [name, description, price]
       responses:
         "201":
-          description: Successfully created a new menu
+          description: Menu created successfully
           content:
             "application/json":
               schema:
@@ -545,26 +530,20 @@ paths:
                   example: 200
                 status:
                   type: string
-                  enum: [active, inactive]
-                  example: active
+                  enum: [1, 2]
+                  example: 1
                 variant:
                   type: string
-                  enum:
-                    [
-                      pizza,
-                      Smoky BBQ Delight,
-                      Pepperoni Supreme,
-                      Veggie Feast,
-                      Mushroom Elegance,
-                    ]
-                  example: pizza
+                  enum: [1, 2, 3, 4, 5]
+
+                  example: 1
                 cover:
                   type: string
                   format: url
                   example: https://s3.aws.com/myfirstblog/124.jpg
       responses:
         "200":
-          description: "Successfully Updated"
+          description: "Menu Successfully Updated"
           content:
             "application/json":
               schema:
@@ -585,7 +564,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/idPathParam"
       responses:
-        "204":
+        "200":
           description: "Menu deleted successfully"
         "401":
           $ref: "#/components/responses/401"
@@ -784,7 +763,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/idPathParam"
       responses:
-        "204":
+        "200":
           description: "Cart deleted successfully"
         "401":
           $ref: "#/components/responses/401"
@@ -827,28 +806,20 @@ paths:
                               example: 21/05/2023
                             order_status:
                               type: string
-                              enum:
-                                [
-                                  pending,
-                                  order_taken,
-                                  order_processing,
-                                  order_shipped,
-                                  order_on_road,
-                                  order_delivered,
-                                  order_rejected,
-                                ]
-                              example: pending
+                              enum: [1, 2, 3, 4, 5]
+
+                              example: 1
                             order_type:
                               type: string
-                              enum: [instant_order, home_delivery]
-                              example: instant_order
+                              enum: [1, 2]
+                              example: 1
                             payment_status:
                               type: string
-                              enum: [pending, paid, reject]
-                              example: pending
-                            userId:
-                              $ref: "#/components/schemas/UserDTO"
-                            menuId:
+                              enum: [1, 2, 3]
+                              example: 1
+                            user:
+                              $ref: "#/components/schemas/UserObjDTO"
+                            menu:
                               $ref: "#/components/schemas/MenuDTO"
 
                         - $ref: "#/components/schemas/Timestamp"
@@ -883,29 +854,20 @@ paths:
                   example: 500
                 order_status:
                   type: string
-                  enum:
-                    [
-                      pending,
-                      order_taken,
-                      order_processing,
-                      order_shipped,
-                      order_on_road,
-                      order_delivered,
-                      order_rejected,
-                    ]
-                  example: pending
+                  enum: [ 1, 2, 3, 4, 5 ]
+                  example: 1
                 order_type:
                   type: string
-                  enum: [instant_order, home_delivery]
-                  example: instant_order
+                  enum: [ 1, 2 ]
+                  example: 1
                 payment_status:
                   type: string
-                  enum: [pending, paid, reject]
-                  example: pending
-                userId:
-                  $ref: "#/components/schemas/UserDTO"
-                menuId:
-                  $ref: "#/components/schemas/MenuDTO"
+                  enum: [ 1, 2, 3 ]
+                  example: 1
+                user:
+                  $ref: "#/components/schemas/UserObjDTO"
+                menu:
+                  $ref: "#/components/schemas/MenuObjDTO"
               required: [quantity, userId, menuId, price, order_date]
       responses:
         "201":
@@ -968,29 +930,20 @@ paths:
                   example: 2015-12-20 10:01:00.999999
                 order_status:
                   type: string
-                  enum:
-                    [
-                      pending,
-                      order_taken,
-                      order_processing,
-                      order_shipped,
-                      order_on_road,
-                      order_delivered,
-                      order_rejected,
-                    ]
-                  example: pending
+                  enum: [1, 2, 3, 4, 5]
+                  example: 1
                 order_type:
                   type: string
-                  enum: [instant_order, home_delivery]
-                  example: instant_order
+                  enum: [ 1, 2 ]
+                  example: 1
                 payment_status:
                   type: string
-                  enum: [pending, paid, reject]
-                  example: pending
-                userId:
-                  $ref: "#/components/schemas/UserDTO"
-                menuId:
-                  $ref: "#/components/schemas/MenuDTO"
+                  enum: [ 1, 2, 3 ]
+                  example: 1
+                user:
+                  $ref: "#/components/schemas/UserObjDTO"
+                menu:
+                  $ref: "#/components/schemas/MenuObjDTO"
       responses:
         "200":
           description: "Successfully Updated"
@@ -1014,7 +967,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/idPathParam"
       responses:
-        "204":
+        "200":
           description: "Cart deleted successfully"
         "401":
           $ref: "#/components/responses/401"
@@ -1080,20 +1033,46 @@ components:
               type: number
               example: 200
             status:
-              type: string
-              enum: [active, inactive]
-              example: active
+              type: number
+              enum: [1, 2]
+              example: 1
             variant:
+              type: number
+              enum: [1, 2, 3, 4, 5]
+              example: 1
+            cover:
               type: string
-              enum:
-                [
-                  pizza,
-                  Smoky BBQ Delight,
-                  Pepperoni Supreme,
-                  Veggie Feast,
-                  Mushroom Elegance,
-                ]
-              example: pizza
+              format: url
+              example: https://s3.aws.com/myfirstblog/124.jpg
+            user:
+              $ref: "#/components/schemas/UserObjDTO"
+
+        - $ref: "#/components/schemas/Timestamp"
+    CreateMenu:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int32
+              example: 1
+            name:
+              type: string
+              example: test pizza
+            description:
+              type: string
+              example: test pizza description
+            price:
+              type: number
+              example: 200
+            status:
+              type: number
+              enum: [1, 2]
+              example: 1
+            variant:
+              type: number
+              enum: [1, 2, 3, 4, 5]
+              example: 1
             cover:
               type: string
               format: url
@@ -1127,10 +1106,10 @@ components:
               type: string
               enum: [1, 2, 3, 4]
               example: 1
-#            photo:
-#              type: string
-#              format: url
-#              example: https://s3.aws.com/myfirstblog/124.jpg
+        #            photo:
+        #              type: string
+        #              format: url
+        #              example: https://s3.aws.com/myfirstblog/124.jpg
 
         - $ref: "#/components/schemas/Timestamp"
     Cart:
@@ -1168,25 +1147,16 @@ components:
               example: 21/05/2023
             order_status:
               type: string
-              enum:
-                [
-                  pending,
-                  order_taken,
-                  order_processing,
-                  order_shipped,
-                  order_on_road,
-                  order_delivered,
-                  order_rejected,
-                ]
-              example: pending
+              enum: [1, 2, 3, 4, 5, 6]
+              example: 1
             order_type:
               type: string
-              enum: [instant_order, home_delivery]
-              example: instant_order
+              enum: [1, 2]
+              example: 1
             payment_status:
               type: string
-              enum: [pending, paid, reject]
-              example: pending
+              enum: [1, 2, 3]
+              example: 1
             userId:
               $ref: "#/components/schemas/UserDTO"
             menuId:
@@ -1217,7 +1187,7 @@ components:
           type: string
           example: "Menu created successfully"
         data:
-          $ref: "#/components/schemas/Menu"
+          $ref: "#/components/schemas/CreateMenu"
     CartCreatedDTO:
       type: object
       properties:
@@ -1302,6 +1272,17 @@ components:
           type: string
           format: date-time
       required: [createdAt, updatedAt]
+    UserObjDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        name:
+          type: string
+          example: "Admin User"
+
     UserDTO:
       type: integer
       format: int32
@@ -1310,17 +1291,18 @@ components:
       type: integer
       format: int32
       example: 1
-    #    UserDTO:
-    #      type: object
-    #      properties:
-    #        id:
-    #          type: integer
-    #          format: int32
-    #          example: 1
-    #        name:
-    #          type: string
-    #          example: "A.B Raihan"
-    #      required: [id, name]
+
+    MenuObjDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        name:
+          type: string
+          example: "Pizza"
+
     Pagination:
       type: object
       properties:

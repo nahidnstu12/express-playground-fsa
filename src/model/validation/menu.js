@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const {MENU_PUBLISH, MENU_VARIANTS} = require("../../utils/constants");
 const menuSchemas = {
   menuPOST: Joi.object().keys({
     id: Joi.number().optional(),
@@ -6,17 +7,25 @@ const menuSchemas = {
     description: Joi.string().required(),
     cover: Joi.string().optional(),
     price: Joi.number().required(),
-    status: Joi.string().optional(),
-    variant: Joi.string().optional(),
+    status: Joi.number()
+        .valid(...Object.values(MENU_PUBLISH))
+        .optional(),
+    variant: Joi.number()
+        .valid(...Object.values(MENU_VARIANTS))
+        .optional(),
     userId: Joi.number().optional(),
   }),
   menuUpdate: Joi.object().keys({
-    name: Joi.string().optional(),
+    // name: Joi.string().optional(),
     description: Joi.string().optional(),
     cover: Joi.string().optional(),
     price: Joi.number().optional(),
-    status: Joi.string().optional(),
-    variant: Joi.string().optional(),
+    status: Joi.number()
+        .valid(...Object.values(MENU_PUBLISH))
+        .optional(),
+    variant: Joi.number()
+        .valid(...Object.values(MENU_VARIANTS))
+        .optional(),
     userId: Joi.number().optional(),
   }),
   menuLIST: {

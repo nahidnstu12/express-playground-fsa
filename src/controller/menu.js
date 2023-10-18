@@ -145,10 +145,14 @@ controller.menuChangePublishStatus = async (req, res, next) => {
       req.params.id,
       publishableStatus,
     );
+    if(!menuResponse){
+      next(notFound("Menu not found"))
+    }
 
-    const status = menuResponse?.status === 400 ? 400 : 200;
+    const status = menuResponse?.code === 400 ? 400 : 200;
     return res.status(status).json(
       successResponse({
+        code: menuResponse.code,
         message:
           menuResponse.message ||
           `Menu ${getKeyByValue(MENU_PUBLISH, publishableStatus)} Successfully`,
