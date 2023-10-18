@@ -1,18 +1,18 @@
-exports.successResponse = ({ message, data, code }) => {
+exports.successResponse = ({ message, data, code = 200 }) => {
   if (Array.isArray(data) && data.length !== 0) {
     if (message) {
-      return { message, data, total: data.length, code };
+      return { code, message, data, total: data.length };
     } else {
-      return { data, total: data.length, code };
+      return { code, data, total: data.length };
     }
   } else if (typeof data === "object" && data !== null) {
     if (message) {
-      return { message, data, code };
+      return { code, message, data };
     } else {
       return { data, code };
     }
   } else {
     // Handle other data types here if needed
-    return { message, code };
+    return { code, message };
   }
 };

@@ -297,12 +297,12 @@ paths:
 
                 role:
                   type: string
-                  enum: [customer, chef, delivery_boy, app_admin]
-                  example: customer
+                  enum: [ 1, 2, 3, 4, 5 ]
+                  example: 1
                 status:
                   type: string
-                  enum: [pending, approved, block, reject]
-                  example: approved
+                  enum: [ 1, 2, 3, 4 ]
+                  example: 1
       #                photo:
       #                  type: string
       #                  format: url

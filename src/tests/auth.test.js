@@ -25,7 +25,7 @@ describe("User Authentication group", () => {
     expect(res.body).toHaveProperty("data.token");
 
     expect(res.body.data).toEqual({
-      code: 201,
+      // code: 201,
       message: "Successfully registered user",
       token: expect.any(String),
     });
@@ -46,12 +46,9 @@ describe("User Authentication group", () => {
 
     expect(res.status).toBe(200);
 
-    expect(res.body).toEqual({
-      data: {
-        code: 200,
-        message: "login successful",
-        token: expect.any(String),
-      },
+    expect(res.body.data).toEqual({
+      message: "login successful",
+      token: expect.any(String),
     });
   });
   test("user login failed when given the email and password are not matched", async () => {

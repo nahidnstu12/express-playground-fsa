@@ -27,7 +27,12 @@ controller.register = async (req, res, next) => {
     if (userResponse.code === 400) {
       next(userResponse);
     } else if (userResponse.code === 201) {
-      return res.status(201).json(successResponse({ data: userResponse }));
+      return res.status(201).json(
+        successResponse({
+          code: 201,
+          data: { message: userResponse.message, token: userResponse.token },
+        }),
+      );
     } else {
       next(serverError());
     }
@@ -45,7 +50,12 @@ controller.login = async (req, res, next) => {
     if (userResponse.code === 400) {
       next(badRequest(userResponse.message));
     } else if (userResponse.code === 200) {
-      return res.status(200).json(successResponse({ data: userResponse }));
+      return res.status(200).json(
+        successResponse({
+          code: 200,
+          data: { message: userResponse.message, token: userResponse.token },
+        }),
+      );
     } else {
       next(serverError());
     }

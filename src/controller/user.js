@@ -8,16 +8,25 @@ const {
 } = require("../service/user");
 const { badRequest, notFound } = require("../utils/error");
 const { successResponse } = require("../utils/success");
-const {USER_STATUS} = require("../utils/constants");
+const { USER_STATUS } = require("../utils/constants");
+const { getKeyByValue } = require("../utils/helpers");
 
 const controller = {};
 
 controller.create = async (req, res, next) => {
   try {
     const { name, email, phone, password, status, role, id } = req.body;
-    const userResponse = await createUserHandler({ name, email, phone, password, status, role, id });
+    const userResponse = await createUserHandler({
+      name,
+      email,
+      phone,
+      password,
+      status,
+      role,
+      id,
+    });
     if (!userResponse) {
-      next(badRequest("user already exists"));
+      next(badRequest("User already exists"));
     }
 
     return res.status(201).json(
@@ -32,15 +41,26 @@ controller.create = async (req, res, next) => {
   }
 };
 
+// only use for testing-coverage purposes
 controller.testing = async (req, res, next) => {
   try {
     const { name, email, phone, password, status, role, id } = req.body;
-    const userResponse = await createUserHandler({ name, email, phone, password, status, role, id });
+    const userResponse = await createUserHandler({
+      name,
+      email,
+      phone,
+      password,
+      status,
+      role,
+      id,
+    });
     if (!userResponse) {
       next(badRequest("user already exists"));
     }
     return res.status(201).json(
       successResponse({
+        code: 201,
+        message: "User created successfully",
         data: userResponse,
       }),
     );
@@ -68,8 +88,8 @@ controller.read = async (req, res, next) => {
   try {
     const id = req.params.id;
     const userResponse = await readUserHandler(id);
-    if(!userResponse){
-      next(notFound("user not found"));
+    if (!userResponse) {
+      next(notFound("User not found"));
     }
     return res.status(200).json(
       successResponse({
@@ -83,17 +103,23 @@ controller.read = async (req, res, next) => {
 
 controller.update = async (req, res, next) => {
   try {
-    const userResponse = await updateUserHandler(req.params.id, req.body);
+    const { name, phone, status, role } = req.body;
+    const userResponse = await updateUserHandler(req.params.id, {
+      name,
+      phone,
+      status,
+      role,
+    });
 
     if (userResponse) {
       return res.status(200).json(
         successResponse({
-          message: "Successfully updated",
+          message: "User updated successfully",
           data: userResponse,
         }),
       );
     } else {
-      next(notFound("user not found"));
+      next(notFound("User not found"));
     }
   } catch (err) {
     next(err);
@@ -105,7 +131,7 @@ controller.delete = async (req, res, next) => {
     await deleteUserHandler(req.params.id);
     res.status(200).json(
       successResponse({
-        message: "Successfully deleted",
+        message: "User deleted successfully",
       }),
     );
   } catch (err) {
@@ -115,26 +141,27 @@ controller.delete = async (req, res, next) => {
 
 controller.userApprove = async (req, res, next) => {
   try {
-    const approvalStatus = req.query.approve;
+    const approvalStatus = Number(req.query.approve);
     if (!approvalStatus) {
       next(badRequest("Provide approval status"));
     }
-    const userResponse = await approveUserHandler(req.params.id, approvalStatus);
-
+    const userResponse = await approveUserHandler(
+      req.params.id,
+      approvalStatus,
+    );
+    console.log("user userApprove", userResponse);
     if (userResponse) {
-      const status = userResponse?.status === 400 ? 400 : 200;
+      const status = userResponse?.code === 400 ? 400 : 200;
       return res.status(status).json(
         successResponse({
-          status: status,
+          code: status,
           message:
             userResponse.message ||
-            `userResponse ${
-              approvalStatus === USER_STATUS.APPROVED ? "Approved" : "Blocked"
-            } Successfully`,
+            `User ${getKeyByValue(USER_STATUS, approvalStatus)} Successfully`,
         }),
       );
     } else {
-      next(notFound(userResponse.message || "user not found"));
+      next(notFound(userResponse.message || "User not found"));
     }
   } catch (err) {
     next(err);

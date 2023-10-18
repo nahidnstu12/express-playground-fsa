@@ -1,6 +1,6 @@
 const { AppdataSource } = require("../database/config");
 const User = require("../model/user");
-const {USER_STATUS} = require("../utils/constants");
+const { USER_STATUS, ORDER_STATUS } = require("../utils/constants");
 
 const userRepository = AppdataSource.getRepository(User);
 const service = {};
@@ -81,16 +81,25 @@ service.approveUserHandler = async (id, status) => {
   if (!user) {
     return false;
   }
-  if (status === USER_STATUS.APPROVED) {
-    Object.assign(user, { status: USER_STATUS.APPROVED });
-  } else if (status === USER_STATUS.BLOCKED) {
-    Object.assign(user, { status: USER_STATUS.BLOCKED });
+
+  if (Object.values(USER_STATUS).some((val) => val === status)) {
+    Object.assign(user, { status: status });
   } else {
     return {
       code: 400,
       message: "Invalid approval status.",
     };
   }
+  // if (status === USER_STATUS.APPROVED) {
+  //   Object.assign(user, { status: USER_STATUS.APPROVED });
+  // } else if (status === USER_STATUS.BLOCKED) {
+  //   Object.assign(user, { status: USER_STATUS.BLOCKED });
+  // } else {
+  //   return {
+  //     code: 400,
+  //     message: "Invalid approval status.",
+  //   };
+  // }
 
   return await userRepository.save(user);
 };

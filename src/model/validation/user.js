@@ -1,6 +1,5 @@
 const Joi = require("joi");
-const {USER_STATUS, USER_ROLES} = require("../../utils/constants");
-
+const { USER_STATUS, USER_ROLES } = require("../../utils/constants");
 
 const userSchemas = {
   userPOST: Joi.object().keys({
@@ -10,23 +9,23 @@ const userSchemas = {
     email: Joi.string().email().lowercase().required(),
     password: Joi.string().min(5).required(),
     role: Joi.number()
-        .valid(...Object.values(USER_ROLES))
-        .optional(),
+      .valid(...Object.values(USER_ROLES))
+      .optional(),
     status: Joi.number()
-        .valid(...Object.values(USER_STATUS))
-        .optional(),
+      .valid(...Object.values(USER_STATUS))
+      .optional(),
   }),
   userUpdate: Joi.object().keys({
     name: Joi.string().optional(),
     phone: Joi.string().optional(),
-    email: Joi.string().email().lowercase().optional(),
-    password: Joi.string().min(5).optional(),
+    // email: Joi.string().email().lowercase().optional(),
+    // password: Joi.string().min(5).optional(),
     role: Joi.number()
-        .valid(...Object.values(USER_ROLES))
-        .optional(),
+      .valid(...Object.values(USER_ROLES))
+      .optional(),
     status: Joi.number()
-        .valid(...Object.values(USER_STATUS))
-        .optional(),
+      .valid(...Object.values(USER_STATUS))
+      .optional(),
   }),
   userLIST: {
     page: Joi.number().required(),
