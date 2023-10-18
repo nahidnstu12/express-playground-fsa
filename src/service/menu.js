@@ -1,6 +1,6 @@
 const { AppdataSource } = require("../database/config");
 const Menu = require("../model/menu");
-const { USER_ROLES } = require("../utils/constants");
+const { USER_ROLES, MENU_PUBLISH } = require("../utils/constants");
 
 const menuRepository = AppdataSource.getRepository(Menu);
 const service = {};
@@ -49,11 +49,13 @@ service.createTestingMenuHandler = async (input) => {
 //   });
 // };
 
-service.readAllMenuHandler = async (user) => {
+service.readAllMenuHandler = async (user, { page, limit }) => {
   const userRole = user?.role !== USER_ROLES.ADMIN;
-
-  return await menuRepository
-    .createQueryBuilder("menu")
+  const menuQueryBuilder = await menuRepository.createQueryBuilder("menu");
+  const itemCount = await menuQueryBuilder
+    .where("menu.status != :status", { status: userRole ? "unpublish" : "" })
+    .getCount();
+  const items = await menuQueryBuilder
     .select([
       "menu.id",
       "menu.name",
@@ -67,7 +69,11 @@ service.readAllMenuHandler = async (user) => {
     ])
     .leftJoin("menu.user", "user")
     .where("menu.status != :status", { status: userRole ? "unpublish" : "" })
+    .skip((page - 1) * limit)
+    .take(limit)
     .getMany();
+
+  return { itemCount, items };
 };
 
 service.readMenuHandler = async (id) => {
@@ -113,13 +119,11 @@ service.publishMenuHandler = async (id, status) => {
     return false;
   }
 
-  if (status === "1") {
-    Object.assign(menu, { status: "publish" });
-  } else if (status === "2") {
-    Object.assign(menu, { status: "unpublish" });
+  if (Object.values(MENU_PUBLISH).some((val) => val === status)) {
+    Object.assign(menu, { status: status });
   } else {
     return {
-      status: 400,
+      code: 400,
       message: "Invalid publishing status.",
     };
   }

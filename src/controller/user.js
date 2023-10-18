@@ -156,7 +156,6 @@ controller.userApprove = async (req, res, next) => {
       req.params.id,
       approvalStatus,
     );
-    console.log("user userApprove", userResponse);
     if (userResponse) {
       const status = userResponse?.code === 400 ? 400 : 200;
       return res.status(status).json(
