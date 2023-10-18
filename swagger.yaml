@@ -196,7 +196,7 @@ paths:
 #                              example: https://s3.aws.com/myfirstblog/124.jpg
 
                         - $ref: "#/components/schemas/Timestamp"
-                  pagination:
+                  meta:
                     $ref: "#/components/schemas/Pagination"
 
         "400":
@@ -430,7 +430,7 @@ paths:
                               $ref: "#/components/schemas/UserDTO"
 
                         - $ref: "#/components/schemas/Timestamp"
-                  pagination:
+                  meta:
                     $ref: "#/components/schemas/Pagination"
 
         "400":
@@ -666,7 +666,7 @@ paths:
                               $ref: "#/components/schemas/MenuDTO"
 
                         - $ref: "#/components/schemas/Timestamp"
-                  pagination:
+                  meta:
                     $ref: "#/components/schemas/Pagination"
 
         "400":
@@ -852,7 +852,7 @@ paths:
                               $ref: "#/components/schemas/MenuDTO"
 
                         - $ref: "#/components/schemas/Timestamp"
-                  pagination:
+                  meta:
                     $ref: "#/components/schemas/Pagination"
 
         "400":
@@ -1324,7 +1324,7 @@ components:
     Pagination:
       type: object
       properties:
-        page:
+        currentPage:
           type: integer
           format: int32
           example: 1

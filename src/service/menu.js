@@ -1,5 +1,6 @@
 const { AppdataSource } = require("../database/config");
 const Menu = require("../model/menu");
+const { USER_ROLES } = require("../utils/constants");
 
 const menuRepository = AppdataSource.getRepository(Menu);
 const service = {};
@@ -31,25 +32,25 @@ service.createTestingMenuHandler = async (input) => {
   return await menuRepository.save(menuRepository.create({ ...input.body }));
 };
 //deprecated
-service.readAllMenuHandler2 = async () => {
-  return await menuRepository.find({
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      price: true,
-      status: true,
-      variant: true,
-      cover: true,
-      userId: true,
-    },
-    // not working
-    relations: { user: { select: ["id", "name", "email", "role", "status"] } },
-  });
-};
+// service.readAllMenuHandler2 = async () => {
+//   return await menuRepository.find({
+//     select: {
+//       id: true,
+//       name: true,
+//       description: true,
+//       price: true,
+//       status: true,
+//       variant: true,
+//       cover: true,
+//       userId: true,
+//     },
+//     // not working
+//     relations: { user: { select: ["id", "name", "email", "role", "status"] } },
+//   });
+// };
 
 service.readAllMenuHandler = async (user) => {
-  const userRole = user?.role !== "admin";
+  const userRole = user?.role !== USER_ROLES.ADMIN;
 
   return await menuRepository
     .createQueryBuilder("menu")

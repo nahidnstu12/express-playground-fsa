@@ -15,8 +15,9 @@ service.createUserHandler = async (input) => {
   }
   return await userRepository.save(userRepository.create({ ...input }));
 };
-service.readAllUserHandler = async () => {
-  return await userRepository.find({
+service.readAllUserHandler = async ({ page, limit }) => {
+  const itemCount = await userRepository.count();
+  const items = await userRepository.find({
     select: {
       id: true,
       name: true,
@@ -25,7 +26,10 @@ service.readAllUserHandler = async () => {
       role: true,
       status: true,
     },
+    skip: (page - 1) * limit,
+    take: limit,
   });
+  return { itemCount, items };
 };
 service.readUserHandler = async (id) => {
   return await userRepository.findOne({

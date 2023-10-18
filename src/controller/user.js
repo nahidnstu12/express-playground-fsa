@@ -9,7 +9,7 @@ const {
 const { badRequest, notFound } = require("../utils/error");
 const { successResponse } = require("../utils/success");
 const { USER_STATUS } = require("../utils/constants");
-const { getKeyByValue } = require("../utils/helpers");
+const { getKeyByValue, paginateObject } = require("../utils/helpers");
 
 const controller = {};
 
@@ -71,10 +71,17 @@ controller.testing = async (req, res, next) => {
 
 controller.readAll = async (req, res, next) => {
   try {
-    const users = await readAllUserHandler();
+    const { page, limit } = req.query;
+
+    const usersResponse = await readAllUserHandler({ page, limit });
     res.status(200).json(
       successResponse({
-        data: users,
+        data: usersResponse.items,
+        meta: paginateObject({
+          page,
+          limit,
+          itemCount: usersResponse.itemCount,
+        }),
       }),
     );
   } catch (err) {
