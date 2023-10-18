@@ -184,16 +184,16 @@ paths:
 
                             role:
                               type: string
-                              enum: [customer, chef, delivery_boy, app_admin]
-                              example: customer
+                              enum: [ 1, 2, 3, 4, 5 ]
+                              example: 1
                             status:
                               type: string
-                              enum: [pending, approved, block, reject]
-                              example: pending
-                            photo:
-                              type: string
-                              format: url
-                              example: https://s3.aws.com/myfirstblog/124.jpg
+                              enum: [ 1, 2, 3, 4 ]
+                              example: 1
+#                            photo:
+#                              type: string
+#                              format: url
+#                              example: https://s3.aws.com/myfirstblog/124.jpg
 
                         - $ref: "#/components/schemas/Timestamp"
                   pagination:
@@ -229,14 +229,14 @@ paths:
                   example: 121212aA
                 role:
                   type: string
-                  enum: [customer, chef, delivary_boy, app_admin]
-                  example: delivary_boy
+                  enum: [ 1, 2, 3, 4, 5 ]
+                  example: 1
                 status:
                   type: string
-                  enum: [pending, approved, block, reject]
-                  example: pending
+                  enum: [ 1, 2, 3, 4 ]
+                  example: 1
 
-              required: [name, phone, email, role, status]
+              required: [name, phone, email]
       responses:
         "201":
           description: Successfully created a new user

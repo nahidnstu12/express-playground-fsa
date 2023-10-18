@@ -9,7 +9,7 @@ exports.UsersFactory = setSeederFactory(User, async (faker) => {
   user.name = faker.internet.userName();
   user.phone = faker.phone.number();
   user.email = faker.internet.email();
-  user.password = "$10$uTq3dlNf7kjuBD8upY.JveFblB8QwZKHfUR13i/GTv9e1tbEuH3Qm"; //121212aA
+  user.password = "$2a$10$4MdjnOO2ymx3HmJPjiNqf.zEEA3Szt3yob3AF2d1RFlLz4uL5cpD6"; //121212aA
   user.role = faker.helpers.enumValue(modifiedUserRoles);
   user.status = faker.helpers.enumValue(USER_STATUS);
   return user;
@@ -19,7 +19,7 @@ exports.appAdminUser = {
   name: "App Admin",
   email: "app@mail.com",
   phone: "01621871111",
-  password: "$10$uTq3dlNf7kjuBD8upY.JveFblB8QwZKHfUR13i/GTv9e1tbEuH3Qm",
+  password: "$2a$10$4MdjnOO2ymx3HmJPjiNqf.zEEA3Szt3yob3AF2d1RFlLz4uL5cpD6",
   role: USER_ROLES.APP_ADMIN,
   status: USER_STATUS.APPROVED,
 };

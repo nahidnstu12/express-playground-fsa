@@ -81,13 +81,13 @@ service.approveUserHandler = async (id, status) => {
   if (!user) {
     return false;
   }
-  if (status === "1") {
+  if (status === USER_STATUS.APPROVED) {
     Object.assign(user, { status: USER_STATUS.APPROVED });
-  } else if (status === "2") {
+  } else if (status === USER_STATUS.BLOCKED) {
     Object.assign(user, { status: USER_STATUS.BLOCKED });
   } else {
     return {
-      status: 400,
+      code: 400,
       message: "Invalid approval status.",
     };
   }
