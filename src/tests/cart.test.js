@@ -62,11 +62,11 @@ describe("Cart group", () => {
       .send({ ...cartInput, menuId: 300 });
 
     expect(res.status).toBe(400);
-    expect(res.body.data).toHaveProperty("message");
-    expect(res.body.data.message).toBe("Menu doesn't found.");
+    expect(res.body.errors).toHaveProperty("message");
+    expect(res.body.errors.message).toBe("Menu doesn't found.");
 
-    expect(res.body.data).toEqual({
-      status: 400,
+    expect(res.body.errors).toEqual({
+      code: 400,
       message: "Menu doesn't found.",
     });
   });

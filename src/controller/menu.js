@@ -62,7 +62,7 @@ controller.readAll = async (req, res, next) => {
     const { page, limit } = req.query;
     const user = req.user;
     const menusResponse = await readAllMenuHandler(user, { page, limit });
-    console.log({ menusResponse, user });
+
     res.status(200).json(
       successResponse({
         data: menusResponse.items,
