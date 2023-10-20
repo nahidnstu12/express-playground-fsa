@@ -71,6 +71,12 @@ serverError message
      "message": "Internal Server Error."
   },
 }
+success message
+{
+  "code": 200,
+  "message": "Successfully created",
+  "data": {}
+}
 ```
 ### Refactoring Scopes
 For limitations of time, i will listing points what i refactor later.
@@ -79,14 +85,14 @@ For limitations of time, i will listing points what i refactor later.
   - Menu published / unpublished
 - Model (enum value convert to number) (fixed)
 - Require optional authentication middleware (fixed)
-- Implement pagination
+- Implement pagination (done)
 - Implement Logging for error tracing
-- Implement Seeding
+- Implement Seeding (done)
 
 
 
 ### Facing Issues
-- Global Error Handler
+- transactions
 - Params validation
 - Query Params validation
 

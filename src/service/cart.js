@@ -1,6 +1,7 @@
 const { AppdataSource } = require("../database/config");
 const Cart = require("../model/cart");
 const { readMenuHandler } = require("./menu");
+const { readUserHandler } = require("./user");
 const { USER_ROLES } = require("../utils/constants");
 
 const cartRepository = AppdataSource.getRepository(Cart);
@@ -30,6 +31,20 @@ service.createCartHandler = async (input) => {
   );
 };
 service.findCartByMenuAndUserId = async (userId, menuId) => {
+  let isMenuExist = await readMenuHandler(menuId);
+  let isUserExist = await readUserHandler(userId);
+  if (!isMenuExist) {
+    return {
+      code: 400,
+      message: "Menu doesn't found.",
+    };
+  }
+  if (!isUserExist) {
+    return {
+      code: 400,
+      message: "User doesn't found.",
+    };
+  }
   return await cartRepository.findOneBy({ userId, menuId });
 };
 
@@ -100,13 +115,13 @@ service.deleteCartHandler = async (id) => {
 
   return await cartRepository.delete(cart);
 };
-service.cancelCartHandler = async (id) => {
-  const cart = await service.readCartHandler(id);
-
-  if (!cart) {
-    return false;
-  }
-  return await cartRepository.delete(cart);
-};
+// service.cancelCartHandler = async (id) => {
+//   const cart = await service.readCartHandler(id);
+//
+//   if (!cart) {
+//     return false;
+//   }
+//   return await cartRepository.delete(cart);
+// };
 
 module.exports = service;

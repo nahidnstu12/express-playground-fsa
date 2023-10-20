@@ -10,7 +10,6 @@ constants.HTTP = {
 };
 
 constants.USER_STATUS = {
-  // enum: ["pending", "approved", "block", "reject"],
   PENDING: 1,
   APPROVED: 2,
   BLOCKED: 3,
@@ -18,7 +17,6 @@ constants.USER_STATUS = {
 };
 
 constants.USER_ROLES = {
-  // ["customer", "chef", "delivary_boy", "app_admin", "admin"],
   CUSTOMER: 1,
   CHEF: 2,
   DELIVERY_MAN: 3,

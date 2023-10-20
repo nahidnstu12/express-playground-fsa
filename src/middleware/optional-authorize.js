@@ -14,9 +14,9 @@ const optionalAuthorize = async (req, _res, next) => {
     const decodedUser = await jwt.verify(token, process.env.JWT_SECRET);
     const user = await findUserByEmailHandler(decodedUser.email);
     if (!user) {
-      console.log("user not found");
+      // console.log("user not found");
       return next({
-        status: 401,
+        code: 401,
         message: "Authentication Failed",
       });
     }
@@ -32,7 +32,7 @@ const optionalAuthorize = async (req, _res, next) => {
   } catch (e) {
     console.log("authentication failed in catch", e.message);
     next({
-      status: 401,
+      code: 401,
       message: e.message || "Authentication Failed",
     });
   }

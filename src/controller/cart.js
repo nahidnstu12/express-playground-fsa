@@ -82,11 +82,7 @@ controller.update = async (req, res, next) => {
         }),
       );
     } else {
-      next(
-        notFound({
-          message: "Cart not found",
-        }),
-      );
+      next(notFound("Cart item not found"));
     }
   } catch (err) {
     next(err);
@@ -109,18 +105,18 @@ controller.delete = async (req, res, next) => {
   }
 };
 
-controller.cancelCart = async (req, res, next) => {
-  try {
-    await cancelCartHandler(req.params.id);
-    res.status(200).json(
-      successResponse({
-        status: "Success",
-        data: [],
-      }),
-    );
-  } catch (err) {
-    next(err);
-  }
-};
+// controller.cancelCart = async (req, res, next) => {
+//   try {
+//     await cancelCartHandler(req.params.id);
+//     res.status(200).json(
+//       successResponse({
+//         status: "Success",
+//         data: [],
+//       }),
+//     );
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 module.exports = controller;

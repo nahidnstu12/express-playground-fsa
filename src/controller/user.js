@@ -85,8 +85,6 @@ controller.readAll = async (req, res, next) => {
       }),
     );
   } catch (err) {
-    console.log("error ", err);
-
     next(err);
   }
 };

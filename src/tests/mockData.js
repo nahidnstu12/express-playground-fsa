@@ -1,5 +1,5 @@
 //customer
-const {USER_STATUS, USER_ROLES} = require("../utils/constants");
+const { USER_STATUS, USER_ROLES } = require("../utils/constants");
 exports.userInput = {
   id: 102,
   name: "customer",
@@ -76,9 +76,9 @@ exports.orderInput = {
   quantity: 3,
   price: 250,
   order_date: "2015-12-20 10:01:00.999999",
-  payment_status: "paid",
+  payment_status: "1",
   menuId: 100,
-  userId: 104
+  userId: 104,
 };
 exports.userInputDataForUpdata = {
   phone: "01621876123",

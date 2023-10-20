@@ -2,32 +2,27 @@ const { AppdataSource } = require("../database/config");
 const Order = require("../model/order");
 const { findCartByMenuAndUserId, deleteCartHandler } = require("./cart");
 const { USER_ROLES, ORDER_STATUS } = require("../utils/constants");
+const { badRequest } = require("../utils/error");
 
 const orderRepository = AppdataSource.getRepository(Order);
 const service = {};
 
 service.createOrderHandler = async (input) => {
-  const queryRunner = AppdataSource.createQueryRunner();
-  await queryRunner.connect();
-  await queryRunner.startTransaction();
-
-  try {
-    const { menuId } = input.body;
-    const { userId } = input.user;
-    let isExistCart = await findCartByMenuAndUserId(userId, menuId);
-    if (isExistCart) {
-      await queryRunner.manager.deleteCartHandler(isExistCart.id);
-    }
-    await queryRunner.manager.save(
+  const { menuId } = input.body;
+  const { userId } = input.user;
+  let isExistCart = await findCartByMenuAndUserId(userId, menuId);
+  console.log({ isExistCart });
+  if (isExistCart?.code === 400) {
+    return isExistCart;
+  } else if (isExistCart?.code !== 400 && isExistCart) {
+    await deleteCartHandler(isExistCart.id);
+    return await orderRepository.save(
       orderRepository.create({ ...input.body, ...input.user }),
     );
-    await queryRunner.commitTransaction();
-  } catch (err) {
-    // since we have errors let's rollback changes we made
-    await queryRunner.rollbackTransaction();
-  } finally {
-    // you need to release query runner which is manually created:
-    await queryRunner.release();
+  } else {
+    return await orderRepository.save(
+      orderRepository.create({ ...input.body, ...input.user }),
+    );
   }
 };
 
@@ -100,6 +95,8 @@ service.updateOrderHandler = async (id, data, user) => {
   }
 
   Object.assign(order, data);
+  // const res = await orderRepository.save(order);
+  // console.log({ order, data, res });
   return await orderRepository.save(order);
 };
 service.deleteOrderHandler = async (id) => {
@@ -128,12 +125,12 @@ service.orderStatusHandler = async (id, status, user) => {
       message: "Order not found",
     };
   }
-  // console.log({valus: Object.values(ORDER_STATUS), status})
+  // console.log({ valus: Object.values(ORDER_STATUS), status, order });
   if (Object.values(ORDER_STATUS).some((val) => val === status)) {
     Object.assign(order, { order_status: status });
   } else {
     return {
-      status: 400,
+      code: 400,
       message: "Invalid order status.",
     };
   }

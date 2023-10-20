@@ -24,7 +24,7 @@ class MainSeeder {
     const customerUsers = getAdminUser(users, USER_ROLES.CUSTOMER);
     // console.log("users=======", users, adminUsers, customerUsers);
     const menus = await Promise.all(
-      Array(10)
+      Array(15)
         .fill("")
         .map(async () => {
           return await menuFactory.make({
@@ -35,7 +35,7 @@ class MainSeeder {
     const menuList = await menuRepository.save(menus);
 
     const carts = await Promise.all(
-      Array(10)
+      Array(20)
         .fill("")
         .map(async () => {
           return await cartFactory.make({
@@ -47,7 +47,7 @@ class MainSeeder {
     await cartRepository.save(carts);
 
     const orders = await Promise.all(
-      Array(10)
+      Array(20)
         .fill("")
         .map(async () => {
           return await orderFactory.make({

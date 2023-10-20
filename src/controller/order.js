@@ -46,7 +46,7 @@ controller.create = async (req, res, next) => {
     if (orderResponse?.code === 400) {
       return next(badRequest(orderResponse.message));
     }
-    res.status(status).json(
+    return res.status(status).json(
       successResponse({
         code: orderResponse.code,
         data: orderResponse,
@@ -95,11 +95,17 @@ controller.read = async (req, res, next) => {
 
 controller.update = async (req, res, next) => {
   try {
-    const { order_type, quantity, price, order_status, payment_status } =
-      req.body;
+    const {
+      order_type,
+      quantity,
+      price,
+      order_status,
+      payment_status,
+      order_date,
+    } = req.body;
     const orderResponse = await updateOrderHandler(
       req.params.id,
-      { order_type, quantity, price, order_status, payment_status },
+      { order_type, quantity, price, order_status, payment_status, order_date },
       req.user,
     );
     if (!orderResponse) {
@@ -120,22 +126,28 @@ controller.update = async (req, res, next) => {
 controller.changeOrderStatus = async (req, res, next) => {
   try {
     const orderStatus = +req.query.order_status;
+
     if (!orderStatus) {
-      next(badRequest("Provide valid orderResponse status status"));
+      next(badRequest("Provide valid order status"));
     }
     const orderResponse = await orderStatusHandler(
       req.params.id,
       orderStatus,
       req.user,
     );
-    const status = orderResponse?.status === 400 ? 400 : 200;
-    return res.status(status).json(
-      successResponse({
-        message:
-          orderResponse.message ||
-          `orderResponse is now ${getKeyByValue(ORDER_STATUS, orderStatus)} `,
-      }),
-    );
+    const status = orderResponse?.code === 400 ? 400 : 200;
+    // console.log({ orderResponse });
+    if (status === 400) {
+      return next(badRequest(orderResponse.message));
+    } else {
+      return res.status(status).json(
+        successResponse({
+          message:
+            orderResponse.message ||
+            `orderResponse is now ${getKeyByValue(ORDER_STATUS, orderStatus)} `,
+        }),
+      );
+    }
   } catch (err) {
     next(err);
   }
