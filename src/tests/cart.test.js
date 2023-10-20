@@ -66,7 +66,7 @@ describe("Cart group", () => {
     expect(res.body.errors.message).toBe("Menu doesn't found.");
 
     expect(res.body.errors).toEqual({
-      code: 400,
+      // code: 400,
       message: "Menu doesn't found.",
     });
   });

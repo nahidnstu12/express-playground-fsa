@@ -7,20 +7,33 @@ const orderRepository = AppdataSource.getRepository(Order);
 const service = {};
 
 service.createOrderHandler = async (input) => {
-  const { menuId } = input.body;
-  const { userId } = input.user;
-  let isExistCart = await findCartByMenuAndUserId(userId, menuId);
-  if (isExistCart) {
-    await deleteCartHandler(isExistCart.id);
+  const queryRunner = AppdataSource.createQueryRunner();
+  await queryRunner.connect();
+  await queryRunner.startTransaction();
+
+  try {
+    const { menuId } = input.body;
+    const { userId } = input.user;
+    let isExistCart = await findCartByMenuAndUserId(userId, menuId);
+    if (isExistCart) {
+      await queryRunner.manager.deleteCartHandler(isExistCart.id);
+    }
+    await queryRunner.manager.save(
+      orderRepository.create({ ...input.body, ...input.user }),
+    );
+    await queryRunner.commitTransaction();
+  } catch (err) {
+    // since we have errors let's rollback changes we made
+    await queryRunner.rollbackTransaction();
+  } finally {
+    // you need to release query runner which is manually created:
+    await queryRunner.release();
   }
-  return await orderRepository.save(
-    orderRepository.create({ ...input.body, ...input.user }),
-  );
 };
 
-service.readAllOrderHandler = async (user) => {
-  let queryBuilder = orderRepository
-    .createQueryBuilder("order")
+service.readAllOrderHandler = async (user, { page, limit }) => {
+  let orderQB = orderRepository.createQueryBuilder("order");
+  let itemsQB = await orderQB
     .select([
       "order.id",
       "order.quantity",
@@ -38,10 +51,18 @@ service.readAllOrderHandler = async (user) => {
     .leftJoin("order.menu", "menu");
 
   if (user?.role !== USER_ROLES.ADMIN) {
-    queryBuilder = queryBuilder.where("order.userId = :uId", { uId: user?.id });
+    itemsQB = itemsQB.where("order.userId = :uId", { uId: user?.id });
   }
 
-  return await queryBuilder.getMany();
+  const items = await itemsQB
+    .skip((page - 1) * limit)
+    .take(limit)
+    .getMany();
+  const itemCount = await orderQB
+    .where("order.userId = :uId", { uId: user?.id })
+    .getCount();
+
+  return { itemCount, items };
 };
 service.readOrderHandler = async (id, user) => {
   let queryBuilder = orderRepository
@@ -77,8 +98,7 @@ service.updateOrderHandler = async (id, data, user) => {
   if (!order) {
     return false;
   }
-  delete data.userId;
-  delete data.menuId;
+
   Object.assign(order, data);
   return await orderRepository.save(order);
 };
@@ -104,12 +124,12 @@ service.orderStatusHandler = async (id, status, user) => {
 
   if (!order) {
     return {
-      status: 404,
+      code: 404,
       message: "Order not found",
     };
   }
   // console.log({valus: Object.values(ORDER_STATUS), status})
-  if (Object.values(ORDER_STATUS).some((val) => val == status)) {
+  if (Object.values(ORDER_STATUS).some((val) => val === status)) {
     Object.assign(order, { order_status: status });
   } else {
     return {

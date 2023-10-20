@@ -15,20 +15,19 @@ const controller = {};
 controller.create = async (req, res, next) => {
   try {
     const { id, price, quantity, menuId } = req.body;
-    const CartResponse = await createCartHandler({
+    const cartResponse = await createCartHandler({
       body: { id, price, quantity, menuId },
       user: { userId: req.user.id },
     });
-    const status = CartResponse?.code === 400 ? 400 : 201;
-    console.log("create cart", status, CartResponse)
-    if (CartResponse?.code === 400) {
-      return next(badRequest(CartResponse.message));
+    const status = cartResponse?.code === 400 ? 400 : 201;
+    if (cartResponse?.code === 400) {
+      return next(badRequest(cartResponse.message));
     }
     res.status(status).json(
       successResponse({
         code: status,
         message: "Cart created successfully",
-        data: CartResponse,
+        data: cartResponse,
       }),
     );
   } catch (err) {
@@ -58,11 +57,11 @@ controller.readAll = async (req, res, next) => {
 controller.read = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const CartResponse = await readCartHandler(id);
-    if (!CartResponse) {
+    const cartResponse = await readCartHandler(id);
+    if (!cartResponse) {
       next(notFound("Cart item not found"));
     }
-    return res.status(200).json(successResponse({ data: CartResponse }));
+    return res.status(200).json(successResponse({ data: cartResponse }));
   } catch (err) {
     next(err);
   }
@@ -71,15 +70,15 @@ controller.read = async (req, res, next) => {
 controller.update = async (req, res, next) => {
   try {
     const { price, quantity } = req.body;
-    const CartResponse = await updateCartHandler(req.params.id, {
+    const cartResponse = await updateCartHandler(req.params.id, {
       price,
       quantity,
     });
-    if (CartResponse) {
+    if (cartResponse) {
       return res.status(200).json(
         successResponse({
           message: "Successfully updated",
-          data: CartResponse,
+          data: cartResponse,
         }),
       );
     } else {
@@ -96,7 +95,10 @@ controller.update = async (req, res, next) => {
 
 controller.delete = async (req, res, next) => {
   try {
-    await deleteCartHandler(req.params.id);
+    const cartResponse = await deleteCartHandler(req.params.id);
+    if (!cartResponse) {
+      next(notFound("Cart item not found"));
+    }
     res.status(200).json(
       successResponse({
         message: "Successfully deleted",

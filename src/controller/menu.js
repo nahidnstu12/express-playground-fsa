@@ -124,7 +124,10 @@ controller.update = async (req, res, next) => {
 
 controller.delete = async (req, res, next) => {
   try {
-    await deleteMenuHandler(req.params.id);
+    const menuResponse = await deleteMenuHandler(req.params.id);
+    if (!menuResponse) {
+      next(notFound("Menu not found"));
+    }
     res.status(200).json(
       successResponse({
         message: "Successfully deleted",
@@ -145,8 +148,8 @@ controller.menuChangePublishStatus = async (req, res, next) => {
       req.params.id,
       publishableStatus,
     );
-    if(!menuResponse){
-      next(notFound("Menu not found"))
+    if (!menuResponse) {
+      next(notFound("Menu not found"));
     }
 
     const status = menuResponse?.code === 400 ? 400 : 200;

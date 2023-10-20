@@ -135,7 +135,10 @@ controller.update = async (req, res, next) => {
 
 controller.delete = async (req, res, next) => {
   try {
-    await deleteUserHandler(req.params.id);
+    const userResponse = await deleteUserHandler(req.params.id);
+    if (!userResponse) {
+      next(notFound("User not found"));
+    }
     res.status(200).json(
       successResponse({
         message: "User deleted successfully",
