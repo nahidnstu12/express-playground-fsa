@@ -79,15 +79,16 @@ describe("User group", () => {
       message: "User not found",
     });
   });
-  test("user will be approved when provide query parameter is approve = 1", async () => {
+  test("user will be approved when provide query parameter is approve = 2", async () => {
     const token = jwtSign({ ...appAdminUser });
     const res = await request(app)
-      .get("/api/v1/users/102/changeApproval?approve=1")
+      .get("/api/v1/users/102/changeApproval?approve=2")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
 
     expect(res.body).toEqual({
+      code: 200,
       message: "User Approved Successfully",
     });
   });
@@ -99,6 +100,7 @@ describe("User group", () => {
 
     expect(res.status).toBe(400);
     expect(res.body).toEqual({
+      code: 400,
       message: "Invalid approval status.",
     });
   });

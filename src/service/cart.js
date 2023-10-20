@@ -1,6 +1,8 @@
 const { AppdataSource } = require("../database/config");
 const Cart = require("../model/cart");
 const { readMenuHandler } = require("./menu");
+const { readUserHandler } = require("./user");
+const { USER_ROLES } = require("../utils/constants");
 
 const cartRepository = AppdataSource.getRepository(Cart);
 const service = {};
@@ -11,7 +13,7 @@ service.createCartHandler = async (input) => {
   let isMenuExist = await readMenuHandler(menuId);
   if (!isMenuExist) {
     return {
-      status: 400,
+      code: 400,
       message: "Menu doesn't found.",
     };
   }
@@ -29,12 +31,26 @@ service.createCartHandler = async (input) => {
   );
 };
 service.findCartByMenuAndUserId = async (userId, menuId) => {
+  let isMenuExist = await readMenuHandler(menuId);
+  let isUserExist = await readUserHandler(userId);
+  if (!isMenuExist) {
+    return {
+      code: 400,
+      message: "Menu doesn't found.",
+    };
+  }
+  if (!isUserExist) {
+    return {
+      code: 400,
+      message: "User doesn't found.",
+    };
+  }
   return await cartRepository.findOneBy({ userId, menuId });
 };
 
-service.readAllCartHandler = async (user) => {
-  let queryBuilder = cartRepository
-    .createQueryBuilder("cart")
+service.readAllCartHandler = async (user, { page, limit }) => {
+  let cartQB = await cartRepository.createQueryBuilder("cart");
+  let itemsQB = await cartQB
     .select([
       "cart.id",
       "cart.quantity",
@@ -47,11 +63,18 @@ service.readAllCartHandler = async (user) => {
     .leftJoin("cart.user", "user")
     .leftJoin("cart.menu", "menu");
 
-  if (user?.role !== "admin") {
-    queryBuilder = queryBuilder.where("cart.userId = :uId", { uId: user?.id });
+  if (user?.role !== USER_ROLES.ADMIN) {
+    itemsQB = await itemsQB.where("cart.userId = :uId", { uId: user?.id });
   }
+  const items = await itemsQB
+    .skip((page - 1) * limit)
+    .take(limit)
+    .getMany();
+  const itemCount = await cartQB
+    .where("cart.userId = :uId", { uId: user?.id })
+    .getCount();
 
-  return await queryBuilder.getMany();
+  return { itemCount, items };
 };
 service.readCartHandler = async (id) => {
   return await cartRepository
@@ -71,23 +94,10 @@ service.readCartHandler = async (id) => {
     .where("cart.id = :id", { id })
     .getOne();
 };
-// service.readCartHandler = async (id) => {
-//   return await cartRepository.findOneOrFail({
-//     select: {
-//       id: true,
-//       quantity: true,
-//       price: true,
-//       menuId: true,
-//       userId: true,
-//     },
-//     where: {
-//       id,
-//     },
-//   });
-// };
+
 service.updateCartHandler = async (id, data) => {
   const cart = await service.readCartHandler(id);
-  console.log("service", { cart, id, data });
+
   if (!cart) {
     return false;
   }
@@ -105,13 +115,13 @@ service.deleteCartHandler = async (id) => {
 
   return await cartRepository.delete(cart);
 };
-service.cancelCartHandler = async (id) => {
-  const cart = await service.readCartHandler(id);
-
-  if (!cart) {
-    return false;
-  }
-  return await cartRepository.delete(cart);
-};
+// service.cancelCartHandler = async (id) => {
+//   const cart = await service.readCartHandler(id);
+//
+//   if (!cart) {
+//     return false;
+//   }
+//   return await cartRepository.delete(cart);
+// };
 
 module.exports = service;

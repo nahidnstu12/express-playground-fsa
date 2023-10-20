@@ -20,17 +20,14 @@ describe("User Authentication group", () => {
     const res = await request(app)
       .post("/api/v1/auth/register")
       .send(userInput);
-
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty("data");
     expect(res.body).toHaveProperty("data.token");
 
     expect(res.body.data).toEqual({
-
-        status: 201,
-        message: "Successfully registered user",
-        token: expect.any(String),
-
+      // code: 201,
+      message: "Successfully registered user",
+      token: expect.any(String),
     });
   });
   test("user registration failed when already user exists", async () => {
@@ -49,13 +46,9 @@ describe("User Authentication group", () => {
 
     expect(res.status).toBe(200);
 
-    expect(res.body).toEqual({
-
-      data: {
-        status: 200,
-        message: "login successful",
-        token: expect.any(String),
-      },
+    expect(res.body.data).toEqual({
+      message: "login successful",
+      token: expect.any(String),
     });
   });
   test("user login failed when given the email and password are not matched", async () => {
@@ -89,12 +82,12 @@ describe("User Authentication group", () => {
       message: "Authentication Failed",
     });
   });
-  test("user profile failed when user provide valid token", async () => {
+  test("user profile fetch successful when user provide valid token", async () => {
     const token = jwtSign({ ...userInput });
+
     const res = await request(app)
       .get("/api/v1/auth/profile")
       .set("Authorization", `Bearer ${token}`);
-
     expect(res.status).toBe(200);
   });
 });

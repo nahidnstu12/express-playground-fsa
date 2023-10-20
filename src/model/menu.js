@@ -1,5 +1,5 @@
 const { EntitySchema } = require("typeorm");
-const {MENU_VARIANTS, MENU_PUBLISH} = require("../utils/constants");
+const { MENU_VARIANTS, MENU_PUBLISH } = require("../utils/constants");
 
 module.exports = new EntitySchema({
   name: "Menu",
@@ -28,7 +28,7 @@ module.exports = new EntitySchema({
     status: {
       type: "enum",
       enum: Object.values(MENU_PUBLISH),
-      default: MENU_PUBLISH.PUBLISH,
+      default: MENU_PUBLISH.PUBLISHED,
     },
     variant: {
       type: "enum",

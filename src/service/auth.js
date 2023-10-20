@@ -13,7 +13,7 @@ service.registerHandler = async (input) => {
 
     // if already registered
     if (isAlreadyRegistered) {
-      return { status: 400, message: "Already Registered" };
+      return { code: 400, message: "Already Registered" };
     }
 
     // password hash
@@ -34,19 +34,18 @@ service.registerHandler = async (input) => {
 
       await authRepository.save(authRepository.create({ ...input }));
       return {
-        status: 201,
+        code: 201,
         message: "Successfully registered user",
         token: tokenGenerate,
       };
     } catch (err) {
       console.log("token err", err);
       return {
-        status: 400,
+        code: 400,
         message: err.message,
-        dev_note: "token error"
-      }
+        dev_note: "token error",
+      };
     }
-
   } catch (err) {
     console.log("password err", err);
     // next(err);
@@ -54,19 +53,18 @@ service.registerHandler = async (input) => {
 };
 service.loginHandler = async (input) => {
   try {
-
     const { email, password } = input;
     const userFound = await authRepository.findOneBy({ email });
 
     // if already registered
     if (!userFound) {
-      return { status: 400, message: "User not found" };
+      return { code: 400, message: "User not found" };
     }
 
     const isMatch = await bcrypt.compare(password, userFound.password);
 
     if (!isMatch) {
-      return { status: 400, message: "credentials do not match" };
+      return { code: 400, message: "credentials do not match" };
     }
 
     const tokenGen = await jwtSign({
@@ -76,7 +74,7 @@ service.loginHandler = async (input) => {
       phone: userFound.phone,
     });
     return {
-      status: 200,
+      code: 200,
       message: "login successful",
       token: tokenGen,
     };
@@ -88,11 +86,10 @@ service.profileHandler = async (requestToken) => {
   const token = requestToken?.split(" ")[1] || null;
   if (!token) {
     return {
-      status: 401,
-      message: "You have not permission",
+      code: 401,
+      message: "Authentication failed",
     };
   }
-  console.log("token", token);
   const decodedUser = await jwtVerify(token);
   const userFound = await authRepository.findOneBy({
     email: decodedUser?.email,
@@ -101,7 +98,7 @@ service.profileHandler = async (requestToken) => {
 
   if (!userFound) {
     return {
-      status: 400,
+      code: 400,
       message: "malicious user",
     };
   }
@@ -110,9 +107,10 @@ service.profileHandler = async (requestToken) => {
     email: decodedUser?.email,
     role: decodedUser?.role,
     phone: decodedUser?.phone,
+    status: decodedUser?.status,
   };
   return {
-    status: 200,
+    code: 200,
     data: profile,
   };
 };

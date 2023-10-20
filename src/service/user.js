@@ -1,6 +1,6 @@
 const { AppdataSource } = require("../database/config");
 const User = require("../model/user");
-const {USER_STATUS} = require("../utils/constants");
+const { USER_STATUS, ORDER_STATUS } = require("../utils/constants");
 
 const userRepository = AppdataSource.getRepository(User);
 const service = {};
@@ -15,8 +15,9 @@ service.createUserHandler = async (input) => {
   }
   return await userRepository.save(userRepository.create({ ...input }));
 };
-service.readAllUserHandler = async () => {
-  return await userRepository.find({
+service.readAllUserHandler = async ({ page, limit }) => {
+  const itemCount = await userRepository.count();
+  const items = await userRepository.find({
     select: {
       id: true,
       name: true,
@@ -25,7 +26,10 @@ service.readAllUserHandler = async () => {
       role: true,
       status: true,
     },
+    skip: (page - 1) * limit,
+    take: limit,
   });
+  return { itemCount, items };
 };
 service.readUserHandler = async (id) => {
   return await userRepository.findOne({
@@ -81,16 +85,25 @@ service.approveUserHandler = async (id, status) => {
   if (!user) {
     return false;
   }
-  if (status === "1") {
-    Object.assign(user, { status: USER_STATUS.APPROVED });
-  } else if (status === "2") {
-    Object.assign(user, { status: USER_STATUS.BLOCKED });
+
+  if (Object.values(USER_STATUS).some((val) => val === status)) {
+    Object.assign(user, { status: status });
   } else {
     return {
-      status: 400,
+      code: 400,
       message: "Invalid approval status.",
     };
   }
+  // if (status === USER_STATUS.APPROVED) {
+  //   Object.assign(user, { status: USER_STATUS.APPROVED });
+  // } else if (status === USER_STATUS.BLOCKED) {
+  //   Object.assign(user, { status: USER_STATUS.BLOCKED });
+  // } else {
+  //   return {
+  //     code: 400,
+  //     message: "Invalid approval status.",
+  //   };
+  // }
 
   return await userRepository.save(user);
 };

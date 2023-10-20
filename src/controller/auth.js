@@ -14,11 +14,25 @@ const controller = {};
 
 controller.register = async (req, res, next) => {
   try {
-    const user = await registerHandler(req.body);
-    if (user.status === 400) {
-      next(user);
-    } else if (user.status === 201) {
-      return res.status(201).json(successResponse({ data: user }));
+    const { name, email, phone, password, status, role, id } = req.body;
+    const userResponse = await registerHandler({
+      name,
+      email,
+      phone,
+      password,
+      status,
+      role,
+      id,
+    });
+    if (userResponse.code === 400) {
+      next(userResponse);
+    } else if (userResponse.code === 201) {
+      return res.status(201).json(
+        successResponse({
+          code: 201,
+          data: { message: userResponse.message, token: userResponse.token },
+        }),
+      );
     } else {
       next(serverError());
     }
@@ -30,12 +44,18 @@ controller.register = async (req, res, next) => {
 
 controller.login = async (req, res, next) => {
   try {
-    const user = await loginHandler(req.body);
+    const { email, password } = req.body;
+    const userResponse = await loginHandler({ email, password });
 
-    if (user.status === 400) {
-      next(badRequest(user.message));
-    } else if (user.status === 200) {
-      return res.status(200).json(successResponse({ data: user }));
+    if (userResponse.code === 400) {
+      next(badRequest(userResponse.message));
+    } else if (userResponse.code === 200) {
+      return res.status(200).json(
+        successResponse({
+          code: 200,
+          data: { message: userResponse.message, token: userResponse.token },
+        }),
+      );
     } else {
       next(serverError());
     }
@@ -47,19 +67,21 @@ controller.login = async (req, res, next) => {
 
 controller.profile = async (req, res, next) => {
   try {
-    const user = await profileHandler(req?.headers?.authorization || "");
+    const userResponse = await profileHandler(
+      req?.headers?.authorization || "",
+    );
 
-    if (user.status === 401) {
-      next(authenticationError(user.message));
-    } else if (user.status === 400) {
-      next(badRequest(user.message));
-    } else if (user.status === 200) {
-      return res.status(200).json(successResponse({ data: user }));
+    if (userResponse.code === 401) {
+      next(authenticationError(userResponse.message));
+    } else if (userResponse.code === 400) {
+      next(badRequest(userResponse.message));
+    } else if (userResponse.code === 200) {
+      return res.status(200).json(successResponse({ data: userResponse }));
     } else {
       next(serverError());
     }
   } catch (err) {
-    console.log("profile failed");
+    console.log("profile fetch failed");
     next(err);
   }
 };

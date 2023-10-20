@@ -9,21 +9,27 @@ const {
 } = require("../service/menu");
 const { successResponse } = require("../utils/success");
 const { badRequest, notFound } = require("../utils/error");
+const { paginateObject, getKeyByValue } = require("../utils/helpers");
+const { MENU_PUBLISH } = require("../utils/constants");
 
 const controller = {};
 
 controller.create = async (req, res, next) => {
   try {
-    const menu = await createMenuHandler({
-      body: req.body,
+    const { id, name, description, price, status, variant, cover, userId } =
+      req.body;
+    const menuResponse = await createMenuHandler({
+      body: { id, name, description, price, status, variant, cover, userId },
       user: { userId: req.user.id },
     });
-    if (!menu) {
-     return  next(badRequest("Menu already exists"));
+    if (!menuResponse) {
+      return next(badRequest("Menu already exists"));
     }
     return res.status(201).json(
       successResponse({
-        data: menu,
+        code: 201,
+        message: "Menu created successfully",
+        data: menuResponse,
       }),
     );
   } catch (err) {
@@ -33,15 +39,17 @@ controller.create = async (req, res, next) => {
 
 controller.testing = async (req, res, next) => {
   try {
-    const menu = await createTestingMenuHandler({
+    const menuResponse = await createTestingMenuHandler({
       body: req.body,
     });
-    if (!menu) {
-     return  next(badRequest("Menu already exists"));
+    if (!menuResponse) {
+      return next(badRequest("Menu already exists"));
     }
     return res.status(201).json(
       successResponse({
-        data: menu,
+        code: 201,
+        message: "Menu created successfully",
+        data: menuResponse,
       }),
     );
   } catch (err) {
@@ -51,11 +59,18 @@ controller.testing = async (req, res, next) => {
 
 controller.readAll = async (req, res, next) => {
   try {
+    const { page, limit } = req.query;
     const user = req.user;
-    const menus = await readAllMenuHandler(user);
+    const menusResponse = await readAllMenuHandler(user, { page, limit });
+
     res.status(200).json(
       successResponse({
-        data: menus,
+        data: menusResponse.items,
+        meta: paginateObject({
+          page,
+          limit,
+          itemCount: menusResponse.itemCount,
+        }),
       }),
     );
   } catch (err) {
@@ -66,13 +81,13 @@ controller.readAll = async (req, res, next) => {
 controller.read = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const menu = await readMenuHandler(id);
-    if(!menu){
+    const menuResponse = await readMenuHandler(id);
+    if (!menuResponse) {
       next(notFound("Menu not found"));
     }
     return res.status(200).json(
       successResponse({
-        data: menu,
+        data: menuResponse,
       }),
     );
   } catch (err) {
@@ -82,13 +97,21 @@ controller.read = async (req, res, next) => {
 
 controller.update = async (req, res, next) => {
   try {
-    const menu = await updateMenuHandler(req.params.id, req.body);
+    const { description, price, status, variant, cover, userId } = req.body;
+    const menuResponse = await updateMenuHandler(req.params.id, {
+      description,
+      price,
+      status,
+      variant,
+      cover,
+      userId,
+    });
 
-    if (menu) {
+    if (menuResponse) {
       return res.status(200).json(
         successResponse({
           message: "Successfully updated",
-          data: menu,
+          data: menuResponse,
         }),
       );
     } else {
@@ -101,7 +124,10 @@ controller.update = async (req, res, next) => {
 
 controller.delete = async (req, res, next) => {
   try {
-    await deleteMenuHandler(req.params.id);
+    const menuResponse = await deleteMenuHandler(req.params.id);
+    if (!menuResponse) {
+      next(notFound("Menu not found"));
+    }
     res.status(200).json(
       successResponse({
         message: "Successfully deleted",
@@ -114,20 +140,25 @@ controller.delete = async (req, res, next) => {
 
 controller.menuChangePublishStatus = async (req, res, next) => {
   try {
-    const publishableStatus = req.query.status;
+    const publishableStatus = +req.query.status;
     if (!publishableStatus) {
       next(badRequest("Provide publishable status"));
     }
-    const menu = await publishMenuHandler(req.params.id, publishableStatus);
+    const menuResponse = await publishMenuHandler(
+      req.params.id,
+      publishableStatus,
+    );
+    if (!menuResponse) {
+      next(notFound("Menu not found"));
+    }
 
-    const status = menu?.status === 400 ? 400 : 200;
+    const status = menuResponse?.code === 400 ? 400 : 200;
     return res.status(status).json(
       successResponse({
+        code: menuResponse.code,
         message:
-          menu.message ||
-          `Menu ${
-            publishableStatus === "1" ? "Published" : "Unpublished"
-          } Successfully`,
+          menuResponse.message ||
+          `Menu ${getKeyByValue(MENU_PUBLISH, publishableStatus)} Successfully`,
       }),
     );
   } catch (err) {

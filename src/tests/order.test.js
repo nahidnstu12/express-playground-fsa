@@ -34,7 +34,7 @@ describe("Order group", () => {
       .post("/api/v1/orders")
       .set("Authorization", `Bearer ${tokenCustomer}`)
       .send(orderInput);
-    console.log({orderInput: res.body})
+    console.log({ orderInput: res.body });
 
     expect(res.status).toBe(201);
     expect(res.body.data).toHaveProperty("order_date");
@@ -72,11 +72,11 @@ describe("Order group", () => {
   test("order status can not changed if valid order_status not provided ", async () => {
     const token = jwtSign({ ...adminUser });
     const res = await request(app)
-      .get("/api/v1/orders/100/changeOrderStatus?order_status=order_invalid")
+      .get("/api/v1/orders/100/changeOrderStatus?order_status=111")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(400);
-    expect(res.body).toEqual({
+    expect(res.body.errors).toEqual({
       message: "Invalid order status.",
     });
   });

@@ -1,4 +1,4 @@
-const {USER_STATUS, USER_ROLES} = require("../utils/constants");
+const { USER_STATUS, USER_ROLES } = require("../utils/constants");
 const EntitySchema = require("typeorm").EntitySchema;
 
 module.exports = new EntitySchema({
@@ -43,13 +43,4 @@ module.exports = new EntitySchema({
       updateDate: true,
     },
   },
-  // relations: {
-  //   menus: {
-  //     type: "one-to-many",
-  //     target: "Menu",
-  //     joinTable: true,
-  //     cascade: true,
-  //     onDelete: "CASCADE", // You can specify the desired behavior on delete
-  //   },
-  // },
 });

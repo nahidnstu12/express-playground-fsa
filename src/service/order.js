@@ -2,6 +2,7 @@ const { AppdataSource } = require("../database/config");
 const Order = require("../model/order");
 const { findCartByMenuAndUserId, deleteCartHandler } = require("./cart");
 const { USER_ROLES, ORDER_STATUS } = require("../utils/constants");
+const { badRequest } = require("../utils/error");
 
 const orderRepository = AppdataSource.getRepository(Order);
 const service = {};
@@ -10,17 +11,24 @@ service.createOrderHandler = async (input) => {
   const { menuId } = input.body;
   const { userId } = input.user;
   let isExistCart = await findCartByMenuAndUserId(userId, menuId);
-  if (isExistCart) {
+  console.log({ isExistCart });
+  if (isExistCart?.code === 400) {
+    return isExistCart;
+  } else if (isExistCart?.code !== 400 && isExistCart) {
     await deleteCartHandler(isExistCart.id);
+    return await orderRepository.save(
+      orderRepository.create({ ...input.body, ...input.user }),
+    );
+  } else {
+    return await orderRepository.save(
+      orderRepository.create({ ...input.body, ...input.user }),
+    );
   }
-  return await orderRepository.save(
-    orderRepository.create({ ...input.body, ...input.user }),
-  );
 };
 
-service.readAllOrderHandler = async (user) => {
-  let queryBuilder = orderRepository
-    .createQueryBuilder("order")
+service.readAllOrderHandler = async (user, { page, limit }) => {
+  let orderQB = orderRepository.createQueryBuilder("order");
+  let itemsQB = await orderQB
     .select([
       "order.id",
       "order.quantity",
@@ -38,10 +46,18 @@ service.readAllOrderHandler = async (user) => {
     .leftJoin("order.menu", "menu");
 
   if (user?.role !== USER_ROLES.ADMIN) {
-    queryBuilder = queryBuilder.where("order.userId = :uId", { uId: user?.id });
+    itemsQB = itemsQB.where("order.userId = :uId", { uId: user?.id });
   }
 
-  return await queryBuilder.getMany();
+  const items = await itemsQB
+    .skip((page - 1) * limit)
+    .take(limit)
+    .getMany();
+  const itemCount = await orderQB
+    .where("order.userId = :uId", { uId: user?.id })
+    .getCount();
+
+  return { itemCount, items };
 };
 service.readOrderHandler = async (id, user) => {
   let queryBuilder = orderRepository
@@ -77,9 +93,10 @@ service.updateOrderHandler = async (id, data, user) => {
   if (!order) {
     return false;
   }
-  delete data.userId;
-  delete data.menuId;
+
   Object.assign(order, data);
+  // const res = await orderRepository.save(order);
+  // console.log({ order, data, res });
   return await orderRepository.save(order);
 };
 service.deleteOrderHandler = async (id) => {
@@ -104,16 +121,16 @@ service.orderStatusHandler = async (id, status, user) => {
 
   if (!order) {
     return {
-      status: 404,
+      code: 404,
       message: "Order not found",
     };
   }
-  // console.log({valus: Object.values(ORDER_STATUS), status})
-  if (Object.values(ORDER_STATUS).some((val) => val == status)) {
+  // console.log({ valus: Object.values(ORDER_STATUS), status, order });
+  if (Object.values(ORDER_STATUS).some((val) => val === status)) {
     Object.assign(order, { order_status: status });
   } else {
     return {
-      status: 400,
+      code: 400,
       message: "Invalid order status.",
     };
   }

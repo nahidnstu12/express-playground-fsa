@@ -10,8 +10,8 @@ const cartSchemas = {
   cartUPDATE: Joi.object().keys({
     price: Joi.number().optional(),
     quantity: Joi.number().optional(),
-    menuId: Joi.number().optional(),
-    userId: Joi.number().optional(),
+    // menuId: Joi.number().optional(),
+    // userId: Joi.number().optional(),
   }),
   cartLIST: {
     page: Joi.number().required(),
