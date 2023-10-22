@@ -1,0 +1,50 @@
+version: '3.7'
+
+networks:
+  street-pizza:
+
+services:
+  mysql:
+    image: mysql:8
+    restart: unless-stopped
+    env_file: ./env.local
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: street-pizza
+#      MYSQL_USER: admin
+#      MYSQL_PASSWORD: password
+    volumes:
+      - mydb:/var/lib/mysql
+    networks:
+      - street-pizza
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+
+  app:
+    build: .
+#      context: .
+#      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./env.local
+    volumes:
+      - ./:/app
+    environment:
+      NODE_ENV: development
+      DB_HOST: localhost
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_NAME: street-pizza
+    depends_on:
+      - mysql
+    command: yarn dev
+    ports:
+      - "5000:5000"
+    stdin_open: true
+    tty: true
+    networks:
+      - street-pizza
+
+volumes:
+  mydb:

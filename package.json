@@ -4,10 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "env-cmd -f .\\env.local nodemon server.js",
+    "dev": "env-cmd -f env.local nodemon server.js",
     "start": "node server.js",
-    "db:seed": "env-cmd -f .\\env.local node seed.js",
-    "test": "env-cmd -f .\\env.test jest --watchAll --runInBand"
+    "db:seed": "env-cmd -f env.local node seed.js",
+    "test": "env-cmd -f env.test jest --watchAll --runInBand"
   },
   "jest": {
     "testEnvironment": "node",
