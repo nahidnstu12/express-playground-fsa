@@ -12,11 +12,11 @@ const MainSeeder = require("../seeder");
 
 exports.AppdataSource = new typeorm.DataSource({
   type: "mysql",
-  host: "localhost",
-  port: 3306,
-  username: "root",
-  password: "",
-  database: process.env.database,
+  host: process.env.DB_HOST || "localhost",
+  port: process.env.DB_PORT || "3306",
+  username: process.env.DB_USERNAME || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_DATABASE || "street-pizza",
   synchronize: true,
   logging: process.env.NODE_ENV === "development",
   entities: [User, Menu, Cart, Order],
