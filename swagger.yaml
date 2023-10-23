@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
   version: "1.0.0"
-  title: "Street Pizza API"
-  description: "This is the street pizza API for second assignment."
+  title: "Street Food API"
+  description: "This is the street food API for providing food service."
   contact:
     name: Nahid
     url: https://github.com/nahidnstu12/express-playground-fsa
@@ -10,6 +10,10 @@ info:
 servers:
   - description: Local
     url: "http://localhost:5000/api/v1"
+  - description: Production
+    url: "https://street-food-rest-api-milm.onrender.com/api/v1"
+  - description: Production-2
+    url: "https://food-rest-api-milm.onrender.com/api/v1"
 tags:
   - name: Auth
     description: Authentication Endpoints (public)
