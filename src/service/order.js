@@ -2,16 +2,46 @@ const { AppdataSource } = require("../database/config");
 const Order = require("../model/order");
 const { findCartByMenuAndUserId, deleteCartHandler } = require("./cart");
 const { USER_ROLES, ORDER_STATUS } = require("../utils/constants");
-const { badRequest } = require("../utils/error");
 
 const orderRepository = AppdataSource.getRepository(Order);
 const service = {};
 
 service.createOrderHandler = async (input) => {
+  const queryRunner = AppdataSource.createQueryRunner();
+  await queryRunner.connect();
+  await queryRunner.startTransaction();
+
+  try {
+    const { menuId } = input.body;
+    const { userId } = input.user;
+    let isExistCart = await findCartByMenuAndUserId(userId, menuId);
+    const order = orderRepository.create({ ...input.body, ...input.user });
+    if (isExistCart?.code === 400) {
+      return isExistCart;
+    } else if (isExistCart?.code !== 400 && isExistCart) {
+      await deleteCartHandler(isExistCart.id, queryRunner);
+      await queryRunner.manager.getRepository(Order).save(order);
+      await queryRunner.commitTransaction();
+      return order;
+    } else {
+      await queryRunner.manager.getRepository(Order).save(order);
+      await queryRunner.commitTransaction();
+      return order;
+    }
+    //   if (isExistCart) {
+    //   await deleteCartHandler(isExistCart.id, queryRunner);
+    // }
+  } catch (err) {
+    await queryRunner.rollbackTransaction();
+      return { code: 400, message: "Order creation failed!" };
+  } finally {
+    await queryRunner.release();
+  }
+};
+service.createOrderHandler2 = async (input) => {
   const { menuId } = input.body;
   const { userId } = input.user;
   let isExistCart = await findCartByMenuAndUserId(userId, menuId);
-  console.log({ isExistCart });
   if (isExistCart?.code === 400) {
     return isExistCart;
   } else if (isExistCart?.code !== 400 && isExistCart) {

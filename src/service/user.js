@@ -47,7 +47,7 @@ service.readUserHandler = async (id) => {
   });
 };
 service.findUserByEmailHandler = async (email) => {
-  return await userRepository.findOneOrFail({
+  return await userRepository.findOne({
     select: {
       id: true,
       name: true,
