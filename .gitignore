@@ -6,3 +6,5 @@ env.test
 env.prod
 coverage
 gen
+.idea
+docker
