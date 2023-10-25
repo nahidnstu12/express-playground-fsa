@@ -41,6 +41,7 @@ controller.create = async (req, res, next) => {
       },
       user: { userId: req.user.id },
     });
+    console.log("orderResponse", orderResponse)
     const status = orderResponse?.code === 400 ? 400 : 201;
 
     if (orderResponse?.code === 400) {

@@ -106,14 +106,16 @@ service.updateCartHandler = async (id, data) => {
 
   return await cartRepository.save(cart);
 };
-service.deleteCartHandler = async (id) => {
+service.deleteCartHandler = async (id, queryRunner) => {
   const cart = await service.readCartHandler(id);
-
+    console.log("CartHandler", cart)
   if (!cart) {
     return false;
   }
 
-  return await cartRepository.delete(cart);
+  return queryRunner
+    ? await queryRunner.manager.getRepository(Cart).delete(cart)
+    : await cartRepository.delete(cart);
 };
 // service.cancelCartHandler = async (id) => {
 //   const cart = await service.readCartHandler(id);
