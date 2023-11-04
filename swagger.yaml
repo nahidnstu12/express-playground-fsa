@@ -27,9 +27,9 @@ tags:
     description: Order Endpoints (public + private)
 
 paths:
-  "/auth/register":
+  "/auth/register-app-admin":
     post:
-      description: create a new account
+      description: create app admin
       tags: [Auth]
       requestBody:
         content:
@@ -52,6 +52,57 @@ paths:
                   format: password
                   example: 121212aA
               required: [name, email, password, phone]
+      responses:
+        "201":
+          description: Signup successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        example: 201
+                      message:
+                        type: string
+                        example: Successfully registered user
+                      token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+  "/auth/register":
+    post:
+      description: create a new account
+      tags: [ Auth ]
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: nahid
+                email:
+                  type: string
+                  format: email
+                  example: nahid@mail.com
+                phone:
+                  type: string
+                  example: 01621876123
+                password:
+                  type: string
+                  format: password
+                  example: 121212aA
+              required: [ name, email, password, phone ]
       responses:
         "201":
           description: Signup successful

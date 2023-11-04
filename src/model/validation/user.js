@@ -1,5 +1,9 @@
 const Joi = require("joi");
-const { USER_STATUS, USER_ROLES } = require("../../utils/constants");
+const {
+  USER_STATUS,
+  USER_ROLES,
+  USER_ROLES_WITHOUT_APP_ADMIN,
+} = require("../../utils/constants");
 
 const userSchemas = {
   userPOST: Joi.object().keys({
@@ -9,7 +13,7 @@ const userSchemas = {
     email: Joi.string().email().lowercase().required(),
     password: Joi.string().min(5).required(),
     role: Joi.number()
-      .valid(...Object.values(USER_ROLES))
+      .valid(...Object.values(USER_ROLES_WITHOUT_APP_ADMIN))
       .optional(),
     status: Joi.number()
       .valid(...Object.values(USER_STATUS))

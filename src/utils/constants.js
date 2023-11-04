@@ -23,6 +23,12 @@ constants.USER_ROLES = {
   ADMIN: 4,
   APP_ADMIN: 5,
 };
+constants.USER_ROLES_WITHOUT_APP_ADMIN = {
+  CUSTOMER: 1,
+  CHEF: 2,
+  DELIVERY_MAN: 3,
+  ADMIN: 4,
+};
 
 constants.ORDER_TYPE = {
   INSTANT_ORDER: 1,

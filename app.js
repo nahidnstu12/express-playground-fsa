@@ -25,7 +25,14 @@ app.get("/api/v1/health", (req, res) => {
 // app.all("*", (req: Request, res: Response, next: NextFunction) => {
 //   next(new AppError(404, `Route ${req.originalUrl} not found`));
 // });
-
+app.use((req, res, next) => {
+  // Check if the request body is undefined
+  if (req.body === undefined) {
+    return res.status(400).json({ error: "Request body is undefined" });
+  }
+  // If the request body is defined, proceed to the next middleware
+  next();
+});
 app.use((req, res, next) => {
   res.status(404).json({ message: "Not Found", dev_note: "global 404" });
 });

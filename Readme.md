@@ -33,6 +33,12 @@ yarn test
 if you want to single file test, run 
 yarn run test auth.test.js  --watchAll=false
 
+if you want to go local swagger docs, hit url
+http://localhost:5000/api/v1/docs/
+
+if you want to go prod swagger docs, hit url
+https://food-rest-api-milm.onrender.com/api/v1/docs
+
 ```
 
 ### Common Snippets

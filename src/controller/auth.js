@@ -1,7 +1,7 @@
 const {
   registerHandler,
   loginHandler,
-  profileHandler,
+  profileHandler,registerAppAdminHandler
 } = require("../service/auth");
 const {
   serverError,
@@ -11,6 +11,36 @@ const {
 const { successResponse } = require("../utils/success");
 
 const controller = {};
+
+controller.registerAppAdmin = async (req, res, next) => {
+  try {
+    const { name, email, phone, password, status, role, id } = req.body;
+    const userResponse = await registerAppAdminHandler({
+      name,
+      email,
+      phone,
+      password,
+      status,
+      role,
+      id,
+    });
+    if (userResponse.code === 400) {
+      next(userResponse);
+    } else if (userResponse.code === 201) {
+      return res.status(201).json(
+        successResponse({
+          code: 201,
+          data: { message: userResponse.message, token: userResponse.token },
+        }),
+      );
+    } else {
+      next(serverError());
+    }
+  } catch (err) {
+    console.log("register failed");
+    next(err);
+  }
+};
 
 controller.register = async (req, res, next) => {
   try {
