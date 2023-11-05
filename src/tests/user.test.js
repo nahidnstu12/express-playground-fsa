@@ -18,10 +18,10 @@ describe("User group", () => {
 
   test("user created successfully when user role will be app-admin", async () => {
     //create app-admin user
-    await request(app).post("/api/v1/users/testing").send(appAdminUser);
+    const appAdminUser1= await request(app).post("/api/v1/users/testing").send(appAdminUser);
     await request(app).post("/api/v1/users/testing").send(userInput);
     const token = jwtSign({ ...appAdminUser });
-
+    console.log("appAdminUser--------", appAdminUser1.status)
     const res = await request(app)
       .post("/api/v1/users")
       .set("Authorization", `Bearer ${token}`)

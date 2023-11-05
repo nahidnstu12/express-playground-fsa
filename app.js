@@ -21,12 +21,10 @@ app.get("/api/v1/health", (req, res) => {
   res.status(200).send({ message: "Site Is Live" });
 });
 
-// UNHANDLED ROUTE
-// app.all("*", (req: Request, res: Response, next: NextFunction) => {
-//   next(new AppError(404, `Route ${req.originalUrl} not found`));
-// });
+
 app.use((req, res, next) => {
   // Check if the request body is undefined
+  console.log("req.body", req.body);
   if (req.body === undefined) {
     return res.status(400).json({ error: "Request body is undefined" });
   }
@@ -39,8 +37,18 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   // format error
-  console.log("last error: ", err);
-  res.status(Number(err.code) || 500).json({
+  console.log("last error: ", { err});
+  if(err.type){
+    // console.log("type ",err.type)
+    return res.status(err.status || 500).json({
+      errors: {
+        message: err.message,
+        body: err.body,
+        type: err.type
+      }
+    })
+  }
+  return res.status(Number(err.code) || 500).json({
     errors: {
       // status: err.status,
       message: err.message,

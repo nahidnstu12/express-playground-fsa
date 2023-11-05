@@ -15,6 +15,7 @@ const controller = {};
 
 controller.create = async (req, res, next) => {
   try {
+
     const { name, email, phone, password, status, role, id } = req.body;
     const userResponse = await createUserHandler({
       name,
@@ -94,7 +95,7 @@ controller.read = async (req, res, next) => {
     const id = req.params.id;
     const userResponse = await readUserHandler(id);
     if (!userResponse) {
-      next(notFound("User not found"));
+     return next(notFound("User not found"));
     }
     return res.status(200).json(
       successResponse({

@@ -10,9 +10,9 @@ info:
 servers:
   - description: Local
     url: "http://localhost:5000/api/v1"
-  - description: Production
-    url: "https://street-food-rest-api-milm.onrender.com/api/v1"
-  - description: Production-2
+#  - description: Production
+#    url: "https://street-food-rest-api-milm.onrender.com/api/v1"
+  - description: Production-1
     url: "https://food-rest-api-milm.onrender.com/api/v1"
 tags:
   - name: Auth

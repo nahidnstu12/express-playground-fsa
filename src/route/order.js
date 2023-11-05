@@ -12,45 +12,31 @@ const schema = require("../model/validation/order");
 const validate = require("../middleware/validate");
 const authenticate = require("../middleware/authenticate");
 const authorize = require("../middleware/authorize");
+const routeparam = require("../middleware/routeparam");
 
 const router = express.Router();
+// Middleware functions
+const adminAuth = [authenticate, authorize([USER_ROLES.ADMIN])];
+const customerAuth = [authenticate, authorize([USER_ROLES.CUSTOMER])];
+const adminCustomerAuth = [
+  authenticate,
+  authorize([USER_ROLES.ADMIN, USER_ROLES.CUSTOMER]),
+];
 
 router
   .route("")
-  .get(
-    authenticate,
-    authorize([USER_ROLES.ADMIN, USER_ROLES.CUSTOMER]),
-    readAll,
-  )
-  .post(
-    authenticate,
-    authorize([USER_ROLES.CUSTOMER]),
-    validate(schema.orderPOST),
-    create,
-  );
+  .get(adminCustomerAuth, readAll)
+  .post(customerAuth, validate(schema.orderPOST), create);
 
 router
   .route("/:id")
-  .get(authenticate, authorize([USER_ROLES.ADMIN, USER_ROLES.CUSTOMER]), read)
-  .delete(
-    authenticate,
-    authorize([USER_ROLES.ADMIN, USER_ROLES.CUSTOMER]),
-    remove,
-  )
-  .put(
-    authenticate,
-    authorize([USER_ROLES.ADMIN, USER_ROLES.CUSTOMER]),
-    validate(schema.orderUPDATE),
-    update,
-  );
-
-// router
-//   .route("/:id/cancel")
-//   .get(authenticate, authorize([USER_ROLES.ADMIN]), orderCancel);
+  .get(routeparam(), adminCustomerAuth, read)
+  .delete(routeparam(), adminCustomerAuth, remove)
+  .put(routeparam(), adminCustomerAuth, validate(schema.orderUPDATE), update);
 
 router.route("/:id/changeOrderStatus").get(
-  authenticate,
-  authorize([USER_ROLES.ADMIN]),
+  routeparam(),
+  adminAuth,
   // validate(schema.orderStatus),
   changeOrderStatus,
 );
