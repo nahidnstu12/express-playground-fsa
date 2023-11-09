@@ -535,6 +535,37 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
+  "/menus-bulk-upload":
+    post:
+      operationId: create bulk Post
+      security:
+        - bearerAuth: [ ]
+      tags: [ Menu ]
+      description: Create bulk menu
+      requestBody:
+        description: To create bulk menu user must need to provide valid data
+        content:
+          "multipart/form-data":
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                  format: binary
+              required: [ filename ]
+      responses:
+        "201":
+          description: Menu created successfully
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/MenuCreatedDTO"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
   "/menus/{id}":
     get:
       tags: [Menu]
@@ -659,6 +690,7 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
+
 
   "/carts":
     get:
