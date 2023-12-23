@@ -1,4 +1,4 @@
-const { USER_STATUS, USER_ROLES } = require("../utils/constants");
+const { USER_STATUS, USER_ROLES, RowStatus } = require("../utils/constants");
 const EntitySchema = require("typeorm").EntitySchema;
 
 module.exports = new EntitySchema({
@@ -34,6 +34,11 @@ module.exports = new EntitySchema({
       enum: Object.values(USER_STATUS),
       default: USER_STATUS.PENDING,
     },
+    row_status: {
+      type: "enum",
+      enum: Object.values(RowStatus),
+      default: RowStatus.ACTIVE,
+    },
     created_at: {
       type: "datetime",
       createDate: true,
@@ -41,6 +46,10 @@ module.exports = new EntitySchema({
     updated_at: {
       type: "datetime",
       updateDate: true,
+    },
+    deleted_at: {
+      type: "datetime",
+      deleteDate: true,
     },
   },
 });

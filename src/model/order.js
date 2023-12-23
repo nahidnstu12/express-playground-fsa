@@ -1,4 +1,4 @@
-const {ORDER_TYPE, ORDER_STATUS, ORDER_PAYMENT_STATUS} = require("../utils/constants");
+const {ORDER_TYPE, ORDER_STATUS, ORDER_PAYMENT_STATUS, RowStatus} = require("../utils/constants");
 const EntitySchema = require("typeorm").EntitySchema;
 
 module.exports = new EntitySchema({
@@ -42,6 +42,11 @@ module.exports = new EntitySchema({
       default: ORDER_PAYMENT_STATUS.PENDING,
     },
 
+    row_status: {
+      type: "enum",
+      enum: Object.values(RowStatus),
+      default: RowStatus.ACTIVE,
+    },
     created_at: {
       type: "datetime",
       createDate: true,
@@ -49,6 +54,10 @@ module.exports = new EntitySchema({
     updated_at: {
       type: "datetime",
       updateDate: true,
+    },
+    deleted_at: {
+      type: "datetime",
+      deleteDate: true,
     },
   },
   relations: {

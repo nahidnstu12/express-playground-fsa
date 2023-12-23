@@ -8,7 +8,10 @@
     "start:prod": "env-cmd -f env.prod node server.js",
     "db:seed": "env-cmd -f env.local node seed.js",
     "db:seed-prod": "env-cmd -f env.prod node seed.js",
-    "test": "env-cmd -f env.test jest --watchAll --runInBand"
+    "test": "env-cmd -f env.test jest --watchAll --runInBand",
+    "migration:create": "typeorm migration:create -o",
+    "migration:generate": "typeorm migration:generate -o -d src/database/config.js",
+    "migration:run": "typeorm migration:run -d src/database/config.js"
   },
   "jest": {
     "testEnvironment": "node",
@@ -33,11 +36,13 @@
     "joi": "^17.10.1",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "mysql2": "^3.6.0",
     "supertest": "^6.3.3",
     "swagger-ui-express": "^5.0.0",
     "typeorm": "^0.3.17",
     "typeorm-extension": "^3.0.2",
+    "xlsx": "^0.18.5",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {

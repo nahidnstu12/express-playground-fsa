@@ -13,5 +13,8 @@ helpers.paginateObject = ({ page, limit, itemCount }) => {
     totalPage: Math.ceil(itemCount / limit),
   };
 };
+helpers.extractItemFromList = (source, item)=> {
+  return source?.map(obj => obj[item] ?? undefined)
+}
 
 module.exports = helpers;

@@ -62,4 +62,11 @@ constants.MENU_PUBLISH = {
   PUBLISHED: 1,
   UNPUBLISHED: 2,
 };
+
+constants.RowStatus = {
+  PENDING: 0,
+  ACTIVE: 1,
+  INACTIVE: 2,
+  REJECTED: 3
+}
 module.exports = constants;

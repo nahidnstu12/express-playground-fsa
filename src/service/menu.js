@@ -1,17 +1,20 @@
 const { AppdataSource } = require("../database/config");
 const Menu = require("../model/menu");
 const { USER_ROLES, MENU_PUBLISH } = require("../utils/constants");
+const xlsx = require("xlsx");
+const Joi = require("joi");
+const menuSchemas = require("../model/validation/menu");
 
 const menuRepository = AppdataSource.getRepository(Menu);
 const service = {};
 
 service.createMenuHandler = async (input) => {
   const { name } = input.body;
-  const isMenuExist = await menuRepository.findOneBy({
+  const isAlreadyMenuExistInDB = await menuRepository.findOneBy({
     name,
   });
 
-  if (isMenuExist) {
+  if (isAlreadyMenuExistInDB) {
     return false;
   }
 
@@ -19,13 +22,62 @@ service.createMenuHandler = async (input) => {
     menuRepository.create({ ...input.body, ...input.user }),
   );
 };
+
+service.createBulkMenuHandler = async (input) => {
+  const workbook = xlsx.readFile(input.file.path);
+  const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+  const data = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
+
+  const keys = data[0];
+
+  const result = data
+    .slice(1)
+    .filter((item) => item.length > 0)
+    .map((row) => {
+      const obj = {};
+      keys.forEach((key, index) => {
+        obj[key] = row[index] || null;
+      });
+      return obj;
+    });
+  const extractMenuNames = result.map((item) => ({
+    name: item.name,
+  }));
+  const isAlreadyMenuExistInDB = await menuRepository.findBy(extractMenuNames);
+
+  if (isAlreadyMenuExistInDB?.length > 0) {
+    return {
+      code: 400,
+      message: `${isAlreadyMenuExistInDB
+        ?.map((item) => item.name)
+        .join(", ")} menu already exists`,
+    };
+  }
+
+  const schema = Joi.array().items(menuSchemas.menuPOST);
+
+  const validationResult = schema
+    .options({ abortEarly: false })
+    .validate(result);
+
+  if (validationResult.error) {
+    const { details } = validationResult.error;
+    const message = details.map((i) => i.message);
+    return {
+      code: 400,
+      message: message,
+    };
+  }
+  return await menuRepository.save(result);
+};
+
 service.createTestingMenuHandler = async (input) => {
   const { name } = input.body;
-  const isMenuExist = await menuRepository.findOneBy({
+  const isAlreadyMenuExistInDB = await menuRepository.findOneBy({
     name,
   });
 
-  if (isMenuExist) {
+  if (isAlreadyMenuExistInDB) {
     return false;
   }
 

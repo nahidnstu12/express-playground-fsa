@@ -27,6 +27,11 @@ create your database for dev & test
 then you ready to run your project dev mode, run
 yarn dev
 
+if you run migrations file,run
+yarn migration:generate src/migrations/<migration_name>
+then,
+yarn migration:run
+
 and when you want to run tests, run
 yarn test
 

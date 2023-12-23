@@ -3,6 +3,6 @@ const app = require("./app");
 
 AppdataSource.initialize()
   .then(async () => {
-    app.listen(5000, () => console.log("server starting at 5000"));
+    app.listen(process.env.PORT, () => console.log("server starting at "+ process.env.PORT));
   })
   .catch((error) => console.log("server error: ", error));

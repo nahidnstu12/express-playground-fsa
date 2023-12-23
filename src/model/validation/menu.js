@@ -35,5 +35,8 @@ const menuSchemas = {
   menuDETAIL: {
     id: Joi.number().min(1).required(),
   },
+  menuBulkUpload: {
+    filename: Joi.string().required()
+  },
 };
 module.exports = menuSchemas;

@@ -1,3 +1,4 @@
+const {RowStatus} = require("../utils/constants");
 const EntitySchema = require("typeorm").EntitySchema;
 
 module.exports = new EntitySchema({
@@ -21,6 +22,11 @@ module.exports = new EntitySchema({
     menuId: {
       type: "int",
     },
+    row_status: {
+      type: "enum",
+      enum: Object.values(RowStatus),
+      default: RowStatus.ACTIVE,
+    },
     created_at: {
       type: "datetime",
       createDate: true,
@@ -28,6 +34,10 @@ module.exports = new EntitySchema({
     updated_at: {
       type: "datetime",
       updateDate: true,
+    },
+    deleted_at: {
+      type: "datetime",
+      deleteDate: true,
     },
   },
   relations: {

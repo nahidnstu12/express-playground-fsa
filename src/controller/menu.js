@@ -6,6 +6,7 @@ const {
   readAllMenuHandler,
   updateMenuHandler,
   createTestingMenuHandler,
+  createBulkMenuHandler
 } = require("../service/menu");
 const { successResponse } = require("../utils/success");
 const { badRequest, notFound } = require("../utils/error");
@@ -31,6 +32,29 @@ controller.create = async (req, res, next) => {
         message: "Menu created successfully",
         data: menuResponse,
       }),
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
+controller.menuBulkUpload = async (req, res, next) => {
+  try {
+    if(!req.file || req.file.fieldname !== "filename"){
+      return next(badRequest("You must provide valid file"));
+    }
+    const menuResponse = await createBulkMenuHandler({file:req.file,  user: { userId: 1 || req?.user?.id  },});
+    console.log(menuResponse)
+    if(menuResponse?.code === 400){
+      return next(badRequest(menuResponse?.message))
+    }
+    return res.status(201).json(
+        successResponse({
+          code: 201,
+          message: "Menu created successfully",
+          data: menuResponse,
+        }),
+
     );
   } catch (err) {
     next(err);

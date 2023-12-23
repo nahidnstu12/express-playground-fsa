@@ -9,7 +9,7 @@ info:
     email: nahid.dev19@gmail.com
 servers:
   - description: Local
-    url: "http://localhost:5000/api/v1"
+    url: "http://localhost:9000/api/v1"
 #  - description: Production
 #    url: "https://street-food-rest-api-milm.onrender.com/api/v1"
   - description: Production-1
@@ -535,7 +535,7 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
-  "/menus-bulk-upload":
+  "/menus/bulk-upload":
     post:
       operationId: create bulk Post
       security:

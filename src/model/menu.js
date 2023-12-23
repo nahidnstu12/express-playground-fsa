@@ -1,5 +1,5 @@
 const { EntitySchema } = require("typeorm");
-const { MENU_VARIANTS, MENU_PUBLISH } = require("../utils/constants");
+const { MENU_VARIANTS, MENU_PUBLISH, RowStatus} = require("../utils/constants");
 
 module.exports = new EntitySchema({
   name: "Menu",
@@ -17,6 +17,7 @@ module.exports = new EntitySchema({
     description: {
       type: "varchar",
       length: 255,
+      nullable: true,
     },
     cover: {
       type: "varchar",
@@ -38,6 +39,11 @@ module.exports = new EntitySchema({
     userId: {
       type: "int",
     },
+    row_status: {
+      type: "enum",
+      enum: Object.values(RowStatus),
+      default: RowStatus.ACTIVE,
+    },
     created_at: {
       type: "datetime",
       createDate: true,
@@ -45,6 +51,10 @@ module.exports = new EntitySchema({
     updated_at: {
       type: "datetime",
       updateDate: true,
+    },
+    deleted_at: {
+      type: "datetime",
+      deleteDate: true,
     },
   },
   relations: {
