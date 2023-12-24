@@ -26,6 +26,11 @@ module.exports = new EntitySchema({
     price: {
       type: "double",
     },
+    stock:{
+      type: "int",
+      min: 0,
+      default: 0
+    },
     status: {
       type: "enum",
       enum: Object.values(MENU_PUBLISH),

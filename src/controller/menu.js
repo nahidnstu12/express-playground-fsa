@@ -17,10 +17,10 @@ const controller = {};
 
 controller.create = async (req, res, next) => {
   try {
-    const { id, name, description, price, status, variant, cover, userId } =
+    const { id, name, description, price, status, variant, cover, stock, userId } =
       req.body;
     const menuResponse = await createMenuHandler({
-      body: { id, name, description, price, status, variant, cover, userId },
+      body: { id, name, description, price, status, variant, cover, stock, userId },
       user: { userId: req.user.id },
     });
     if (!menuResponse) {
@@ -44,7 +44,6 @@ controller.menuBulkUpload = async (req, res, next) => {
       return next(badRequest("You must provide valid file"));
     }
     const menuResponse = await createBulkMenuHandler({file:req.file,  user: { userId: 1 || req?.user?.id  },});
-    console.log(menuResponse)
     if(menuResponse?.code === 400){
       return next(badRequest(menuResponse?.message))
     }
@@ -121,10 +120,11 @@ controller.read = async (req, res, next) => {
 
 controller.update = async (req, res, next) => {
   try {
-    const { description, price, status, variant, cover, userId } = req.body;
+    const { description, price,stock, status, variant, cover, userId } = req.body;
     const menuResponse = await updateMenuHandler(req.params.id, {
       description,
       price,
+      stock,
       status,
       variant,
       cover,

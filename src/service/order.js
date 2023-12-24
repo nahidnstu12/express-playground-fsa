@@ -2,6 +2,7 @@ const { AppdataSource } = require("../database/config");
 const Order = require("../model/order");
 const { findCartByMenuAndUserId, deleteCartHandler } = require("./cart");
 const { USER_ROLES, ORDER_STATUS } = require("../utils/constants");
+const {readMenuHandler, updateMenuHandler} = require("./menu");
 
 const orderRepository = AppdataSource.getRepository(Order);
 const service = {};
@@ -12,14 +13,40 @@ service.createOrderHandler = async (input) => {
   await queryRunner.startTransaction();
 
   try {
-    const { menuId } = input.body;
+    const { menuId, quantity } = input.body;
     const { userId } = input.user;
+
+    let isMenuExist = await readMenuHandler(menuId);
+    if (!isMenuExist) {
+      return {
+        code: 400,
+        message: "Menu doesn't found.",
+      };
+    }
+
     let isExistCart = await findCartByMenuAndUserId(userId, menuId);
+
+    if(!isExistCart){
+      return {
+        code: 400,
+        message: `Item can't found in cart`,
+      };
+    }
+
+    if (isMenuExist?.stock < quantity || isExistCart?.quantity <  quantity) {
+      return {
+        code: 400,
+        message: `Sorry, stock is out of range.Currently we can receive ${isMenuExist?.stock} item`,
+      };
+    }
+
     const order = orderRepository.create({ ...input.body, ...input.user });
+
     if (isExistCart?.code === 400) {
       return isExistCart;
     } else if (isExistCart?.code !== 400 && isExistCart) {
       await deleteCartHandler(isExistCart.id, queryRunner);
+      await updateMenuHandler(isMenuExist?.id,{stock: isMenuExist?.stock - quantity}, queryRunner);
       await queryRunner.manager.getRepository(Order).save(order);
       await queryRunner.commitTransaction();
       return order;

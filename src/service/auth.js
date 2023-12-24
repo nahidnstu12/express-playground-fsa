@@ -13,7 +13,7 @@ service.registerAppAdminHandler = async (input) => {
     const isAlreadyRegistered = await authRepository.findOneBy([{ email}, {role: USER_ROLES.APP_ADMIN }]);
 
     // if already registered
-    console.log({isAlreadyRegistered})
+
 
     if (isAlreadyRegistered) {
       return { code: 400, message: "Already App Admin exist" };

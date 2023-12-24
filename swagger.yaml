@@ -461,6 +461,9 @@ paths:
                             price:
                               type: number
                               example: 200
+                            stock:
+                              type: number
+                              example: 2
                             status:
                               type: string
                               enum: [1, 2]
@@ -506,6 +509,9 @@ paths:
                 price:
                   type: number
                   example: 200
+                stock:
+                  type: number
+                  example: 2
                 status:
                   type: string
                   enum: [1, 2]
@@ -520,7 +526,7 @@ paths:
                   example: https://s3.aws.com/myfirstblog/124.jpg
                 userId:
                   $ref: "#/components/schemas/UserDTO"
-              required: [name, description, price]
+              required: [name, description, price, stock]
       responses:
         "201":
           description: Menu created successfully
@@ -614,6 +620,9 @@ paths:
                 price:
                   type: number
                   example: 200
+                stock:
+                  type: number
+                  example: 2
                 status:
                   type: string
                   enum: [1, 2]
@@ -1118,6 +1127,9 @@ components:
             price:
               type: number
               example: 200
+            stock:
+              type: number
+              example: 2
             status:
               type: number
               enum: [1, 2]
@@ -1151,6 +1163,9 @@ components:
             price:
               type: number
               example: 200
+            stock:
+              type: number
+              example: 2
             status:
               type: number
               enum: [1, 2]

@@ -8,6 +8,7 @@ exports.MenuFactory = setSeederFactory(Menu, async (faker) => {
   menu.description = faker.lorem.paragraph();
   menu.cover = faker.image.urlLoremFlickr({ category: "food" });
   menu.price = faker.number.float({ min: 50, max: 200, precision: 0.2 });
+  menu.stock = faker.number.int({ min: 0, max: 10 });
   menu.status = faker.helpers.enumValue(MENU_PUBLISH);
   menu.variant = faker.helpers.enumValue(MENU_VARIANTS);
   return menu;

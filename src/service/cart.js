@@ -8,7 +8,7 @@ const cartRepository = AppdataSource.getRepository(Cart);
 const service = {};
 
 service.createCartHandler = async (input) => {
-  const { menuId } = input.body;
+  const { menuId, quantity } = input.body;
   const { userId } = input.user;
   let isMenuExist = await readMenuHandler(menuId);
   if (!isMenuExist) {
@@ -17,7 +17,15 @@ service.createCartHandler = async (input) => {
       message: "Menu doesn't found.",
     };
   }
+
   let isExistCart = await service.findCartByMenuAndUserId(userId, menuId);
+
+  if (isMenuExist?.stock < quantity || isMenuExist?.stock < (isExistCart?.quantity || 0) + quantity) {
+    return {
+      code: 400,
+      message: `Sorry, stock is out of range.Currently we can receive ${isMenuExist?.stock} item`,
+    };
+  }
 
   if (isExistCart) {
     isExistCart = {
@@ -108,7 +116,6 @@ service.updateCartHandler = async (id, data) => {
 };
 service.deleteCartHandler = async (id, queryRunner) => {
   const cart = await service.readCartHandler(id);
-    console.log("CartHandler", cart)
   if (!cart) {
     return false;
   }

@@ -4,6 +4,7 @@ const { USER_ROLES, MENU_PUBLISH } = require("../utils/constants");
 const xlsx = require("xlsx");
 const Joi = require("joi");
 const menuSchemas = require("../model/validation/menu");
+const Cart = require("../model/cart");
 
 const menuRepository = AppdataSource.getRepository(Menu);
 const service = {};
@@ -113,6 +114,7 @@ service.readAllMenuHandler = async (user, { page, limit }) => {
       "menu.name",
       "menu.description",
       "menu.price",
+      "menu.stock",
       "menu.status",
       "menu.variant",
       "menu.cover",
@@ -136,6 +138,7 @@ service.readMenuHandler = async (id) => {
       "menu.name",
       "menu.description",
       "menu.price",
+      "menu.stock",
       "menu.status",
       "menu.variant",
       "menu.cover",
@@ -146,7 +149,7 @@ service.readMenuHandler = async (id) => {
     .where("menu.id = :id", { id })
     .getOne();
 };
-service.updateMenuHandler = async (id, data) => {
+service.updateMenuHandler = async (id, data, queryRunner) => {
   const menu = await service.readMenuHandler(id);
 
   if (!menu) {
@@ -154,7 +157,10 @@ service.updateMenuHandler = async (id, data) => {
   }
 
   Object.assign(menu, data);
-  return await menuRepository.save(menu);
+
+  return queryRunner
+    ? await queryRunner.manager.getRepository(Menu).save(menu)
+    : await menuRepository.save(menu);
 };
 service.deleteMenuHandler = async (id) => {
   const menu = await service.readMenuHandler(id);

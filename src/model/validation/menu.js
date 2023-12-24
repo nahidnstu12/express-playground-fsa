@@ -7,6 +7,7 @@ const menuSchemas = {
     description: Joi.string().required(),
     cover: Joi.string().optional(),
     price: Joi.number().required(),
+    stock: Joi.number().required(),
     status: Joi.number()
         .valid(...Object.values(MENU_PUBLISH))
         .optional(),
@@ -20,6 +21,7 @@ const menuSchemas = {
     description: Joi.string().optional(),
     cover: Joi.string().optional(),
     price: Joi.number().optional(),
+    stock: Joi.number().optional(),
     status: Joi.number()
         .valid(...Object.values(MENU_PUBLISH))
         .optional(),
